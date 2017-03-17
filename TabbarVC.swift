@@ -16,6 +16,8 @@ class TabBarVC: UITabBarController {
         super.viewDidLoad()
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
         //tvNEnjoystoriesL
+        UITabBar.appearance().barTintColor = UIColor.white
+        
     }
     
 }

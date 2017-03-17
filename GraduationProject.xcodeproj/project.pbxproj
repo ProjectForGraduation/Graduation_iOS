@@ -18,6 +18,10 @@
 		674BD8931E7C025800B4CBE5 /* TimeLineTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674BD8921E7C025800B4CBE5 /* TimeLineTableVC.swift */; };
 		674BD8961E7C029100B4CBE5 /* WriteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674BD8951E7C029100B4CBE5 /* WriteVC.swift */; };
 		674BD8981E7C23A300B4CBE5 /* TabbarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674BD8971E7C23A300B4CBE5 /* TabbarVC.swift */; };
+		6760BDF91E7C69B800BED7C6 /* SortLocationTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6760BDF81E7C69B800BED7C6 /* SortLocationTableVC.swift */; };
+		6760BDFB1E7C75D400BED7C6 /* TimeLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6760BDFA1E7C75D400BED7C6 /* TimeLineCell.swift */; };
+		6760BDFD1E7C762900BED7C6 /* MyListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6760BDFC1E7C762900BED7C6 /* MyListCell.swift */; };
+		6760BDFF1E7C838500BED7C6 /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6760BDFE1E7C838500BED7C6 /* SearchVC.swift */; };
 		6782AE941E7BEB4B0072851E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6782AE931E7BEB4B0072851E /* AppDelegate.swift */; };
 		6782AE991E7BEB4B0072851E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6782AE971E7BEB4B0072851E /* Main.storyboard */; };
 		6782AE9B1E7BEB4B0072851E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6782AE9A1E7BEB4B0072851E /* Assets.xcassets */; };
@@ -25,7 +29,7 @@
 		6782AEA91E7BEB4B0072851E /* GraduationProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6782AEA81E7BEB4B0072851E /* GraduationProjectTests.swift */; };
 		678E54741E7C2C4F00529467 /* tvn_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 678E54721E7C2BE900529467 /* tvn_light.ttf */; };
 		678E54751E7C2C4F00529467 /* tvn_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 678E54731E7C2BE900529467 /* tvn_medium.ttf */; };
-		678E54781E7C2EE400529467 /* TVCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678E54771E7C2EE400529467 /* TVCells.swift */; };
+		678E54781E7C2EE400529467 /* SpaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678E54771E7C2EE400529467 /* SpaceCell.swift */; };
 		67AD4E1F1E7C009700D36FFB /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AD4E1E1E7C009700D36FFB /* ApiManager.swift */; };
 		67E6C90C1E7C2493009E396B /* MyListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E6C90B1E7C2493009E396B /* MyListVC.swift */; };
 		67E6C90F1E7C25E8009E396B /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E6C90E1E7C25E8009E396B /* TabBar.swift */; };
@@ -54,6 +58,10 @@
 		674BD8921E7C025800B4CBE5 /* TimeLineTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineTableVC.swift; sourceTree = "<group>"; };
 		674BD8951E7C029100B4CBE5 /* WriteVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WriteVC.swift; sourceTree = "<group>"; };
 		674BD8971E7C23A300B4CBE5 /* TabbarVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TabbarVC.swift; path = ../TabbarVC.swift; sourceTree = "<group>"; };
+		6760BDF81E7C69B800BED7C6 /* SortLocationTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortLocationTableVC.swift; sourceTree = "<group>"; };
+		6760BDFA1E7C75D400BED7C6 /* TimeLineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeLineCell.swift; sourceTree = "<group>"; };
+		6760BDFC1E7C762900BED7C6 /* MyListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyListCell.swift; sourceTree = "<group>"; };
+		6760BDFE1E7C838500BED7C6 /* SearchVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
 		6782AE901E7BEB4B0072851E /* GraduationProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GraduationProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6782AE931E7BEB4B0072851E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6782AE981E7BEB4B0072851E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -65,7 +73,7 @@
 		6782AEAA1E7BEB4B0072851E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		678E54721E7C2BE900529467 /* tvn_light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tvn_light.ttf; sourceTree = "<group>"; };
 		678E54731E7C2BE900529467 /* tvn_medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tvn_medium.ttf; sourceTree = "<group>"; };
-		678E54771E7C2EE400529467 /* TVCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TVCells.swift; sourceTree = "<group>"; };
+		678E54771E7C2EE400529467 /* SpaceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceCell.swift; sourceTree = "<group>"; };
 		67AD4E1E1E7C009700D36FFB /* ApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
 		67E6C90B1E7C2493009E396B /* MyListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyListVC.swift; sourceTree = "<group>"; };
 		67E6C90E1E7C25E8009E396B /* TabBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
@@ -121,6 +129,8 @@
 				674BD8921E7C025800B4CBE5 /* TimeLineTableVC.swift */,
 				674BD8951E7C029100B4CBE5 /* WriteVC.swift */,
 				67E6C90B1E7C2493009E396B /* MyListVC.swift */,
+				6760BDF81E7C69B800BED7C6 /* SortLocationTableVC.swift */,
+				6760BDFE1E7C838500BED7C6 /* SearchVC.swift */,
 			);
 			name = MainVC;
 			sourceTree = "<group>";
@@ -175,7 +185,9 @@
 		678E54761E7C2E4500529467 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				678E54771E7C2EE400529467 /* TVCells.swift */,
+				678E54771E7C2EE400529467 /* SpaceCell.swift */,
+				6760BDFA1E7C75D400BED7C6 /* TimeLineCell.swift */,
+				6760BDFC1E7C762900BED7C6 /* MyListCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -383,18 +395,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				674BD8901E7C010200B4CBE5 /* UIView+Extension.swift in Sources */,
+				6760BDFD1E7C762900BED7C6 /* MyListCell.swift in Sources */,
 				674BD8931E7C025800B4CBE5 /* TimeLineTableVC.swift in Sources */,
 				674BD88E1E7C010200B4CBE5 /* UITextField+Extension.swift in Sources */,
 				674BD88D1E7C010200B4CBE5 /* UILabel+Extension.swift in Sources */,
 				674BD88C1E7C010200B4CBE5 /* UIColor+Extension.swift in Sources */,
-				678E54781E7C2EE400529467 /* TVCells.swift in Sources */,
+				678E54781E7C2EE400529467 /* SpaceCell.swift in Sources */,
 				674BD88F1E7C010200B4CBE5 /* UITextView+Extension.swift in Sources */,
+				6760BDFB1E7C75D400BED7C6 /* TimeLineCell.swift in Sources */,
 				67E6C90F1E7C25E8009E396B /* TabBar.swift in Sources */,
+				6760BDF91E7C69B800BED7C6 /* SortLocationTableVC.swift in Sources */,
 				674BD88A1E7C010200B4CBE5 /* iOSDevCenters+GIF.swift in Sources */,
 				67AD4E1F1E7C009700D36FFB /* ApiManager.swift in Sources */,
 				674BD8961E7C029100B4CBE5 /* WriteVC.swift in Sources */,
 				6782AE941E7BEB4B0072851E /* AppDelegate.swift in Sources */,
 				67E6C90C1E7C2493009E396B /* MyListVC.swift in Sources */,
+				6760BDFF1E7C838500BED7C6 /* SearchVC.swift in Sources */,
 				674BD8891E7C010200B4CBE5 /* DeviceResize.swift in Sources */,
 				674BD8981E7C23A300B4CBE5 /* TabbarVC.swift in Sources */,
 				674BD88B1E7C010200B4CBE5 /* UIButton+Extension.swift in Sources */,

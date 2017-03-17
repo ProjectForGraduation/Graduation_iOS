@@ -92,7 +92,7 @@ extension TimeLineTableVC{
             return textHeight.y+textHeight.height+10
             
         default:
-            return 10
+            return 7
         }
     }
     

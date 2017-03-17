@@ -1,28 +1,20 @@
 //
-//  WriteVC.swift
+//  SearchVC.swift
 //  GraduationProject
 //
-//  Created by 윤민섭 on 2017. 3. 17..
+//  Created by 윤민섭 on 2017. 3. 18..
 //  Copyright © 2017년 윤민섭. All rights reserved.
 //
 
 import UIKit
 
-class WriteVC: UIViewController {
+class SearchVC: UIViewController {
 
-    
-    
     @IBOutlet weak var backBtn: UIButton!
-    @IBOutlet weak var writeBtn: UIBarButtonItem!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
         // Do any additional setup after loading the view.
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,16 +22,8 @@ class WriteVC: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
-    func setUpView(){
-        
-    }
-    
-    @IBAction func backBtnAction(_ sender: UIButton) {
+    @IBAction func backBtn(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction func writeBtnAction(_ sender: UIButton) {
     }
 
     /*
