@@ -62,6 +62,11 @@ extension TimeLineTableVC{
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "timelineCell", for: indexPath) as! TimeLineCell
             cell.selectionStyle = .none
+            if indexPath.row == 2 {
+                //임시로 사진이 없을 경우
+                cell.contentPic.isHidden = true
+                cell.anotherBtnUp()
+            }
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "spaceCell", for: indexPath) as! SpaceCell
@@ -88,7 +93,7 @@ extension TimeLineTableVC{
             if indexPath.row == 0 {
                 return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
             }
-            return (textHeight.y+textHeight.height+10.multiplyHeightRatio())
+            return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
             
         default:
             return 7.multiplyHeightRatio()

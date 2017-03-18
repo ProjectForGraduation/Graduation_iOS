@@ -49,6 +49,11 @@ extension MyListVC {
                 cell.profileHidden(false)
             }else {
                 cell.profileHidden(true)
+//                if indexPath.row == 4 {
+//                    //임시
+//                    cell.contentPic.isHidden = true
+//                    cell.anotherBtnUp()
+//                }
             }
             return cell
         default:
@@ -78,7 +83,7 @@ extension MyListVC {
                 
                 // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
                 
-                return (picHeight.y+picHeight.height+50).multiplyHeightRatio()
+                return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
                 
             }
         default:
