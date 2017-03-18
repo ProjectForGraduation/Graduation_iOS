@@ -60,20 +60,20 @@ class MyListCell: UITableViewCell{
         
         contentText.sizeToFit()
         
-        contentPic.rframe(x: 0, y: contentText.y+contentText.height+10, width: 375, height: 375)
+        contentPic.rframe(x: 0, y: (contentText.y+contentText.height+10).remultiplyHeightRatio(), width: 375, height: 375)
         contentPic.image = UIImage(named: "gguggu")
         
-        likeBtn.rframe(x: 10, y: contentPic.y+contentPic.height+10, width: 30, height: 30)
+        likeBtn.rframe(x: 10, y: (contentPic.y+contentPic.height+10).remultiplyHeightRatio(), width: 30, height: 30)
         likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnActions))
         
-        likeCount.rframe(x: 45, y: contentPic.y+contentPic.height+20, width: 100, height: 0)
+        likeCount.rframe(x: 45, y: (contentPic.y+contentPic.height+20).remultiplyHeightRatio(), width: 100, height: 0)
         likeCount.setLabel(text: "좋아요 99개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
         likeCount.sizeToFit()
         
-        mapBtn.rframe(x: 300, y: contentPic.y+contentPic.height+14, width: 30, height: 25)
+        mapBtn.rframe(x: 300, y: (contentPic.y+contentPic.height+14).remultiplyHeightRatio(), width: 30, height: 25)
         mapBtn.setButton(imageName: "marker", target: self, action: #selector(mapBtnActions))
         
-        commentBtn.rframe(x: 335, y: contentPic.y+contentPic.height+10, width: 30, height: 30)
+        commentBtn.rframe(x: 335, y: (contentPic.y+contentPic.height+10).remultiplyHeightRatio(), width: 30, height: 30)
         commentBtn.setButton(imageName: "comment", target: self, action: #selector(commentBtnActions))
         
         

@@ -147,3 +147,20 @@ extension Int{
 }
 
 
+extension CGFloat{
+    public func multiplyWidthRatio() -> CGFloat{
+        return self * widthRatio
+    }
+    public func multiplyHeightRatio() -> CGFloat{
+        return self * heightRatio
+    }
+}
+
+extension CGFloat{
+    public func remultiplyWidthRatio() -> CGFloat{
+        return self / widthRatio
+    }
+    public func remultiplyHeightRatio() -> CGFloat{
+        return self / heightRatio
+    }
+}

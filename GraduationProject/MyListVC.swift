@@ -23,7 +23,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
     }
     
     func setTableView(){
-        self.tableView.rframe(x: 0, y: 0, width: 375, height: 627)
+        self.tableView.rframe(x: 0, y: 0, width: 375, height: 625)
         self.tableView.bounces = false
         self.tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         self.tableView.showsVerticalScrollIndicator = false
@@ -64,7 +64,7 @@ extension MyListVC {
         switch indexPath.row % 2 {
         case 0:
             if indexPath.row == 0{
-                return 160
+                return 160.multiplyHeightRatio()
             }else{
                 let textHeight = UILabel()
                 let picHeight = UIImageView()
@@ -73,12 +73,12 @@ extension MyListVC {
                 textHeight.text = "윤민섭"
                 textHeight.sizeToFit()
                 
-                picHeight.rframe(x: 0, y: textHeight.y+textHeight.height+10, width: 375, height: 375)
+                picHeight.rframe(x: 0, y: (textHeight.y+textHeight.height+10).remultiplyHeightRatio(), width: 375, height: 375)
                 picHeight.image = UIImage(named: "gguggu")
                 
                 // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
                 
-                return picHeight.y+picHeight.height+50
+                return (picHeight.y+picHeight.height+50).multiplyHeightRatio()
                 
             }
         default:

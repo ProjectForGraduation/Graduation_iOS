@@ -29,7 +29,7 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     // MARK: - set Table
 
     func setTableView(){
-        self.tableView.rframe(x: 0, y: 0, width: 375, height: 627)
+        self.tableView.rframe(x: 0, y: 0, width: 375, height: 625)
         self.tableView.bounces = false
         self.tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         self.tableView.showsVerticalScrollIndicator = false
@@ -81,18 +81,17 @@ extension TimeLineTableVC{
             textHeight.text = "윤민섭"
             textHeight.sizeToFit()
             
-            picHeight.rframe(x: 0, y: textHeight.y+textHeight.height+10, width: 375, height: 375)
+            picHeight.rframe(x: 0, y: (textHeight.y+textHeight.height+10).remultiplyHeightRatio(), width: 375, height: 375)
             picHeight.image = UIImage(named: "gguggu")
             
             // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
-            
             if indexPath.row == 0 {
-                return picHeight.y+picHeight.height+50
+                return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
             }
-            return textHeight.y+textHeight.height+10
+            return (textHeight.y+textHeight.height+10.multiplyHeightRatio())
             
         default:
-            return 7
+            return 7.multiplyHeightRatio()
         }
     }
     
