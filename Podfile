@@ -6,5 +6,6 @@ target ‘GraduationProject’ do
 pod 'Alamofire', '~> 4.0'
 pod 'SwiftyJSON'
 pod 'SwipeableTabBarController'
+pod 'GoogleMaps'
 use_frameworks!
 end

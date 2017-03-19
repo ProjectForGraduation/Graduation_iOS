@@ -165,7 +165,7 @@
         <!--Time Line TableVC-->
         <scene sceneID="FVm-4C-TJd">
             <objects>
-                <viewController id="Ea9-Nw-kUX" customClass="TimeLineTableVC" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ea9-Nw-kUX" customClass="TimeLineTableVC" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Gfs-nx-dtU"/>
                         <viewControllerLayoutGuide type="bottom" id="dmm-E3-PZ1"/>
@@ -212,11 +212,60 @@
                     <navigationItem key="navigationItem" id="09R-FG-xxs"/>
                     <connections>
                         <outlet property="tableView" destination="VG8-wc-3e3" id="LtB-oh-J7P"/>
+                        <segue destination="ecN-6h-2Yi" kind="show" identifier="MapSegue" id="Lsp-Iu-ijA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BL0-O4-ptU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1076" y="-439"/>
+        </scene>
+        <!--MapVC-->
+        <scene sceneID="sX5-z3-bZh">
+            <objects>
+                <viewController id="MCx-4T-Xlg" customClass="MapVC" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="D4f-xw-gEN"/>
+                        <viewControllerLayoutGuide type="bottom" id="osx-1m-Gsj"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dqQ-0j-AzF">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="1Ti-el-ZFf">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="GJP-iI-n0a">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Kxs-am-XP9">
+                                <rect key="frame" x="16" y="7" width="37" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="뒤로">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="backBtn:" destination="MCx-4T-Xlg" eventType="touchUpInside" id="BaQ-gF-IXE"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mB3-Nq-dIC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2892" y="-215"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="YPp-bQ-EFU">
+            <objects>
+                <navigationController id="ecN-6h-2Yi" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="ZQu-2X-mpo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="MCx-4T-Xlg" kind="relationship" relationship="rootViewController" id="kcq-9H-yLG"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WGg-T4-ums" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2065" y="-419"/>
         </scene>
         <!--지금 여기 우리-->
         <scene sceneID="VFX-It-Vqx">

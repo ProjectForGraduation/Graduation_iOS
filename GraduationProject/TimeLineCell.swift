@@ -8,7 +8,9 @@
 
 import UIKit
 
-class TimeLineCell: UITableViewCell {
+class TimeLineCell: UITableViewCell{
+    
+    var index = 0;
     
     var profileImg = UIImageView()
     var userName = UILabel()
@@ -19,6 +21,17 @@ class TimeLineCell: UITableViewCell {
     var likeCount = UILabel()
     var commentBtn = UIButton()
     var mapBtn = UIButton()
+    
+    
+    var isLiked : Bool = true {
+        willSet(newValue){
+            if newValue{
+                likeBtn.setImage(UIImage(named: "likeFill"), for: .normal)
+            }else {
+                likeBtn.setImage(UIImage(named: "like"), for: .normal)
+            }
+        }
+    }
     
     
     override func awakeFromNib() {
@@ -33,7 +46,7 @@ class TimeLineCell: UITableViewCell {
         userName.setLabel(text: "yoonmssssss", align: .left, fontName: "AppleSDGothicNeo-SemiBold", fontSize: 12, color: UIColor.black)
         
         optionBtn.rframe(x: 335, y: 22.5, width: 15, height: 5)
-        optionBtn.setButton(imageName: "option", target: self, action: #selector(optionBtnActions))
+        optionBtn.setButton(imageName: "option", target: self, action: #selector(optionBtnAction))
         
         contentText.rframe(x: 10, y: 60, width: 355, height: 0)
         contentText.setLabel(text: "안녕하세요 울 조카입니다^^~", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
@@ -44,17 +57,17 @@ class TimeLineCell: UITableViewCell {
         contentPic.image = UIImage(named: "gguggu")
         
         likeBtn.rframe(x: 10, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)
-        likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnActions))
+        likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnAction))
         
         likeCount.rframe(x: 45, y: (contentPic.y+contentPic.height+20.multiplyHeightRatio()).remultiplyHeightRatio(), width: 100, height: 0)
         likeCount.setLabel(text: "좋아요 99개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
         likeCount.sizeToFit()
         
         mapBtn.rframe(x: 300, y: (contentPic.y+contentPic.height+14.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 25)
-        mapBtn.setButton(imageName: "marker", target: self, action: #selector(mapBtnActions))
+        mapBtn.setButton(imageName: "marker", target: self, action: #selector(mapBtnAction))
         
         commentBtn.rframe(x: 335, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)
-        commentBtn.setButton(imageName: "comment", target: self, action: #selector(commentBtnActions))
+        commentBtn.setButton(imageName: "comment", target: self, action: #selector(commentBtnAction))
         
         contentView.addSubview(profileImg)
         contentView.addSubview(userName)
@@ -83,21 +96,28 @@ class TimeLineCell: UITableViewCell {
     
     // MARK: - button action
     
-    func likeBtnActions(){
+    func likeBtnAction(){
+        // 이곳에서 서버로 내가 눌렀는지 안눌렀는지 보낸다.
+        if isLiked{
+            isLiked = false
+        }else{
+            isLiked = true
+        }
+    }
+    
+    func mapBtnAction(){
+       TimeLineTableVC.index = self.index
+    }
+    
+    func commentBtnAction(){
+        
+    }
+ 
+    
+    func optionBtnAction(){
         
     }
     
-    func mapBtnActions(){
-        
-    }
-    
-    func commentBtnActions(){
-        
-    }
-    
-    func optionBtnActions(){
-        
-    }
     
     
 }

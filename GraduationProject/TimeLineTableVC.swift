@@ -7,11 +7,19 @@
 //
 
 import UIKit
-
 class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
-  
+    
+    // MARK: - location
+    var locationManager = LocationManager()
+    var locValue: Dictionary<String,Double> = [:]
+    var locationTimer = Timer()
+    static var index: Int = 0
+    
+    // temp
+    var liked : [Bool] = [true,false,true,true,true,true,true,false,false,true]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
@@ -38,11 +46,29 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func setUpView(){
-     
+        //locationTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
+        // 일단 15초
+
     }
     
-  
+    func updateLocation(){
+        // 로그인한 사람의 아이디 값을 받는다.
+        let userId: String = ""
+        locValue = locationManager.getUserLocation()
+        print(locValue)
+        locationManager.setLocationDB(userId)
+    }
+    
+    func openMap(){
+        // index/2에 해당하는 lati 와 longi 를 받아서 넘긴다.
+        print(TimeLineTableVC.index)
+        MapVC.latitude = 37.676357
+        MapVC.longitude = 126.773339
+        performSegue(withIdentifier: "MapSegue", sender: self)
+    }
+    
 }
+
 
 // MARK: - extension tableVC
 
@@ -54,7 +80,7 @@ extension TimeLineTableVC{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        return 10
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -62,16 +88,23 @@ extension TimeLineTableVC{
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "timelineCell", for: indexPath) as! TimeLineCell
             cell.selectionStyle = .none
+            
+            cell.index = indexPath.row
+            
+            // 좋아요
+            cell.isLiked = liked[indexPath.row/2]
+            cell.mapBtn.addTarget(self, action: #selector(openMap), for: .touchUpInside)
             if indexPath.row == 2 {
                 //임시로 사진이 없을 경우
                 cell.contentPic.isHidden = true
                 cell.anotherBtnUp()
             }
+            
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "spaceCell", for: indexPath) as! SpaceCell
             cell.selectionStyle = .none
-            
+        
             return cell
         }
     }
@@ -90,10 +123,9 @@ extension TimeLineTableVC{
             picHeight.image = UIImage(named: "gguggu")
             
             // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
-            if indexPath.row == 0 {
-                return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
-            }
-            return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
+            return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
+            
+            //return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
             
         default:
             return 7.multiplyHeightRatio()

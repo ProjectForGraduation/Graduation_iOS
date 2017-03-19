@@ -70,7 +70,7 @@ class MyListCell: UITableViewCell{
         likeCount.setLabel(text: "좋아요 99개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
         likeCount.sizeToFit()
         
-        mapBtn.rframe(x: 300, y: (contentPic.y+contentPic.height+14.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 25)
+        mapBtn.rframe(x: 300, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)
         mapBtn.setButton(imageName: "marker", target: self, action: #selector(mapBtnActions))
         
         commentBtn.rframe(x: 335, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)
@@ -134,7 +134,7 @@ class MyListCell: UITableViewCell{
     }
     
     func anotherBtnUp(){
-        mapBtn.frame.origin.y = contentText.y + contentText.height + 14.multiplyHeightRatio()
+        mapBtn.frame.origin.y = contentText.y + contentText.height + 10.multiplyHeightRatio()
         likeBtn.frame.origin.y = contentText.y + contentText.height + 10.multiplyHeightRatio()
         likeCount.frame.origin.y = contentText.y + contentText.height + 20.multiplyHeightRatio()
         commentBtn.frame.origin.y = contentText.y + contentText.height + 10.multiplyHeightRatio()
