@@ -68,7 +68,7 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         inputText.backgroundColor = UIColor.clear
         inputText.textColor = UIColor(red: 74/255, green: 74/255, blue: 74/255, alpha: 1.0)
         inputText.text = placeHolderText
-        inputText.layer.borderWidth = 0.3
+        //inputText.layer.borderWidth = 0.3
         //inputText.isScrollEnabled = false
         
         //imageView = UIImageView(frame: CGRect(x: 20*widthRatio, y: 560*heightRatio, width: 335*widthRatio, height: (300*heightRatio)))
