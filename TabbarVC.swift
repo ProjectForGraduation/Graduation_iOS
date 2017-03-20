@@ -11,6 +11,7 @@ import SwipeableTabBarController
 
 class TabBarVC: UITabBarController {
     
+    var imageMain : UIImage!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,4 +21,39 @@ class TabBarVC: UITabBarController {
         
     }
     
-}
+    @IBAction func writeBtnClicked(_ sender: UIButton) {
+        
+        performSegue(withIdentifier: "writeSegue", sender: self)
+    
+//        // Show Fusuma
+//        let fusuma = FusumaViewController()
+//        
+//        fusuma.delegate = self
+//        fusuma.cropHeightRatio = 1.0
+//        fusumaCropImage = false
+//        fusumaTintColor = UIColor.darkGray
+//        fusumaBackgroundColor = UIColor.darkGray
+//        //
+//        self.present(fusuma, animated: false, completion: nil)
+    }
+    
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        
+//        if segue.identifier == "writeSegue"
+//        {
+//
+//            let destination = segue.destination as! UINavigationController
+//            let realdest = destination.topViewController as! WriteVC
+//            realdest.receivedImg = imageMain
+//            
+//        }
+//        else if segue.identifier == "mainToDetail"
+//        {
+//            let destination = segue.destination as! DetailMissionViewController
+//            destination.receivedImg = MainController.subOriImage
+//            destination.receivedLbl = MainController.subLabel
+//        }
+    }
+
+

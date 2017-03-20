@@ -7,5 +7,6 @@ pod 'Alamofire', '~> 4.0'
 pod 'SwiftyJSON'
 pod 'SwipeableTabBarController'
 pod 'GoogleMaps'
+pod 'Fusuma’
 use_frameworks!
 end

@@ -57,6 +57,25 @@
                     <view key="view" contentMode="scaleToFill" id="amc-jy-h90">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sZu-ue-Q1Q">
+                                <rect key="frame" x="23" y="72" width="336" height="523"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="fnO-BM-6OW">
+                                        <rect key="frame" x="48" y="-56" width="240" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JgP-J7-BfE">
+                                        <rect key="frame" x="48" y="133" width="240" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="생각 공유" id="2Rr-51-zn3">
@@ -87,12 +106,15 @@
                     </navigationItem>
                     <connections>
                         <outlet property="backBtn" destination="yMo-zM-rcE" id="glm-l5-bSm"/>
+                        <outlet property="imageView" destination="JgP-J7-BfE" id="6N2-9X-ysm"/>
+                        <outlet property="inputText" destination="fnO-BM-6OW" id="xWL-Ow-H8P"/>
+                        <outlet property="scrollView" destination="sZu-ue-Q1Q" id="95i-tG-fWd"/>
                         <outlet property="writeBtn" destination="8J0-nU-Qgm" id="KuE-f9-AcH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1d5-FJ-6Db" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2087" y="-1173"/>
+            <point key="canvasLocation" x="2065" y="-1446"/>
         </scene>
         <!--Item-->
         <scene sceneID="fNo-bS-rNG">
@@ -288,7 +310,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="write"/>
                                 <connections>
-                                    <segue destination="Em9-6n-9iY" kind="show" identifier="writeSegue" id="sHu-NS-UW6"/>
+                                    <action selector="writeBtnClicked:" destination="26s-ul-QBA" eventType="touchUpInside" id="zAF-f4-gr3"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -311,6 +333,7 @@
                         <segue destination="Ea9-Nw-kUX" kind="relationship" relationship="viewControllers" id="sdS-p2-a7y"/>
                         <segue destination="rQn-8p-SWQ" kind="relationship" relationship="viewControllers" id="e6K-az-2ci"/>
                         <segue destination="fMx-M9-KXm" kind="relationship" relationship="viewControllers" id="YAH-c9-9aA"/>
+                        <segue destination="Em9-6n-9iY" kind="show" identifier="writeSegue" id="poy-Pf-cZn"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EZC-6a-Lj5" userLabel="First Responder" sceneMemberID="firstResponder"/>

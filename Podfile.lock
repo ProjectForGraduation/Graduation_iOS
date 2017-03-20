@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (4.4.0)
+  - Fusuma (1.0.3)
   - GoogleMaps (2.2.0):
     - GoogleMaps/Maps (= 2.2.0)
   - GoogleMaps/Base (2.2.0)
@@ -10,16 +11,18 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 4.0)
+  - Fusuma
   - GoogleMaps
   - SwiftyJSON
   - SwipeableTabBarController
 
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  Fusuma: 60ed1dd51a3b3610960219df9862c83f03304ce1
   GoogleMaps: 104c418d61ab8a05dff06ed0784c25ea9d37da45
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   SwipeableTabBarController: a52688ad47614ba98611df30a788202db90620fe
 
-PODFILE CHECKSUM: d19e4f8e4837d93cc7192180c4bacdfaaf7032e1
+PODFILE CHECKSUM: 22f29ce3254096f3f1a4a9756ed72cf53132f385
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.0
