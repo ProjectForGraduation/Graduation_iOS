@@ -20,6 +20,13 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     // temp
     var liked : [Bool] = [true,false,true,true,true,true,true,false,false,true]
     
+    //Api
+    
+    var apiManager = ApiManager()
+    var userId : [Int] = []
+    var contentText : [String] = []
+    var hasImage : [Int] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
@@ -48,6 +55,16 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func setUpView(){
         //locationTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
         // 일단 15초
+        apiManager.setApi(path: "contents", method: .get, parameters: [:], header: [:])
+        apiManager.requestContents { (ContentList) in
+            for index in 0..<ContentList.count{
+                self.userId.append(ContentList[index].userId!)
+                self.contentText.append(ContentList[index].contentText!)
+                self.hasImage.append(ContentList[index].hasImage!)
+            }
+            self.tableView.reloadData()
+        }
+        
 
     }
     
@@ -67,6 +84,10 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         performSegue(withIdentifier: "MapSegue", sender: self)
     }
     
+    func userBtnAction(){
+        print("1")
+    }
+    
 }
 
 
@@ -80,7 +101,7 @@ extension TimeLineTableVC{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return userId.count*2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -92,12 +113,22 @@ extension TimeLineTableVC{
             cell.index = indexPath.row
             
             // 좋아요
+            
             cell.isLiked = liked[indexPath.row/2]
+            
+            cell.userName.setTitle("\(userId[indexPath.row/2])", for: .normal)
+            cell.userName.contentHorizontalAlignment = .left
+            cell.userName.addTarget(self, action: #selector(userBtnAction), for: .touchUpInside)
+        
+            cell.contentText.text = contentText[indexPath.row/2]
+            cell.contentText.sizeToFit()
+            
             cell.mapBtn.addTarget(self, action: #selector(openMap), for: .touchUpInside)
-            if indexPath.row == 2 {
-                //임시로 사진이 없을 경우
-                cell.contentPic.isHidden = true
+            
+            if (hasImage[indexPath.row/2] == 0){
                 cell.anotherBtnUp()
+            }else{
+                
             }
             
             return cell
@@ -123,9 +154,11 @@ extension TimeLineTableVC{
             picHeight.image = UIImage(named: "gguggu")
             
             // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
-            return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
-            
-            //return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
+            if hasImage[indexPath.row/2] == 0 {
+                return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
+            }else{
+                return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
+            }
             
         default:
             return 7.multiplyHeightRatio()

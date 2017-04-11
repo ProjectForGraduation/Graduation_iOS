@@ -27,6 +27,12 @@ extension UIButton{
         self.addTarget(target, action: action, for: .touchUpInside)
     }
     
+    public func setButton(title: String, fontName: String = ".SFUIText", fontSize: CGFloat, color: UIColor){
+        self.setTitle(title, for: .normal)
+        self.setTitleColor(color, for: .normal)
+        self.titleLabel?.font = UIFont(name: fontName, size: fontSize*widthRatio)
+    }
+    
 }
 
 
