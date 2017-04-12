@@ -11,6 +11,8 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
 
     @IBOutlet weak var tableView: UITableView!
     
+    final let hasImage :String = "http://0"
+    
     // MARK: - location
     var locationManager = LocationManager()
     var locValue: Dictionary<String,Double> = [:]
@@ -23,18 +25,15 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     //Api
     
     var apiManager = ApiManager()
-    var userId : [Int] = []
-    var contentText : [String] = []
-    var hasImage : [Int] = []
+    var timeLineContent: [ContentList] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
-        setUpView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
+        setUpView()
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -55,13 +54,11 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func setUpView(){
         //locationTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
         // 일단 15초
-        apiManager.setApi(path: "contents", method: .get, parameters: [:], header: [:])
+        apiManager.setApi(path: "/contents/all", method: .get, parameters: [:], header: [:])
         apiManager.requestContents { (ContentList) in
-            for index in 0..<ContentList.count{
-                self.userId.append(ContentList[index].userId!)
-                self.contentText.append(ContentList[index].contentText!)
-                self.hasImage.append(ContentList[index].hasImage!)
-            }
+
+            self.timeLineContent = ContentList
+            
             self.tableView.reloadData()
         }
         
@@ -101,7 +98,7 @@ extension TimeLineTableVC{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return userId.count*2
+        return timeLineContent.count*2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -109,33 +106,38 @@ extension TimeLineTableVC{
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "timelineCell", for: indexPath) as! TimeLineCell
             cell.selectionStyle = .none
-            
             cell.index = indexPath.row
+            cell.content_id = timeLineContent[indexPath.row/2].contentId!
+            cell.user_id = timeLineContent[indexPath.row/2].userId!
+   
             
             // 좋아요
-            
             cell.isLiked = liked[indexPath.row/2]
             
-            cell.userName.setTitle("\(userId[indexPath.row/2])", for: .normal)
+            
+            cell.userName.setTitle(timeLineContent[indexPath.row/2].userName!, for: .normal)
             cell.userName.contentHorizontalAlignment = .left
             cell.userName.addTarget(self, action: #selector(userBtnAction), for: .touchUpInside)
-        
-            cell.contentText.text = contentText[indexPath.row/2]
+            if timeLineContent[indexPath.row/2].contentImage! != hasImage{
+                cell.contentPic.image = UIImage(data: NSData(contentsOf: NSURL(string: timeLineContent[indexPath.row/2].contentImage!) as! URL)! as Data)!
+            }else{
+                cell.contentPic.image = nil
+            }
+            cell.contentText.text = timeLineContent[indexPath.row/2].contentText!
             cell.contentText.sizeToFit()
             
             cell.mapBtn.addTarget(self, action: #selector(openMap), for: .touchUpInside)
             
-            if (hasImage[indexPath.row/2] == 0){
+            if (timeLineContent[indexPath.row/2].contentImage! == hasImage){
                 cell.anotherBtnUp()
             }else{
-                
+                cell.anotherBtnDown()
             }
             
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "spaceCell", for: indexPath) as! SpaceCell
             cell.selectionStyle = .none
-        
             return cell
         }
     }
@@ -154,7 +156,8 @@ extension TimeLineTableVC{
             picHeight.image = UIImage(named: "gguggu")
             
             // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
-            if hasImage[indexPath.row/2] == 0 {
+           
+            if timeLineContent[indexPath.row/2].contentImage! == hasImage {
                 return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
             }else{
                 return (picHeight.y+picHeight.height+50.multiplyHeightRatio())

@@ -9,7 +9,7 @@
 import SwiftyJSON
 import Alamofire
 
-private let server = "http://13.124.115.238:8080/"
+private let server = "http://13.124.115.238:8080"
 
 class ApiManager {
     
@@ -36,15 +36,17 @@ class ApiManager {
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
+                    print(resp)
                     var contentList = [ContentList]()
                     for idx in 0..<resp.count{
-                        let content = ContentList(contentId: resp[idx]["content_id"].intValue, userId: resp[idx]["user_id"].intValue, contentText: resp[idx]["content_text"].stringValue, contentImage: nil, createdAt: resp[idx]["create_at"].stringValue, share_range: resp[idx]["share_range"].intValue, location_range: resp[idx]["location_range"].intValue, hasImage: resp[idx]["hasImage"].intValue)
+                        let content = ContentList(contentId: resp[idx]["content_id"].intValue, userId: resp[idx]["user_id"].intValue,userName: resp[idx]["user_name"].stringValue, contentText: resp[idx]["content_text"].stringValue, contentImage: "http://"+resp[idx]["image_dir"].stringValue, createdAt: resp[idx]["create_at"].stringValue,updatedAt: resp[idx]["update_at"].stringValue ,share_range: resp[idx]["share_range"].intValue, location_range: resp[idx]["location_range"].intValue)
                         contentList += [content]
                     }
                     completion(contentList)
                 }
                 break
             case .failure(_):
+
                 break
                 
             }
