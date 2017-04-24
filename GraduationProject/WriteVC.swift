@@ -9,10 +9,27 @@
 import UIKit
 import Fusuma
 
+extension UIImage {
+    func resized(withPercentage percentage: CGFloat) -> UIImage? {
+        let canvasSize = CGSize(width: size.width * percentage, height: size.height * percentage)
+        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: canvasSize))
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+    func resized(toWidth width: CGFloat) -> UIImage? {
+        let canvasSize = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
+        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: canvasSize))
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+}
+
 class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollViewDelegate {
 
     var receivedImg : UIImage = UIImage(named : "defaultPhoto")!
-    var receivedMissionId : Int = 0
+    //var receivedMissionId : Int = 0
     
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -29,6 +46,11 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
     @IBOutlet weak var writeBtn: UIBarButtonItem!
     
     var change : CGFloat = 0.0
+    
+    var userId : Int = 8
+    var apiManager = ApiManager()
+    
+    var hasImage : Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,6 +188,18 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
     }
     
     @IBAction func writeBtnAction(_ sender: UIButton) {
+        
+        print("writeBtnACTIOn")
+        
+        //게시물 작성
+        apiManager.setApi(path: "/contents/\(userId)", method: .post, parameters: ["content_text":inputText.text,"share_range":1,"location_range":1,"has_image":hasImage,"content_image":resizing(receivedImg) as Any,"lat":37.599899839999985,"lng":126.95895195999994], header: [:])
+        
+        apiManager.requestUpload { (resp) in
+            print("asdasd")
+            print(resp)
+        }
+        
+        
     }
 
     
@@ -195,6 +229,7 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         scrollView.contentSize = CGSize(width:375*widthRatio ,height:(imageView.y+imageView.height+50)*heightRatio)
         
         imageView.image = image
+        hasImage = 1
     }
     
     func fusumaVideoCompleted(withFileURL fileURL: URL) {
@@ -252,5 +287,19 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func resizing(_ image: UIImage) -> Data?{
+        
+        
+        
+        let resizedWidthImage = image.resized(toWidth: 1080)
+        
+        let resizedData = UIImageJPEGRepresentation(resizedWidthImage!, 0.25)
+        
+        
+        
+        return resizedData
+        
+    }
 
 }
