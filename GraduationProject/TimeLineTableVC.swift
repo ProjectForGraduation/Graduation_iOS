@@ -27,9 +27,13 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var apiManager = ApiManager()
     var timeLineContent: [ContentList] = []
     
+    // userdefaults
+    let users = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
+        print(users.string(forKey: "token")!)
     }
     
     override func viewDidAppear(_ animated: Bool) {

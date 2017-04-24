@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="wzD-DL-4Lz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="i5o-eS-Wu9">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -9,6 +9,128 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Pre ViewVC-->
+        <scene sceneID="nk9-lb-Gk2">
+            <objects>
+                <viewController id="i5o-eS-Wu9" customClass="PreViewVC" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="huA-LP-Ntv"/>
+                        <viewControllerLayoutGuide type="bottom" id="YhH-Aj-90h"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Mqj-F7-3gS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="gTc-8O-t1B" kind="show" identifier="registerSegue" animates="NO" id="5ng-2l-MdP"/>
+                        <segue destination="vWz-JM-9Iz" kind="show" identifier="loginSegue" animates="NO" id="xKh-7x-OIG"/>
+                        <segue destination="wzD-DL-4Lz" kind="show" identifier="validTokenSegue" id="C8W-Ff-Vqx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7n8-eU-taP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2126" y="-68"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="nj6-im-skv">
+            <objects>
+                <navigationController id="gTc-8O-t1B" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="mYK-qG-GNs">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Oe6-Sh-SG4" kind="relationship" relationship="rootViewController" id="CLQ-aL-wb6"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nnj-Hh-84M" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3415" y="788"/>
+        </scene>
+        <!--회원가입-->
+        <scene sceneID="bjO-wu-eEH">
+            <objects>
+                <viewController id="Oe6-Sh-SG4" customClass="RegisterUserVC" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="zeh-KW-Tho"/>
+                        <viewControllerLayoutGuide type="bottom" id="jKd-rM-Vww"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dXz-wF-IM9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="회원가입" id="aEr-mR-IzM">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="LWz-2o-5Gi">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Tfw-rn-Rwt">
+                                <rect key="frame" x="16" y="7" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="뒤로">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="backBtnAction:" destination="Oe6-Sh-SG4" eventType="touchUpInside" id="sCp-wk-X3H"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2uV-nv-Knd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2642" y="789"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="5qv-d6-KPP">
+            <objects>
+                <navigationController id="vWz-JM-9Iz" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="SZz-N1-lez">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="sjS-On-zI7" kind="relationship" relationship="rootViewController" id="sPa-bM-JG5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="V9e-bc-qHy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1825" y="825"/>
+        </scene>
+        <!--로그인-->
+        <scene sceneID="KOc-Nt-lTz">
+            <objects>
+                <viewController id="sjS-On-zI7" customClass="LoginVC" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="eTh-Tc-x0U"/>
+                        <viewControllerLayoutGuide type="bottom" id="NzH-cW-Iq4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="VYD-rQ-pem">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="로그인" id="Rev-NV-jFq">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="CZz-BT-jTy">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dEG-7I-lsg">
+                                <rect key="frame" x="16" y="7" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="뒤로">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="backBtnAction:" destination="sjS-On-zI7" eventType="touchUpInside" id="hdw-oc-3qa"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="wzD-DL-4Lz" kind="show" identifier="mainSegue" id="Kot-b8-9Sr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="V5Q-AD-bCz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1060" y="826"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="H3f-ZG-nfr">
             <objects>
@@ -403,4 +525,7 @@
         <image name="timeline" width="25" height="25"/>
         <image name="write" width="25" height="25"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="C8W-Ff-Vqx"/>
+    </inferredMetricsTieBreakers>
 </document>

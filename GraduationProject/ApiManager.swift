@@ -27,6 +27,38 @@ class ApiManager {
         self.header = header
     }
     
+    func requestRegisterUser(completion: @escaping(Int)->Void){
+        Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
+            switch(response.result){
+                
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    completion(resp["meta"]["code"].intValue)
+                }
+                break
+            case .failure(_):
+                break
+            }
+        }
+    }
+    
+    func requestLogin(meta: @escaping(Int,String)->Void){
+        Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
+            switch(response.result){
+                
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    meta(resp["meta"]["code"].intValue,resp["token"].stringValue)
+                    
+                }
+                break
+            case .failure(_):
+                break
+            }
+        }
+    }
     
     func requestContents(completion : @escaping ([ContentList])->Void){
         
@@ -36,7 +68,6 @@ class ApiManager {
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
-                    print(resp)
                     var contentList = [ContentList]()
                     for idx in 0..<resp.count{
                         let content = ContentList(contentId: resp[idx]["content_id"].intValue, userId: resp[idx]["user_id"].intValue,userName: resp[idx]["user_name"].stringValue, contentText: resp[idx]["content_text"].stringValue, contentImage: "http://"+resp[idx]["image_dir"].stringValue, createdAt: resp[idx]["create_at"].stringValue,updatedAt: resp[idx]["update_at"].stringValue ,share_range: resp[idx]["share_range"].intValue, location_range: resp[idx]["location_range"].intValue)
