@@ -53,5 +53,38 @@ class ApiManager {
         }
     }
     
+    func requestUpload(completion : @escaping (String)->Void){
+        
+        
+        Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
+            print("faffa")
+            print(response.result.value!)
+            switch(response.result) {
+                
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    //print("aa")
+                    //print(resp)
+                    
+                    completion(resp.description)
+                }
+                break
+            case .failure(_):
+                
+                break
+                
+            }
+        }
+//        Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseString { response in
+//            
+//            print(response.result.value!)
+//            
+//        }
+
+        
+        
+    }
+    
     
 }

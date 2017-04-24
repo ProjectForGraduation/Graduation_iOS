@@ -119,9 +119,9 @@ extension TimeLineTableVC{
             cell.userName.contentHorizontalAlignment = .left
             cell.userName.addTarget(self, action: #selector(userBtnAction), for: .touchUpInside)
             if timeLineContent[indexPath.row/2].contentImage! != hasImage{
-                cell.contentPic.image = UIImage(data: NSData(contentsOf: NSURL(string: timeLineContent[indexPath.row/2].contentImage!) as! URL)! as Data)!
+                //cell.contentPic.image = UIImage(data: NSData(contentsOf: NSURL(string: timeLineContent[indexPath.row/2].contentImage!) as! URL)! as Data)!
             }else{
-                cell.contentPic.image = nil
+                //cell.contentPic.image = nil
             }
             cell.contentText.text = timeLineContent[indexPath.row/2].contentText!
             cell.contentText.sizeToFit()
