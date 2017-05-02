@@ -23,19 +23,20 @@ class TimeLineCell: UITableViewCell{
     var likeCount = UILabel()
     var commentBtn = UIButton()
     var mapBtn = UIButton()
-    
+
     
     var isLiked : Bool = true {
         willSet(newValue){
             if newValue{
-                
                 likeBtn.setImage(UIImage(named: "likeFill"), for: .normal)
             }else {
                 likeBtn.setImage(UIImage(named: "like"), for: .normal)
             }
         }
     }
-    
+
+    let apiManager = ApiManager()
+    let users = UserDefaults.standard
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -119,11 +120,13 @@ class TimeLineCell: UITableViewCell{
         
         print(content_id)
         print(user_id)
+        apiManager.setApi(path: "/contents/like", method: .post, parameters: ["content_id":content_id,"is_like":isLiked], header: ["authorization":users.string(forKey: "token")!])
         
     }
     
     func mapBtnAction(){
        TimeLineTableVC.index = self.index
+       SortLocationTableVC.index = self.index
     }
     
     func commentBtnAction(){
@@ -132,7 +135,8 @@ class TimeLineCell: UITableViewCell{
  
     
     func optionBtnAction(){
-        
+        TimeLineTableVC.index = self.index
+        SortLocationTableVC.index = self.index
     }
     
     

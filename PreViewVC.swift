@@ -10,16 +10,35 @@ import UIKit
 
 class PreViewVC: UIViewController {
 
+    let apiManager = ApiManager()
+    
     var mainImage : UIImageView!
     var mainLabel : UILabel!
     var subLabel : UILabel!
     var registerBtn : UIButton!
     var loginBtn : UIButton!
+    var users = UserDefaults.standard
+    var token : String?
+    var window: UIWindow?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setUpView()
+        
+        if let token = users.string(forKey: "token") {
+            apiManager.setApi(path: "/token", method: .get, parameters: [:], header: ["authorization":token])
+            
+            self.apiManager.requestToken { (token) in
+                if token != "OPEN_LOGINVC"{
+                    self.users.set(token, forKey: "token")
+                    self.performSegue(withIdentifier: "validTokenSegue", sender: self)
+                }else{
+                    self.tokenInvalidAlert()
+                }
+            }
+        }else{
+            setUpView()
+        }
+        
         // Do any additional setup after loading the view.
     }
 
@@ -64,6 +83,30 @@ class PreViewVC: UIViewController {
     func loginBtnAction(){
         self.performSegue(withIdentifier: "loginSegue", sender: self)
     }
+    
+    func tokenInvalidAlert(){
+        let alertView = UIAlertController(title: "로그인 만료", message: "다시 로그인 해주세요.", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "확인", style: UIAlertActionStyle.default, handler: { (UIAlertAction) in
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC")
+            self.window?.rootViewController = loginVC
+            self.window?.makeKeyAndVisible()
+            
+        })
+        
+        
+        
+        alertView.addAction(action)
+        
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alertView, animated: true, completion: nil)
+    }
+    
+
     
 
     /*

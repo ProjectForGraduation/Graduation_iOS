@@ -24,14 +24,16 @@ class MyListCell: UITableViewCell{
     var mapBtn = UIButton()
 
     
+    let apiManager = ApiManager()
+    let users = UserDefaults.standard
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         mainProfileImg.rcenter(y: 10, width: 100, height: 100, targetWidth: 375)
-        mainProfileImg.image = UIImage(named: "profileimg")
+        mainProfileImg.image = UIImage(named: "default")
         mainProfileImg.layer.masksToBounds = false
         mainProfileImg.layer.cornerRadius = 50.multiplyWidthRatio()
         mainProfileImg.clipsToBounds = true
-        mainProfileImg.addAction(target: self, action: #selector(changeProfileImg))
         
         myId.rcenter(y: 120, width: 375, height: 14, targetWidth: 375)
         myId.setLabel(text: "yoonmssssss", align: .center, fontName: "AppleSDGothicNeo-Medium", fontSize: 15, color: UIColor.black)
@@ -40,28 +42,25 @@ class MyListCell: UITableViewCell{
         myName.setLabel(text: "윤민섭", align: .center, fontName: "AppleSDGothicNeo-Medium", fontSize: 13, color: UIColor.black)
         
         mylistProfileImg.rframe(x: 10, y: 10, width: 30, height: 30)
-        mylistProfileImg.image = UIImage(named: "profileimg")
+        mylistProfileImg.image = UIImage(named: "default")
         mylistProfileImg.layer.masksToBounds = false
         mylistProfileImg.layer.cornerRadius = 15.multiplyWidthRatio()
         mylistProfileImg.clipsToBounds = true
         
         mylistName.rframe(x: 50, y: 14, width: 100, height: 11)
-        mylistName.setLabel(text: "윤민섭", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
+        mylistName.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
 
         createdDate.rframe(x: 50, y: 26, width: 100, height: 11)
-        createdDate.setLabel(text: "3월 18일", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
+        createdDate.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
         
         optionBtn.rframe(x: 335, y: 22.5, width: 15, height: 5)
         optionBtn.setButton(imageName: "option", target: self, action: #selector(optionBtnActions))
         
-        contentText.rframe(x: 10, y: 60, width: 355, height: 0)
-        contentText.setLabel(text: "안녕하세요 울 조카입니다^^~", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
-        contentText.numberOfLines = 0
-        
+        contentText.rframe(x: 10, y: 50, width: 355, height: 0)
+        contentText.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
         contentText.sizeToFit()
         
         contentPic.rframe(x: 0, y: (contentText.y+contentText.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 375, height: 375)
-        contentPic.image = UIImage(named: "gguggu")
         
         likeBtn.rframe(x: 10, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)
         likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnActions))
@@ -107,10 +106,8 @@ class MyListCell: UITableViewCell{
     func optionBtnActions(){
         
     }
-    
-    func changeProfileImg(){
 
-    }
+   
     
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -140,4 +137,10 @@ class MyListCell: UITableViewCell{
         commentBtn.frame.origin.y = contentText.y + contentText.height + 10.multiplyHeightRatio()
     }
     
+    func anotherBtnDown(){
+        mapBtn.frame.origin.y = contentPic.y + contentPic.height + 10.multiplyHeightRatio()
+        likeBtn.frame.origin.y = contentPic.y + contentPic.height + 10.multiplyHeightRatio()
+        likeCount.frame.origin.y = contentPic.y + contentPic.height + 20.multiplyHeightRatio()
+        commentBtn.frame.origin.y = contentPic.y + contentPic.height + 10.multiplyHeightRatio()
+    }
 }

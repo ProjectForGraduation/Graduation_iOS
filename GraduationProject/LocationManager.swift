@@ -13,6 +13,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     private var locationManager: CLLocationManager!
     private var locationValue: [String: Double] = ["latitude":0.0 , "longitude":0.0]
+    var apiManager = ApiManager()
     
     override init() {
         super.init()
@@ -35,11 +36,12 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         return locationValue
     }
     
-    func setLocationDB(_ userId:String){
+    func setLocationDB(_ token:String){
         // 디비에 현재 위치를 저장한다.
-        let userId = userId
         let latitude = locationValue["latitude"]
         let longitude = locationValue["longitude"]
+        apiManager.setApi(path: "/users/position", method: .post, parameters: ["lat":latitude!,"lng":longitude!], header: ["authorization":token])
+        apiManager.requestUpdatePosition()
         
     }
     

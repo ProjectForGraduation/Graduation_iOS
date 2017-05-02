@@ -118,7 +118,7 @@ class RegisterUserVC: UIViewController ,UITextFieldDelegate{
 
     
     func registerBtnAction(){
-        apiManager.setApi(path: "/users", method: .post, parameters: ["login_id":inputId.text!,"login_pw":inputPw.text!,"reEnterpw":reInputPw.text!,"user_name":inputName.text!,"public_range":1], header: [:])
+        apiManager.setApi(path: "/users/regist", method: .post, parameters: ["login_id":inputId.text!,"login_pw":inputPw.text!,"reEnterpw":reInputPw.text!,"user_name":inputName.text!,"public_range":1], header: [:])
         apiManager.requestRegisterUser { (code) in
             if code==0{
                 self.basicAlert(title: "반갑습니다", message: "회원가입을 축하드립니다!",true)

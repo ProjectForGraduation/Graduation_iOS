@@ -28,12 +28,13 @@ class ApiManager {
     }
     
     func requestRegisterUser(completion: @escaping(Int)->Void){
+        
         Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
             switch(response.result){
-                
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
+                    print(resp)
                     completion(resp["meta"]["code"].intValue)
                 }
                 break
@@ -44,14 +45,14 @@ class ApiManager {
     }
     
     func requestLogin(meta: @escaping(Int,String)->Void){
+        
         Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
             switch(response.result){
-                
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
+                    print(resp)
                     meta(resp["meta"]["code"].intValue,resp["token"].stringValue)
-                    
                 }
                 break
             case .failure(_):
@@ -60,7 +61,7 @@ class ApiManager {
         }
     }
     
-    func requestContents(completion : @escaping ([ContentList])->Void){
+    func requestAroundContents(completion : @escaping ([AroundContentList])->Void){
         
         Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
             switch(response.result) {
@@ -68,9 +69,10 @@ class ApiManager {
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
-                    var contentList = [ContentList]()
+                    print(resp)
+                    var contentList = [AroundContentList]()
                     for idx in 0..<resp.count{
-                        let content = ContentList(contentId: resp[idx]["content_id"].intValue, userId: resp[idx]["user_id"].intValue,userName: resp[idx]["user_name"].stringValue, contentText: resp[idx]["content_text"].stringValue, contentImage: "http://"+resp[idx]["image_dir"].stringValue, createdAt: resp[idx]["create_at"].stringValue,updatedAt: resp[idx]["update_at"].stringValue ,share_range: resp[idx]["share_range"].intValue, location_range: resp[idx]["location_range"].intValue)
+                        let content = AroundContentList(contentId: resp["data"][idx]["content_id"].intValue, userId: resp["data"][idx]["user_id"].intValue,userName: resp["data"][idx]["user_name"].stringValue, profileImg: resp["data"][idx]["profile_dir"].stringValue, contentText: resp["data"][idx]["content_text"].stringValue, contentImage: resp["data"][idx]["image_dir"].stringValue,createdAt: resp["data"][idx]["create_at"].stringValue ,updatedAt: resp["data"][idx]["update_at"].stringValue, share_range: resp["data"][idx]["share_range"].intValue, location_range: resp["data"][idx]["location_range"].intValue , isLiked: resp["data"][idx]["is_like"].intValue, likeCount: resp["data"][idx]["like_cnt"].intValue)
                         contentList += [content]
                     }
                     completion(contentList)
@@ -84,6 +86,113 @@ class ApiManager {
         }
     }
     
+    func requestMyContents(completion : @escaping ([MyContentList])->Void){
+        
+        Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
+            switch(response.result) {
+                
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    print(resp)
+                    var contentList = [MyContentList]()
+                    for idx in 0..<resp["myContents"].count{
+                        let content = MyContentList(contentId: resp["myContents"][idx]["content_id"].intValue, userId: resp["myContents"][idx]["user_id"].intValue,userName: resp["myContents"][idx]["user_name"].stringValue, profileImg: resp["myContents"][idx]["profile_dir"].stringValue, contentText: resp["myContents"][idx]["content_text"].stringValue, contentImage: resp["myContents"][idx]["image_dir"].stringValue,createdAt: resp["myContents"][idx]["create_at"].stringValue ,updatedAt: resp["myContents"][idx]["update_at"].stringValue, share_range: resp["myContents"][idx]["share_range"].intValue, location_range: resp["myContents"][idx]["location_range"].intValue , isLiked: resp["myContents"][idx]["is_like"].intValue, likeCount: resp["myContents"][idx]["like_cnt"].intValue)
+                        contentList += [content]
+                    }
+                    completion(contentList)
+                }
+                break
+            case .failure(_):
+                
+                break
+                
+            }
+        }
+    }
+    
+    func requestUpdatePosition(){
+        Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
+            switch(response.result){
+            case .success(_):
+                break
+            case .failure(_):
+                break
+            }
+        }
+    }
+    
+    func requestDeleteContents(completion: @escaping (Int)->Void){
+        Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
+            switch(response.result){
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    print(resp)
+                    completion(resp["meta"]["code"].intValue)
+                }
+                break
+            case .failure(_):
+                break
+            }
+        }
+    }
+    
+    func requestToken(completion : @escaping (String) -> Void){
+        Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
+            switch(response.result){
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    print(resp)
+                    if resp["meta"]["code"].intValue == 0 {
+                        completion(resp["token"].stringValue)
+                    }else{
+                        completion("OPEN_LOGINVC")
+                    }
+                }
+                break
+            case .failure(_):
+                break
+            }
+        }
+    }
+    
+    func requestChangeProfileImage(){
+        Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
+            switch(response.result) {
+                
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    print(resp)
+                }
+                break
+            case .failure(_):
+                
+                break
+                
+            }
+        }
+    }
+    
+    func requestLike(completion : @escaping (Int)->Void){
+        Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
+            switch(response.result) {
+                
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    print(resp)
+                    completion(resp["meta"]["code"].intValue)
+                }
+                break
+            case .failure(_):
+                break
+                
+            }
+        }
+    }
     func requestUpload(completion : @escaping (String)->Void){
         
         

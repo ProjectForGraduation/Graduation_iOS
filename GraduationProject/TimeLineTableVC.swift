@@ -18,14 +18,14 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var locValue: Dictionary<String,Double> = [:]
     var locationTimer = Timer()
     static var index: Int = 0
-    
+    var token : String!
     // temp
     var liked : [Bool] = [true,false,true,true,true,true,true,false,false,true]
     
     //Api
     
     var apiManager = ApiManager()
-    var timeLineContent: [ContentList] = []
+    var timeLineContent: [AroundContentList] = []
     
     // userdefaults
     let users = UserDefaults.standard
@@ -33,7 +33,7 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
-        print(users.string(forKey: "token")!)
+        token = users.string(forKey: "token")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,23 +58,20 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func setUpView(){
         //locationTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
         // 일단 15초
-        apiManager.setApi(path: "/contents/all", method: .get, parameters: [:], header: [:])
-        apiManager.requestContents { (ContentList) in
-
-            self.timeLineContent = ContentList
-            
-            self.tableView.reloadData()
-        }
-        
-
+//        apiManager.setApi(path: "/contents/all", method: .get, parameters: [:], header: [:])
+//        apiManager.requestContents { (ContentList) in
+//
+//            self.timeLineContent = ContentList
+//            
+//            self.tableView.reloadData()
+//        }
+//
     }
     
     func updateLocation(){
-        // 로그인한 사람의 아이디 값을 받는다.
-        let userId: String = ""
+
         locValue = locationManager.getUserLocation()
-        print(locValue)
-        locationManager.setLocationDB(userId)
+        locationManager.setLocationDB(token)
     }
     
     func openMap(){
@@ -87,6 +84,53 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     func userBtnAction(){
         print("1")
+    }
+    
+    func optionBtnAction(){
+        print(TimeLineTableVC.index)
+    }
+    
+    func contentAlert(isMine : Bool){
+        
+        let alertView = UIAlertController(title: "", message: "이 글에 대하여", preferredStyle: .actionSheet)
+        
+        let reportContent = UIAlertAction(title: "신고하기", style: UIAlertActionStyle.destructive, handler: { (UIAlertAction) in
+            
+            alertView.dismiss(animated: true, completion: nil)
+        })
+        
+        let modifyContent = UIAlertAction(title: "게시물 수정", style: UIAlertActionStyle.default, handler: { (UIAlertAction) in
+            alertView.dismiss(animated: true, completion: nil)
+        })
+        
+        
+        let removeContent = UIAlertAction(title: "게시물 삭제", style: UIAlertActionStyle.destructive, handler: { (UIAlertAction) in
+            
+            self.apiManager.setApi(path: "contents/:contentId", method: .delete, parameters: [:], header: ["authorization":self.users.string(forKey: "token")!])
+            self.apiManager.requestDeleteContents(completion: { (code) in
+                print(code)
+            })
+            
+            alertView.dismiss(animated: true, completion: nil)
+        })
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { (_) in }
+        
+        if isMine{
+            alertView.addAction(modifyContent)
+            alertView.addAction(removeContent)
+        }else{
+            alertView.addAction(reportContent)
+        }
+        
+        alertView.addAction(cancelAction)
+        
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alertView, animated: true, completion: nil)
+        
     }
     
 }
@@ -122,6 +166,8 @@ extension TimeLineTableVC{
             cell.userName.setTitle(timeLineContent[indexPath.row/2].userName!, for: .normal)
             cell.userName.contentHorizontalAlignment = .left
             cell.userName.addTarget(self, action: #selector(userBtnAction), for: .touchUpInside)
+            cell.optionBtn.setButton(imageName: "option", target: self, action: #selector(optionBtnAction))
+
             if timeLineContent[indexPath.row/2].contentImage! != hasImage{
                 //cell.contentPic.image = UIImage(data: NSData(contentsOf: NSURL(string: timeLineContent[indexPath.row/2].contentImage!) as! URL)! as Data)!
             }else{

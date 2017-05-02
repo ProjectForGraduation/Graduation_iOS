@@ -74,8 +74,10 @@ class LoginVC: UIViewController , UITextFieldDelegate{
     func loginBtnAction(){
         apiManager.setApi(path: "/users/login", method: .post, parameters: ["login_id":inputId.text!,"login_pw":inputPw.text!], header: [:])
         apiManager.requestLogin { (meta, token) in
+            print(meta,token)
             if meta == 0 {
                 self.users.set(token, forKey: "token")
+                self.users.set(self.inputId.text!, forKey: "userid")
                 self.performSegue(withIdentifier: "mainSegue", sender: self)
             }else{
                 self.basicAlert(title: "오류!", message: "아이디, 비밀번호를 확인해주세요.", false)
