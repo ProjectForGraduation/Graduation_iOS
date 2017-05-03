@@ -33,6 +33,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
+        updateLocation()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -57,11 +58,11 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     func setUpView(){
         //locationTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
         // 일단 15초
-        apiManager.setApi(path: "/contents/around", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+        let userLati = Float(locValue["latitude"]!)
+        let userLong = Float(locValue["longitude"]!)
+        apiManager.setApi(path: "/contents/around?lat=\(userLati)&lng=\(userLong)", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
         apiManager.requestAroundContents { (ContentList) in
-            
             self.aroundContentList = ContentList
-            
             self.tableView.reloadData()
         }
         
@@ -69,11 +70,8 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     func updateLocation(){
-        // 로그인한 사람의 아이디 값을 받는다.
-        let userId: String = ""
         locValue = locationManager.getUserLocation()
-        print(locValue)
-        locationManager.setLocationDB(userId)
+        locationManager.setLocationDB(users.string(forKey: "token")!)
     }
     
     func openMap(){
@@ -161,33 +159,31 @@ extension SortLocationTableVC{
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "timelineCell", for: indexPath) as! TimeLineCell
             cell.selectionStyle = .none
+            
             cell.index = indexPath.row
             cell.content_id = aroundContentList[indexPath.row/2].contentId!
             cell.user_id = aroundContentList[indexPath.row/2].userId!
-            
             // 좋아요
-            cell.isLiked = liked[indexPath.row/2]
-            
+            cell.isLiked = aroundContentList[indexPath.row/2].isLiked!
             // 옵션
             cell.optionBtn.setButton(imageName: "option", target: self, action: #selector(optionBtnAction))
             
             cell.userName.setTitle(aroundContentList[indexPath.row/2].userName!, for: .normal)
             cell.userName.contentHorizontalAlignment = .left
             cell.userName.addTarget(self, action: #selector(userBtnAction), for: .touchUpInside)
-            if aroundContentList[indexPath.row/2].contentImage! != hasImage{
-                //cell.contentPic.image = UIImage(data: NSData(contentsOf: NSURL(string: timeLineContent[indexPath.row/2].contentImage!) as! URL)! as Data)!
-            }else{
-                //cell.contentPic.image = nil
-            }
+            
             cell.contentText.text = aroundContentList[indexPath.row/2].contentText!
             cell.contentText.sizeToFit()
             
             cell.mapBtn.addTarget(self, action: #selector(openMap), for: .touchUpInside)
             
-            if (aroundContentList[indexPath.row/2].contentImage! == hasImage){
-                cell.anotherBtnUp()
-            }else{
+            if aroundContentList[indexPath.row/2].contentImage != "0"{
+                cell.contentPic.image = UIImage(data: NSData(contentsOf: NSURL(string: aroundContentList[indexPath.row/2].contentImage!) as! URL)! as Data)!
+                cell.contentPic.y = (cell.contentText.y+cell.contentText.height+10.multiplyHeightRatio()).remultiplyHeightRatio()
                 cell.anotherBtnDown()
+            }else{
+                cell.contentPic.image = nil
+                cell.anotherBtnUp()
             }
             
             return cell
@@ -211,9 +207,7 @@ extension SortLocationTableVC{
             picHeight.rframe(x: 0, y: (textHeight.y+textHeight.height+10).remultiplyHeightRatio(), width: 375, height: 375)
             picHeight.image = UIImage(named: "gguggu")
             
-            // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
-            
-            if aroundContentList[indexPath.row/2].contentImage! == hasImage {
+            if aroundContentList[indexPath.row/2].contentImage! == "0" {
                 return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
             }else{
                 return (picHeight.y+picHeight.height+50.multiplyHeightRatio())

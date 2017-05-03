@@ -23,10 +23,8 @@ class PreViewVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         if let token = users.string(forKey: "token") {
             apiManager.setApi(path: "/token", method: .get, parameters: [:], header: ["authorization":token])
-            
             self.apiManager.requestToken { (token) in
                 if token != "OPEN_LOGINVC"{
                     self.users.set(token, forKey: "token")

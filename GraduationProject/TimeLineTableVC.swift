@@ -160,7 +160,7 @@ extension TimeLineTableVC{
    
             
             // 좋아요
-            cell.isLiked = liked[indexPath.row/2]
+            //cell.isLiked = liked[indexPath.row/2]
             
             
             cell.userName.setTitle(timeLineContent[indexPath.row/2].userName!, for: .normal)

@@ -25,9 +25,9 @@ class TimeLineCell: UITableViewCell{
     var mapBtn = UIButton()
 
     
-    var isLiked : Bool = true {
+    var isLiked : Int = 1 {
         willSet(newValue){
-            if newValue{
+            if newValue == 1{
                 likeBtn.setImage(UIImage(named: "likeFill"), for: .normal)
             }else {
                 likeBtn.setImage(UIImage(named: "like"), for: .normal)
@@ -112,10 +112,10 @@ class TimeLineCell: UITableViewCell{
     
     func likeBtnAction(){
         // 이곳에서 서버로 내가 눌렀는지 안눌렀는지 보낸다.
-        if isLiked{
-            isLiked = false
+        if isLiked == 1{
+            isLiked = 0
         }else{
-            isLiked = true
+            isLiked = 1
         }
         
         print(content_id)

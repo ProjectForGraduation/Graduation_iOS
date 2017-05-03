@@ -19,6 +19,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     let users = UserDefaults.standard
     var token : String!
     var myContentList: [MyContentList] = []
+    var userInfo : UserInfo?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,10 +47,16 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     }
     
     func setUpView(){
-        apiManager.setApi(path: "/contents/my", method: .get, parameters: [:], header: ["authorization":token])
+        
+        apiManager.setApi(path: "/contents/my", method: .get, parameters: [:], header: ["authorization":self.token])
         apiManager.requestMyContents { (mylist) in
             self.myContentList = mylist
-            self.tableView.reloadData()
+           
+            self.apiManager.setApi(path: "/users/id", method: .get, parameters: [:], header: ["authorization":self.token])
+            self.apiManager.requestUserInfo { (userInfo) in
+                self.userInfo = userInfo
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -76,11 +83,9 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
             print("Image selected")
         }
         
-        print(image)
-     
-        apiManager.setApi(path: "/users/profile", method: .post, parameters: ["userprofile":image as Any!], header: ["authorization":users.string(forKey: "token")!])
+        apiManager.setApi(path: "/users/profile", method: .post, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
         
-        apiManager.requestChangeProfileImage()
+        apiManager.requestChangeProfileImage(resizing(image)!)
         setUpView()
     }
 
@@ -135,6 +140,12 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         return date
     }
     
+    func resizing(_ image: UIImage) -> Data?{
+        let resizedWidthImage = image.resized(toWidth: 1080)
+        let resizedData = UIImageJPEGRepresentation(resizedWidthImage!, 0.25)
+        return resizedData
+    }
+    
 }
 
 extension MyListVC {
@@ -149,14 +160,23 @@ extension MyListVC {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "mytimeline", for: indexPath) as! MyListCell
             cell.selectionStyle = .none
-            if (indexPath.row != 0) , !myContentList.isEmpty{
-                print(indexPath.row)
-                if myContentList[indexPath.row/2 - 1].profileImg != "0"{
-                    cell.mainProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: myContentList[indexPath.row/2 - 1].profileImg!) as! URL)! as Data)!
-                    cell.mylistProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: myContentList[indexPath.row/2 - 1].profileImg!) as! URL)! as Data)!
+        
+            if indexPath.row == 0 {
+                if userInfo != nil{
+                    cell.myId.text = userInfo?.login_id
+                    cell.myName.text = userInfo?.user_name
+                    if userInfo?.profile_dir != "0"{
+                        cell.mylistProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: myContentList[indexPath.row/2 - 1].profileImg!) as! URL)! as Data)!
+                    }
                 }
-                cell.myId.text = users.string(forKey: "userid")
-                cell.myName.text = myContentList[indexPath.row/2 - 1].userName!
+                
+            }
+            
+            if (indexPath.row != 0) , !myContentList.isEmpty{
+                if myContentList[indexPath.row/2 - 1].profileImg != "0"{
+                    cell.mylistProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: myContentList[indexPath.row/2 - 1].profileImg!) as! URL)! as Data)!
+                    
+                }
                 cell.mylistName.text = myContentList[indexPath.row/2 - 1].userName!
                 cell.createdDate.text = changeDate(myContentList[indexPath.row/2 - 1].createdAt!)
                 cell.contentText.text = myContentList[indexPath.row/2 - 1].contentText!
@@ -168,6 +188,7 @@ extension MyListVC {
                     cell.contentPic.y = (cell.contentText.y+cell.contentText.height+10.multiplyHeightRatio()).remultiplyHeightRatio()
                     cell.anotherBtnDown()
                 }else{
+                    cell.contentPic.image = nil
                     cell.anotherBtnUp()
                 }
             }
