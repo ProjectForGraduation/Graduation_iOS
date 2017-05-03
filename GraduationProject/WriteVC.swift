@@ -27,7 +27,7 @@ extension UIImage {
 }
 
 class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollViewDelegate {
-
+    
     var receivedImg : UIImage = UIImage(named : "defaultPhoto")!
     //var receivedMissionId : Int = 0
     
@@ -48,9 +48,15 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
     var change : CGFloat = 0.0
     
     var userId : Int = 8
-    var apiManager = ApiManager()
+    var apiManager = ApiManager2()
+    
+    let users = UserDefaults.standard
     
     var hasImage : Int = 0
+    
+    
+    var locationManager = LocationManager()
+    var locValue: Dictionary<String,Double> = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +64,7 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         // Do any additional setup after loading the view.
         self.inputText.delegate = self
         
+
         setUpView()
     }
     
@@ -65,7 +72,7 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         
         //imageView.image = receivedImg
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -94,7 +101,7 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         //inputText.isScrollEnabled = false
         
         //imageView = UIImageView(frame: CGRect(x: 20*widthRatio, y: 560*heightRatio, width: 335*widthRatio, height: (300*heightRatio)))
-    
+        
         
         imageView.frame = CGRect(x: 20*widthRatio, y: 250*heightRatio, width: 335*widthRatio, height: (300*heightRatio))
         imageView.image = receivedImg
@@ -102,8 +109,8 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(imageTapped))
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(tapGestureRecognizer)
-    
-    
+        
+        
     }
     
     func imageTapped(){
@@ -164,7 +171,7 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         
         //self.inputText.contentSize.height
         //
-       
+        
         
         let imageWidth = CGFloat((imageView.image?.size.width)!)
         let imageHeight = CGFloat((imageView.image?.size.height)!)
@@ -181,7 +188,7 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         
         
     }
-
+    
     
     @IBAction func backBtnAction(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -189,19 +196,36 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
     
     @IBAction func writeBtnAction(_ sender: UIButton) {
         
-        print("writeBtnACTIOn")
         
-        //게시물 작성
-        apiManager.setApi(path: "/contents/\(userId)", method: .post, parameters: ["content_text":inputText.text,"share_range":1,"location_range":1,"has_image":hasImage,"content_image":resizing(receivedImg) as Any,"lat":37.599899839999985,"lng":126.95895195999994], header: [:])
+        updateLocation()
+        let lat = locValue["latitude"]
+        let lng = locValue["longitude"]
         
-        apiManager.requestUpload { (resp) in
-            print("asdasd")
-            print(resp)
+        apiManager.setApi(path: "/contents", method: .post, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+        
+        apiManager.requestWrite(imageData: self.resizing(imageView.image!)!, text: inputText.text, share: 1, location: 1, hasImage: hasImage, lng: lng!, lat: lat!) { (resp) in
+            
+            if resp == 0{
+                
+                self.dismiss(animated: true, completion: nil)
+            
+            }else{
+            
+                self.basicAlert(title: "실패", message: "게시물 업로드에 실패하였습니다.")
+                
+            }
         }
         
         
+        
+        
     }
-
+    
+    func updateLocation(){
+        
+        locValue = locationManager.getUserLocation()
+    }
+    
     
     // MARK: FusumaDelegate Protocol
     func fusumaImageSelected(_ image: UIImage, source: FusumaMode) {
@@ -277,16 +301,16 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         print("Called when the close button is pressed")
         
     }
-
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
     
     func resizing(_ image: UIImage) -> Data?{
         
@@ -301,5 +325,26 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         return resizedData
         
     }
+    
+    func basicAlert(title : String,message : String){
+        let alertView = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "네", style: UIAlertActionStyle.default, handler: { (UIAlertAction) in
+            alertView.dismiss(animated: true, completion: nil)
+        })
+        
+        alertView.addAction(action)
+        
+        alertWindow(alertView: alertView)
+    }
+    
+    func alertWindow(alertView: UIAlertController){
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alertView, animated: true, completion: nil)
+    }
 
+    
 }
