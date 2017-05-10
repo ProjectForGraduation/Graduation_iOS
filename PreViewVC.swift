@@ -26,6 +26,7 @@ class PreViewVC: UIViewController {
         if let token = users.string(forKey: "token") {
             apiManager.setApi(path: "/token", method: .get, parameters: [:], header: ["authorization":token])
             self.apiManager.requestToken { (token) in
+                print(token)
                 if token != "OPEN_LOGINVC"{
                     self.users.set(token, forKey: "token")
                     self.performSegue(withIdentifier: "validTokenSegue", sender: self)
@@ -88,9 +89,7 @@ class PreViewVC: UIViewController {
         let action = UIAlertAction(title: "확인", style: UIAlertActionStyle.default, handler: { (UIAlertAction) in
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVC")
-            self.window?.rootViewController = loginVC
-            self.window?.makeKeyAndVisible()
-            
+            self.present(loginVC, animated: false, completion: nil)
         })
         
         

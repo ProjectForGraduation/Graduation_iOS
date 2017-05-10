@@ -104,7 +104,6 @@ class ApiManager {
                 }
                 break
             case .failure(_):
-                print("fail")
                 break
             }
         }
@@ -166,7 +165,7 @@ class ApiManager {
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
-                    if resp["meta"]["code"].intValue == 0 {
+                    if resp["meta"]["code"].intValue == 0 && resp["token"].stringValue != ""{
                         completion(resp["token"].stringValue)
                     }else{
                         completion("OPEN_LOGINVC")
