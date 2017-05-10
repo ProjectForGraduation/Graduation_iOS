@@ -244,7 +244,7 @@ extension MyListVC {
         //performSegue(withIdentifier: "segueToReplyVC", sender: self)
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let replyContentVC = storyboard.instantiateViewController(withIdentifier: "ReplyContentVC")
+        let replyContentVC = storyboard.instantiateViewController(withIdentifier: "ReplyVC")
         
         
         
