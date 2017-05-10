@@ -1,10 +1,11 @@
 //
-//  ReplyList.swift
+//  ReplyContentList.swift
 //  GraduationProject
 //
-//  Created by 전한경 on 2017. 5. 3..
+//  Created by 전한경 on 2017. 5. 4..
 //  Copyright © 2017년 윤민섭. All rights reserved.
 //
+
 
 import Foundation
 

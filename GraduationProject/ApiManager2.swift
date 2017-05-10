@@ -1,10 +1,11 @@
 //
-//  ApiManager.swift
+//  ApiManagerHK.swift
 //  GraduationProject
 //
-//  Created by 윤민섭 on 2017. 3. 17..
+//  Created by 전한경 on 2017. 5. 4..
 //  Copyright © 2017년 윤민섭. All rights reserved.
 //
+
 
 import SwiftyJSON
 import Alamofire
@@ -73,3 +74,4 @@ class ApiManager2 {
     
     
 }
+

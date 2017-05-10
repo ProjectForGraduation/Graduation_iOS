@@ -48,7 +48,7 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
     var change : CGFloat = 0.0
     
     var userId : Int = 8
-    //var apiManager = ApiManager2()
+    var apiManager = ApiManager2()
     
     let users = UserDefaults.standard
     
@@ -201,20 +201,20 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
         let lat = locValue["latitude"]
         let lng = locValue["longitude"]
         
-//        apiManager.setApi(path: "/contents", method: .post, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
-//        
-//        apiManager.requestWrite(imageData: self.resizing(imageView.image!)!, text: inputText.text, share: 1, location: 1, hasImage: hasImage, lng: lng!, lat: lat!) { (resp) in
-//            
-//            if resp == 0{
-//                
-//                self.dismiss(animated: true, completion: nil)
-//            
-//            }else{
-//            
-//                self.basicAlert(title: "실패", message: "게시물 업로드에 실패하였습니다.")
-//                
-//            }
-//        }
+        apiManager.setApi(path: "/contents", method: .post, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+        
+        apiManager.requestWrite(imageData: self.resizing(imageView.image!)!, text: inputText.text, share: 1, location: 1, hasImage: hasImage, lng: lng!, lat: lat!) { (resp) in
+            
+            if resp == 0{
+                
+                self.dismiss(animated: true, completion: nil)
+            
+            }else{
+            
+                self.basicAlert(title: "실패", message: "게시물 업로드에 실패하였습니다.")
+                
+            }
+        }
         
         
         
