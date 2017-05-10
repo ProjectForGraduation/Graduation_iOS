@@ -239,4 +239,23 @@ extension MyListVC {
 
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        //performSegue(withIdentifier: "segueToReplyVC", sender: self)
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let replyContentVC = storyboard.instantiateViewController(withIdentifier: "ReplyContentVC")
+        
+        
+        
+        //        SelectListViewController.receivedCid = self.photos[indexPath.item].contentId
+        //        SelectListViewController.receivedCimg = self.photos[indexPath.item].image
+        //        SelectListViewController.receivedRange = 0
+        //        SelectListViewController.receivedIndex = indexPath.item
+        
+        
+        self.present(replyContentVC, animated: false, completion: nil)
+        
+    }
+    
 }
