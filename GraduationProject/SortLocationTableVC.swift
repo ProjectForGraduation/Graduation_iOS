@@ -34,6 +34,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         super.viewDidLoad()
         setTableView()
         updateLocation()
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
     }
     
     override func viewDidAppear(_ animated: Bool) {

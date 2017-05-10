@@ -34,6 +34,7 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         super.viewDidLoad()
         setTableView()
         token = users.string(forKey: "token")
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -21,11 +21,12 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     var myContentList: [MyContentList] = []
     var userInfo : UserInfo?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         token = users.string(forKey: "token")
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
         setTableView()
-        // Do any additional setup after loading the view.
     }
 
     override func viewDidAppear(_ animated: Bool) {

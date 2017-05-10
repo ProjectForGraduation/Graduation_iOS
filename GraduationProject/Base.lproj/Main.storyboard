@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="wzD-DL-4Lz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="80c-j2-Ekv">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -25,7 +25,7 @@
                     <connections>
                         <segue destination="gTc-8O-t1B" kind="show" identifier="registerSegue" animates="NO" id="5ng-2l-MdP"/>
                         <segue destination="vWz-JM-9Iz" kind="show" identifier="loginSegue" animates="NO" id="xKh-7x-OIG"/>
-                        <segue destination="wzD-DL-4Lz" kind="show" identifier="validTokenSegue" id="C8W-Ff-Vqx"/>
+                        <segue destination="26s-ul-QBA" kind="show" identifier="validTokenSegue" id="enJ-Kg-zrA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7n8-eU-taP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -124,30 +124,14 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="wzD-DL-4Lz" kind="show" identifier="mainSegue" id="Kot-b8-9Sr"/>
+                        <segue destination="26s-ul-QBA" kind="show" identifier="mainSegue" id="UlI-ev-gaN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V5Q-AD-bCz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1060" y="826"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="H3f-ZG-nfr">
-            <objects>
-                <navigationController id="wzD-DL-4Lz" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="GDM-29-34p">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="26s-ul-QBA" kind="relationship" relationship="rootViewController" id="XZN-S4-ytZ"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6ZX-qk-hbK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-601" y="-93"/>
-        </scene>
-        <!--Sort Location TableVC-->
+        <!--지금 여기 우리-->
         <scene sceneID="T8b-2d-EyO">
             <objects>
                 <viewController id="rQn-8p-SWQ" customClass="SortLocationTableVC" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
@@ -191,17 +175,35 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" tag="2" title="" image="location" id="GSs-kM-kuU">
-                        <inset key="imageInsets" minX="0.0" minY="7" maxX="0.0" maxY="-7"/>
-                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
-                    </tabBarItem>
+                    <navigationItem key="navigationItem" title="지금 여기 우리" id="106-dT-AFu">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="HRd-RY-flv">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3DU-Ku-idK">
+                                <rect key="frame" x="16" y="9" width="25" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="search"/>
+                                <connections>
+                                    <segue destination="k4m-h6-Gd8" kind="show" id="P7n-zO-yE1"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="UfO-Ae-GMZ">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ohe-4o-jZn">
+                                <rect key="frame" x="334" y="9" width="25" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="write"/>
+                                <connections>
+                                    <segue destination="Em9-6n-9iY" kind="show" id="Wt2-05-OPf"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="VaR-nO-3TM" id="T8S-Si-veu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kxQ-QA-1sp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1076" y="1044.8275862068967"/>
+            <point key="canvasLocation" x="2006" y="825"/>
         </scene>
         <!--생각 공유-->
         <scene sceneID="gEg-cw-9z5">
@@ -372,7 +374,7 @@
             </objects>
             <point key="canvasLocation" x="1076" y="-1173"/>
         </scene>
-        <!--Time Line TableVC-->
+        <!--지금 여기 우리-->
         <scene sceneID="FVm-4C-TJd">
             <objects>
                 <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ea9-Nw-kUX" customClass="TimeLineTableVC" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
@@ -415,11 +417,28 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" tag="1" title="" image="timeline" id="j4W-Yn-XhM">
-                        <inset key="imageInsets" minX="0.0" minY="7" maxX="0.0" maxY="-7"/>
-                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
-                    </tabBarItem>
-                    <navigationItem key="navigationItem" id="09R-FG-xxs"/>
+                    <navigationItem key="navigationItem" title="지금 여기 우리" id="09R-FG-xxs">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="Sj1-0i-57O">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Qa9-Aa-KKu">
+                                <rect key="frame" x="16" y="9" width="25" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="search"/>
+                                <connections>
+                                    <segue destination="k4m-h6-Gd8" kind="show" id="7at-rp-um2"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="Xuy-Sp-LV8">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gPQ-Q8-LF3">
+                                <rect key="frame" x="334" y="9" width="25" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="write"/>
+                                <connections>
+                                    <segue destination="Em9-6n-9iY" kind="show" identifier="writeSegue" id="OtL-Bi-Ssg"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="VG8-wc-3e3" id="LtB-oh-J7P"/>
                         <segue destination="ecN-6h-2Yi" kind="show" identifier="MapSegue" id="Lsp-Iu-ijA"/>
@@ -428,7 +447,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BL0-O4-ptU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1076" y="-439"/>
+            <point key="canvasLocation" x="2006" y="33"/>
         </scene>
         <!--ReplyVC-->
         <scene sceneID="Kab-cv-TTR">
@@ -502,6 +521,25 @@
             <point key="canvasLocation" x="3831" y="-155"/>
         </scene>
         <!--Navigation Controller-->
+        <scene sceneID="kvh-t2-QDz">
+            <objects>
+                <navigationController id="mfy-b6-aCv" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="timeline" id="f2x-vM-Gk9">
+                        <inset key="imageInsets" minX="0.0" minY="7" maxX="0.0" maxY="-7"/>
+                    </tabBarItem>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="09k-mR-NL8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Ea9-Nw-kUX" kind="relationship" relationship="rootViewController" id="cPB-Xb-cTu"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9Ay-gG-nj0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1201" y="33"/>
+        </scene>
+        <!--Navigation Controller-->
         <scene sceneID="YPp-bQ-EFU">
             <objects>
                 <navigationController id="ecN-6h-2Yi" sceneMemberID="viewController">
@@ -527,9 +565,6 @@
                                 <rect key="frame" x="16" y="9" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="search"/>
-                                <connections>
-                                    <segue destination="k4m-h6-Gd8" kind="show" identifier="searchSegue" id="8NU-gT-Y66"/>
-                                </connections>
                             </button>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Item" style="plain" id="f6Y-pO-H9D">
@@ -558,17 +593,35 @@
                         </userDefinedRuntimeAttributes>
                     </tabBar>
                     <connections>
-                        <segue destination="Em9-6n-9iY" kind="show" identifier="writeSegue" id="poy-Pf-cZn"/>
-                        <segue destination="Ea9-Nw-kUX" kind="relationship" relationship="viewControllers" id="sdS-p2-a7y"/>
-                        <segue destination="rQn-8p-SWQ" kind="relationship" relationship="viewControllers" id="e6K-az-2ci"/>
-                        <segue destination="fMx-M9-KXm" kind="relationship" relationship="viewControllers" id="e5F-jr-izN"/>
+                        <segue destination="mfy-b6-aCv" kind="relationship" relationship="viewControllers" id="9ug-tI-e7e"/>
+                        <segue destination="3w0-do-CoP" kind="relationship" relationship="viewControllers" id="s3h-ey-ssw"/>
+                        <segue destination="CzV-KT-RqF" kind="relationship" relationship="viewControllers" id="cGa-1h-EXa"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EZC-6a-Lj5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="204" y="-93"/>
         </scene>
-        <!--My ListVC-->
+        <!--Navigation Controller-->
+        <scene sceneID="mI3-Bf-dAr">
+            <objects>
+                <navigationController id="CzV-KT-RqF" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="mylist" id="dTw-1J-Eft">
+                        <inset key="imageInsets" minX="0.0" minY="7" maxX="0.0" maxY="-7"/>
+                    </tabBarItem>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="kMi-mS-rWp">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="fMx-M9-KXm" kind="relationship" relationship="rootViewController" id="NNA-GS-Ply"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="f1x-c6-B8s" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1201" y="1603"/>
+        </scene>
+        <!--지금 여기 우리-->
         <scene sceneID="4RS-Q6-C5K">
             <objects>
                 <viewController id="fMx-M9-KXm" customClass="MyListVC" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
@@ -612,17 +665,123 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" tag="3" title="" image="mylist" id="JEZ-MS-xh9">
-                        <inset key="imageInsets" minX="0.0" minY="7" maxX="0.0" maxY="-7"/>
-                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
-                    </tabBarItem>
+                    <navigationItem key="navigationItem" title="지금 여기 우리" id="cMY-NP-7Qg">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="CFd-Ac-6OY">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="7cG-ZT-L0J">
+                                <rect key="frame" x="334" y="9" width="25" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="alarm"/>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="8eq-oX-Rxs" id="Mgw-7Q-rBw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4kD-hf-D7q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1700" y="268"/>
+            <point key="canvasLocation" x="2006" y="1603"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="1Xs-1R-DAV">
+            <objects>
+                <navigationController id="80c-j2-Ekv" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="DhQ-ee-ZTt">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="AXi-nJ-N5G" kind="relationship" relationship="rootViewController" id="RbF-a5-CI6"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hiK-l5-2FC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1201" y="2353"/>
+        </scene>
+        <!--지금 여기 우리-->
+        <scene sceneID="I8t-ga-sLm">
+            <objects>
+                <viewController id="AXi-nJ-N5G" customClass="UserTimeLineVC" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1zI-HY-e2Z"/>
+                        <viewControllerLayoutGuide type="bottom" id="9jW-7a-xi6"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="FdS-75-taY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="97" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="v4c-PW-PkI">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="usertimeline" rowHeight="100" id="AMD-hK-OVx" customClass="UserListCell" customModule="GraduationProject" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="100"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AMD-hK-OVx" id="WSd-4D-e9c">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="spaceCell" rowHeight="30" id="rVQ-7w-cOp" customClass="SpaceCell" customModule="GraduationProject" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="128" width="375" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rVQ-7w-cOp" id="GOD-5a-Btc">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="AXi-nJ-N5G" id="dNG-MX-Ytx"/>
+                                    <outlet property="delegate" destination="AXi-nJ-N5G" id="kYn-Ql-LDX"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="지금 여기 우리" id="DEu-vb-4qC">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="5dO-jK-hLW">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wF6-He-z3c">
+                                <rect key="frame" x="16" y="7" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="뒤로">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="backBtn:" destination="AXi-nJ-N5G" eventType="touchUpInside" id="C0C-bm-UQG"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="v4c-PW-PkI" id="0dd-zr-8ty"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OQW-AF-323" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1996" y="2352.7736131934034"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4Kj-gn-4Sg">
+            <objects>
+                <navigationController id="3w0-do-CoP" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="location" id="VbO-Oa-Lw9">
+                        <inset key="imageInsets" minX="0.0" minY="7" maxX="0.0" maxY="-7"/>
+                    </tabBarItem>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="OAU-4n-nn2">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="rQn-8p-SWQ" kind="relationship" relationship="rootViewController" id="U7d-Rj-Tvf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4hW-5b-21g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1201" y="825"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="x7k-ZO-NGp">
@@ -644,6 +803,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="alarm" width="32" height="32"/>
         <image name="location" width="25" height="25"/>
         <image name="mylist" width="25" height="25"/>
         <image name="search" width="25" height="25"/>
@@ -651,6 +811,8 @@
         <image name="write" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Kot-b8-9Sr"/>
+        <segue reference="enJ-Kg-zrA"/>
+        <segue reference="7at-rp-um2"/>
+        <segue reference="OtL-Bi-Ssg"/>
     </inferredMetricsTieBreakers>
 </document>

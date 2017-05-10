@@ -24,7 +24,7 @@ class TabBarVC: UITabBarController {
     
     @IBAction func writeBtnClicked(_ sender: UIButton) {
         
-        performSegue(withIdentifier: "writeSegue", sender: self)
+//        performSegue(withIdentifier: "writeSegue", sender: self)
     
 //        // Show Fusuma
 //        let fusuma = FusumaViewController()
