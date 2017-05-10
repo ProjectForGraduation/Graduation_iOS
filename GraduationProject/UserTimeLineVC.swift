@@ -10,8 +10,7 @@
 import UIKit
 import Fusuma
 
-class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate,FusumaDelegate {
-    
+class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
     
     @IBOutlet weak var tableView: UITableView!
@@ -61,78 +60,6 @@ class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate
         }
     }
     
-    func changeProfileImage(){
-        let fusuma = FusumaViewController()
-        
-        fusuma.delegate = self
-        fusuma.cropHeightRatio = 1.0
-        fusumaCropImage = false
-        fusumaTintColor = UIColor.darkGray
-        fusumaBackgroundColor = UIColor.darkGray
-        
-        self.present(fusuma, animated: false, completion: nil)
-        
-    }
-    
-    func fusumaImageSelected(_ image: UIImage, source: FusumaMode) {
-        switch source {
-        case .camera:
-            print("Image captured from Camera")
-        case .library:
-            print("Image selected from Camera Roll")
-        default:
-            print("Image selected")
-        }
-        
-        apiManager.setApi(path: "/users/profile", method: .post, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
-        
-        apiManager.requestChangeProfileImage(resizing(image)!)
-        setUpView()
-    }
-    
-    func fusumaVideoCompleted(withFileURL fileURL: URL) {
-        print("video completed and output to file: \(fileURL)")
-        //self.fileUrlLabel.text = "file output to: \(fileURL.absoluteString)"
-    }
-    
-    func fusumaDismissedWithImage(_ image: UIImage, source: FusumaMode) {
-        switch source {
-        case .camera:
-            UIImageWriteToSavedPhotosAlbum(image, self, nil, nil)
-            break
-        case .library: break
-            
-        default: break
-            
-        }
-        
-        //performSegue(withIdentifier: "writeSegue", sender: self)
-    }
-    
-    func fusumaCameraRollUnauthorized() {
-        
-        let alert = UIAlertController(title: "Access Requested", message: "Saving image needs to access your photo album", preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { (action) -> Void in
-            
-            if let url = URL(string:UIApplicationOpenSettingsURLString) {
-                UIApplication.shared.openURL(url)
-            }
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) -> Void in
-            
-        }))
-        
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    func fusumaClosed() {
-        
-        print("Called when the close button is pressed")
-        
-    }
-    
-    
     func changeDate(_ date: String)->String{
         let year = date.substring(to: date.index(date.startIndex, offsetBy: 4))
         let month = date.substring(with: date.index(date.startIndex, offsetBy:5)..<date.index(date.startIndex, offsetBy:7))
@@ -148,6 +75,10 @@ class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     @IBAction func backBtn(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    func requestFriend(){
+        
     }
     
 }
@@ -173,6 +104,7 @@ extension UserTimeLineVC {
                         cell.mylistProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: myContentList[indexPath.row/2 - 1].profileImg!) as! URL)! as Data)!
                     }
                 }
+                cell.requestBtn.addAction(target: self, action: #selector(requestFriend))
                 
             }
             
@@ -197,8 +129,6 @@ extension UserTimeLineVC {
                 }
             }
             
-            cell.mainProfileImg.addAction(target: self, action: #selector(changeProfileImage))
-            
             
             if indexPath.row == 0 {
                 cell.profileHidden(false)
@@ -219,7 +149,7 @@ extension UserTimeLineVC {
         switch indexPath.row % 2 {
         case 0:
             if indexPath.row == 0{
-                return 160.multiplyHeightRatio()
+                return 190.multiplyHeightRatio()
             }else{
                 let textHeight = UILabel()
                 let picHeight = UIImageView()
