@@ -80,7 +80,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         print(TimeLineTableVC.index)
         MapVC.latitude = 37.676357
         MapVC.longitude = 126.773339
-        performSegue(withIdentifier: "MapSegue", sender: self)
+        performSegue(withIdentifier: "mapSegue2", sender: self)
     }
     
     func userBtnAction(){
@@ -176,8 +176,11 @@ extension SortLocationTableVC{
             cell.profileImg.addAction(target: self, action: #selector(userBtnAction))
             // 좋아요
             cell.isLiked = aroundContentList[indexPath.row/2].isLiked!
+            cell.likeCount = aroundContentList[indexPath.row/2].likeCount!
             // 옵션
-            cell.optionBtn.setButton(imageName: "option", target: self, action: #selector(optionBtnAction))
+            cell.optionBtn.addTarget(self, action: #selector(optionBtnAction), for: .touchUpInside)
+            
+            
             
             cell.userName.setTitle(aroundContentList[indexPath.row/2].userName!, for: .normal)
             cell.userName.contentHorizontalAlignment = .left
@@ -197,8 +200,8 @@ extension SortLocationTableVC{
                 cell.anotherBtnUp()
             }
             
-            cell.likeCount.text = "좋아요 \(aroundContentList[indexPath.row/2].likeCount!)개"
-            cell.likeCount.sizeToFit()
+            cell.likeCountLabel.text = "좋아요 \(aroundContentList[indexPath.row/2].likeCount!)개"
+            cell.likeCountLabel.sizeToFit()
             
             return cell
         default:

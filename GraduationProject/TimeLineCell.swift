@@ -13,6 +13,7 @@ class TimeLineCell: UITableViewCell{
     var index = 0;
     var content_id = 0;
     var user_id = 0;
+    var likeCount = 0;
     
     var profileImg = UIImageView()
     var userName = UIButton()
@@ -20,7 +21,7 @@ class TimeLineCell: UITableViewCell{
     var contentText = UILabel()
     var contentPic = UIImageView()
     var likeBtn = UIButton()
-    var likeCount = UILabel()
+    var likeCountLabel = UILabel()
     var commentBtn = UIButton()
     var mapBtn = UIButton()
 
@@ -61,9 +62,9 @@ class TimeLineCell: UITableViewCell{
         likeBtn.rframe(x: 10, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)
         likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnAction))
         
-        likeCount.rframe(x: 45, y: (contentPic.y+contentPic.height+20.multiplyHeightRatio()).remultiplyHeightRatio(), width: 100, height: 0)
-        likeCount.setLabel(text: "좋아요 개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
-        likeCount.sizeToFit()
+        likeCountLabel.rframe(x: 45, y: (contentPic.y+contentPic.height+20.multiplyHeightRatio()).remultiplyHeightRatio(), width: 100, height: 0)
+        likeCountLabel.setLabel(text: "좋아요 개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
+        likeCountLabel.sizeToFit()
         
         mapBtn.rframe(x: 300, y: (contentPic.y+contentPic.height+14.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 25)
         mapBtn.setButton(imageName: "marker", target: self, action: #selector(mapBtnAction))
@@ -77,7 +78,7 @@ class TimeLineCell: UITableViewCell{
         contentView.addSubview(contentText)
         contentView.addSubview(contentPic)
         contentView.addSubview(likeBtn)
-        contentView.addSubview(likeCount)
+        contentView.addSubview(likeCountLabel)
         contentView.addSubview(mapBtn)
         contentView.addSubview(commentBtn)
         
@@ -92,14 +93,14 @@ class TimeLineCell: UITableViewCell{
     func anotherBtnUp(){
         mapBtn.frame.origin.y = contentText.y + contentText.height + 14.multiplyHeightRatio()
         likeBtn.frame.origin.y = contentText.y + contentText.height + 10.multiplyHeightRatio()
-        likeCount.frame.origin.y = contentText.y + contentText.height + 20.multiplyHeightRatio()
+        likeCountLabel.frame.origin.y = contentText.y + contentText.height + 20.multiplyHeightRatio()
         commentBtn.frame.origin.y = contentText.y + contentText.height + 10.multiplyHeightRatio()
     }
     
     func anotherBtnDown(){
         mapBtn.frame.origin.y = contentPic.y + contentPic.height + 14.multiplyHeightRatio()
         likeBtn.frame.origin.y = contentPic.y + contentPic.height + 10.multiplyHeightRatio()
-        likeCount.frame.origin.y = contentPic.y + contentPic.height + 20.multiplyHeightRatio()
+        likeCountLabel.frame.origin.y = contentPic.y + contentPic.height + 20.multiplyHeightRatio()
         commentBtn.frame.origin.y = contentPic.y + contentPic.height + 10.multiplyHeightRatio()
 
     }
@@ -112,15 +113,17 @@ class TimeLineCell: UITableViewCell{
     
     func likeBtnAction(){
         // 이곳에서 서버로 내가 눌렀는지 안눌렀는지 보낸다.
+        print(isLiked)
         if isLiked == 1{
             isLiked = 0
         }else{
             isLiked = 1
         }
         
-        print(content_id)
-        print(user_id)
         apiManager.setApi(path: "/contents/like", method: .post, parameters: ["content_id":content_id,"is_like":isLiked], header: ["authorization":users.string(forKey: "token")!])
+        apiManager.requestLike { (code) in
+            print(code)
+        }
         
     }
     
