@@ -37,10 +37,10 @@ class MyListCell: UITableViewCell{
         mainProfileImg.clipsToBounds = true
         
         myId.rcenter(y: 120, width: 375, height: 14, targetWidth: 375)
-        myId.setLabel(text: "yoonmssssss", align: .center, fontName: "AppleSDGothicNeo-Medium", fontSize: 15, color: UIColor.black)
+        myId.setLabel(text: "", align: .center, fontName: "AppleSDGothicNeo-Medium", fontSize: 15, color: UIColor.black)
         
         myName.rcenter(y: 136, width: 375, height: 12, targetWidth: 375)
-        myName.setLabel(text: "윤민섭", align: .center, fontName: "AppleSDGothicNeo-Medium", fontSize: 13, color: UIColor.black)
+        myName.setLabel(text: "", align: .center, fontName: "AppleSDGothicNeo-Medium", fontSize: 13, color: UIColor.black)
         
         mylistProfileImg.rframe(x: 10, y: 10, width: 30, height: 30)
         mylistProfileImg.image = UIImage(named: "default")
@@ -67,7 +67,7 @@ class MyListCell: UITableViewCell{
         likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnActions))
         
         likeCount.rframe(x: 45, y: (contentPic.y+contentPic.height+20.multiplyHeightRatio()).remultiplyHeightRatio(), width: 100, height: 0)
-        likeCount.setLabel(text: "좋아요 99개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
+        likeCount.setLabel(text: "좋아요 개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
         likeCount.sizeToFit()
         
         mapBtn.rframe(x: 300, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)

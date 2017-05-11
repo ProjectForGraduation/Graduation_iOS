@@ -11,14 +11,14 @@ import UIKit
 import Fusuma
 
 class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,FusumaDelegate {
-
+    
     static var index: Int = 0
-
+    
     @IBOutlet weak var tableView: UITableView!
     let apiManager = ApiManager()
     let users = UserDefaults.standard
     var token : String!
-    var myContentList: [MyContentList] = []
+    var myContentList: [UserContentList] = []
     var userInfo : UserInfo?
     
     
@@ -28,7 +28,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
         setTableView()
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         setUpView()
     }
@@ -54,7 +54,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
             self.userInfo = userInfo
             let userId = self.userInfo!.user_id!
             self.apiManager.setApi(path: "/contents/\(userId)/info", method: .get, parameters: [:], header: ["authorization":self.token])
-            self.apiManager.requestMyContents(completion: { (mylist) in
+            self.apiManager.requestUserContents(completion: { (mylist) in
                 self.myContentList = mylist
                 self.tableView.reloadData()
             })
@@ -72,7 +72,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         fusumaBackgroundColor = UIColor.darkGray
         
         self.present(fusuma, animated: false, completion: nil)
-    
+        
     }
     
     func fusumaImageSelected(_ image: UIImage, source: FusumaMode) {
@@ -90,7 +90,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         apiManager.requestChangeProfileImage(resizing(image)!)
         setUpView()
     }
-
+    
     func fusumaVideoCompleted(withFileURL fileURL: URL) {
         print("video completed and output to file: \(fileURL)")
         //self.fileUrlLabel.text = "file output to: \(fileURL.absoluteString)"
@@ -132,7 +132,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         print("Called when the close button is pressed")
         
     }
-
+    
     
     func changeDate(_ date: String)->String{
         let year = date.substring(to: date.index(date.startIndex, offsetBy: 4))
@@ -149,7 +149,26 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     }
     
     func commentBtnAction(){
-        print(MyListVC.index)
+        //print(MyListVC.index)
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let replyVC = storyboard.instantiateViewController(withIdentifier: "ReplyVC")
+        
+        ReplyVC.receivedContent = self.myContentList[MyListVC.index/2-1].contentText!
+        ReplyVC.receivedUserName = self.myContentList[MyListVC.index/2-1].userName!
+        ReplyVC.receivedLikeCount = self.myContentList[MyListVC.index/2-1].likeCount!
+        ReplyVC.receivedWriteTime = changeDate(self.myContentList[MyListVC.index/2-1].createdAt!)
+        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.myContentList[MyListVC.index/2-1].contentImage!)) as! URL)! as Data)!
+        ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.myContentList[MyListVC.index/2-1].contentImage!)) as! URL)! as Data)!
+        
+        //print(self.myContentList[MyListVC.index/2-1].profileImg!)
+        
+        
+        
+        
+        
+        self.present(replyVC, animated: false, completion: nil)
+        
     }
 }
 
@@ -196,6 +215,8 @@ extension MyListVC {
                     cell.contentPic.image = nil
                     cell.anotherBtnUp()
                 }
+                cell.likeCount.text = "좋아요 \(myContentList[indexPath.row/2 - 1].likeCount!)개"
+                cell.likeCount.sizeToFit()
             }
             
             cell.mainProfileImg.addAction(target: self, action: #selector(changeProfileImage))
@@ -213,7 +234,7 @@ extension MyListVC {
             
             return cell
         }
-
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -240,7 +261,7 @@ extension MyListVC {
         default:
             return 7
         }
-
+        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -256,7 +277,6 @@ extension MyListVC {
         //        SelectListViewController.receivedCimg = self.photos[indexPath.item].image
         //        SelectListViewController.receivedRange = 0
         //        SelectListViewController.receivedIndex = indexPath.item
-        
         
         //self.present(replyContentVC, animated: false, completion: nil)
         
