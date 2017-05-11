@@ -38,7 +38,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     static var receivedUserName = "신꾸꾸"
     static var receivedWriteTime = "20160731"
     static var receivedContent = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요"
-    
+    static var receivedImg = UIImage(named:"gguggu")
     static var receivedLikeCount = 30
     static var receivedReplyCount = 22
     
@@ -119,7 +119,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 ,targetView: receivedView)
         }
         
-        contentImg.image = UIImage(named:"gguggu")
+        contentImg.image = ReplyVC.receivedImg
         
         content.setTextView(fontName: "AppleSDGothicNeo-Medium", size: 12)
         content.textColor = UIColor.black
