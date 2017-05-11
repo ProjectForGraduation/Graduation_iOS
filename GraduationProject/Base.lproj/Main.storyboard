@@ -200,6 +200,7 @@
                     <connections>
                         <outlet property="tableView" destination="VaR-nO-3TM" id="T8S-Si-veu"/>
                         <segue destination="80c-j2-Ekv" kind="show" identifier="userSegue" animates="NO" id="g02-Po-w8Y"/>
+                        <segue destination="ecN-6h-2Yi" kind="show" identifier="mapSegue2" animates="NO" id="xhi-m3-Qbb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kxQ-QA-1sp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -442,7 +443,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="VG8-wc-3e3" id="LtB-oh-J7P"/>
-                        <segue destination="ecN-6h-2Yi" kind="show" identifier="MapSegue" id="Lsp-Iu-ijA"/>
+                        <segue destination="ecN-6h-2Yi" kind="show" identifier="MapSegue" animates="NO" id="Lsp-Iu-ijA"/>
                         <segue destination="Irf-Mh-HhV" kind="showDetail" identifier="segueToReply" id="E2h-1c-NCy"/>
                     </connections>
                 </viewController>
@@ -846,5 +847,6 @@
         <segue reference="enJ-Kg-zrA"/>
         <segue reference="Wt2-05-OPf"/>
         <segue reference="P7n-zO-yE1"/>
+        <segue reference="Lsp-Iu-ijA"/>
     </inferredMetricsTieBreakers>
 </document>
