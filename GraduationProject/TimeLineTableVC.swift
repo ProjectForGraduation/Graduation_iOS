@@ -57,7 +57,7 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func setUpView(){
-        //locationTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
+        locationTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
         // 일단 15초
 //        apiManager.setApi(path: "/contents/all", method: .get, parameters: [:], header: [:])
 //        apiManager.requestContents { (ContentList) in
@@ -66,11 +66,10 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
 //            
 //            self.tableView.reloadData()
 //        }
-//
+
     }
     
     func updateLocation(){
-
         locValue = locationManager.getUserLocation()
         locationManager.setLocationDB(token)
     }

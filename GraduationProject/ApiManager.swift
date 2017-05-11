@@ -86,7 +86,7 @@ class ApiManager {
         }
     }
     
-    func requestMyContents(completion : @escaping ([MyContentList])->Void){
+    func requestUserContents(completion : @escaping ([UserContentList])->Void){
         print(url)
         Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
             switch(response.result) {
@@ -95,9 +95,9 @@ class ApiManager {
                 if let json = response.result.value{
                     let resp = JSON(json)
                     print(resp)
-                    var contentList = [MyContentList]()
+                    var contentList = [UserContentList]()
                     for idx in 0..<resp["myContents"].count{
-                        let content = MyContentList(contentId: resp["myContents"][idx]["content_id"].intValue, userId: resp["myContents"][idx]["user_id"].intValue,userName: resp["myContents"][idx]["user_name"].stringValue, profileImg: resp["myContents"][idx]["profile_dir"].stringValue, contentText: resp["myContents"][idx]["content_text"].stringValue, contentImage: resp["myContents"][idx]["image_dir"].stringValue,createdAt: resp["myContents"][idx]["create_at"].stringValue ,updatedAt: resp["myContents"][idx]["update_at"].stringValue, share_range: resp["myContents"][idx]["share_range"].intValue, location_range: resp["myContents"][idx]["location_range"].intValue , isLiked: resp["myContents"][idx]["is_like"].intValue, likeCount: resp["myContents"][idx]["like_cnt"].intValue)
+                        let content = UserContentList(contentId: resp["myContents"][idx]["content_id"].intValue, userId: resp["myContents"][idx]["user_id"].intValue,userName: resp["myContents"][idx]["user_name"].stringValue, profileImg: resp["myContents"][idx]["profile_dir"].stringValue, contentText: resp["myContents"][idx]["content_text"].stringValue, contentImage: resp["myContents"][idx]["image_dir"].stringValue,createdAt: resp["myContents"][idx]["create_at"].stringValue ,updatedAt: resp["myContents"][idx]["update_at"].stringValue, share_range: resp["myContents"][idx]["share_range"].intValue, location_range: resp["myContents"][idx]["location_range"].intValue , isLiked: resp["myContents"][idx]["is_like"].intValue, likeCount: resp["myContents"][idx]["like_cnt"].intValue)
                         contentList += [content]
                     }
                     completion(contentList)

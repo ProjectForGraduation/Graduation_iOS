@@ -62,7 +62,7 @@ class TimeLineCell: UITableViewCell{
         likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnAction))
         
         likeCount.rframe(x: 45, y: (contentPic.y+contentPic.height+20.multiplyHeightRatio()).remultiplyHeightRatio(), width: 100, height: 0)
-        //likeCount.setLabel(text: "좋아요 99개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
+        likeCount.setLabel(text: "좋아요 개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
         likeCount.sizeToFit()
         
         mapBtn.rframe(x: 300, y: (contentPic.y+contentPic.height+14.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 25)

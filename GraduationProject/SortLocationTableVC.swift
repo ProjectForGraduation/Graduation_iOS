@@ -48,7 +48,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     // MARK: - set Table
     
     func setTableView(){
-        self.tableView.rframe(x: 0, y: 0, width: 375, height: 625)
+        self.tableView.rframe(x: 0, y: 0, width: 375, height: 667)
         self.tableView.bounces = false
         self.tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         self.tableView.showsVerticalScrollIndicator = false
@@ -84,11 +84,10 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     func userBtnAction(){
-
+        performSegue(withIdentifier: "userSegue", sender: self)
     }
     
     func optionBtnAction(){
-        print(SortLocationTableVC.index)
         apiManager.setApi(path: "contents/:contentId", method: .delete, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
         // 만약 해당 게시글의 id 가 내 아이디와 같다면 삭제 alert
         // 아니면 신고 alert
@@ -138,6 +137,13 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "userSegue" {
+            let des = segue.destination as! UINavigationController
+            let target = des.topViewController as! UserTimeLineVC
+            target.user_id = aroundContentList[SortLocationTableVC.index/2].userId!
+        }
+    }
     
 }
 
@@ -160,10 +166,14 @@ extension SortLocationTableVC{
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "timelineCell", for: indexPath) as! TimeLineCell
             cell.selectionStyle = .none
-            
             cell.index = indexPath.row
             cell.content_id = aroundContentList[indexPath.row/2].contentId!
             cell.user_id = aroundContentList[indexPath.row/2].userId!
+            //유저 프로필 사진
+            if aroundContentList[indexPath.row/2].profileImg != "0" {
+                cell.profileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: aroundContentList[indexPath.row/2].profileImg!) as! URL)! as Data)!
+            }
+            cell.profileImg.addAction(target: self, action: #selector(userBtnAction))
             // 좋아요
             cell.isLiked = aroundContentList[indexPath.row/2].isLiked!
             // 옵션
@@ -186,6 +196,9 @@ extension SortLocationTableVC{
                 cell.contentPic.image = nil
                 cell.anotherBtnUp()
             }
+            
+            cell.likeCount.text = "좋아요 \(aroundContentList[indexPath.row/2].likeCount!)개"
+            cell.likeCount.sizeToFit()
             
             return cell
         default:

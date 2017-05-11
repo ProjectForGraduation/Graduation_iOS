@@ -9,7 +9,7 @@
 import Foundation
 
 
-class MyContentList: NSObject{
+class UserContentList: NSObject{
     
     public var contentId : Int?
     public var userId : Int?
