@@ -12,7 +12,7 @@ import Fusuma
 
 class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,FusumaDelegate {
 
-
+    static var index: Int = 0
 
     @IBOutlet weak var tableView: UITableView!
     let apiManager = ApiManager()
@@ -148,6 +148,9 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         return resizedData
     }
     
+    func commentBtnAction(){
+        print(MyListVC.index)
+    }
 }
 
 extension MyListVC {
@@ -162,7 +165,7 @@ extension MyListVC {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "mytimeline", for: indexPath) as! MyListCell
             cell.selectionStyle = .none
-        
+            cell.index = indexPath.row
             if indexPath.row == 0 {
                 if userInfo != nil{
                     cell.myId.text = userInfo?.login_id
@@ -196,7 +199,7 @@ extension MyListVC {
             }
             
             cell.mainProfileImg.addAction(target: self, action: #selector(changeProfileImage))
-            
+            cell.commentBtn.addTarget(self, action: #selector(commentBtnAction), for: .touchUpInside)
             
             if indexPath.row == 0 {
                 cell.profileHidden(false)
@@ -244,8 +247,8 @@ extension MyListVC {
         
         //performSegue(withIdentifier: "segueToReplyVC", sender: self)
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let replyContentVC = storyboard.instantiateViewController(withIdentifier: "ReplyVC")
+        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        //let replyContentVC = storyboard.instantiateViewController(withIdentifier: "ReplyVC")
         
         
         
@@ -255,7 +258,7 @@ extension MyListVC {
         //        SelectListViewController.receivedIndex = indexPath.item
         
         
-        self.present(replyContentVC, animated: false, completion: nil)
+        //self.present(replyContentVC, animated: false, completion: nil)
         
     }
     

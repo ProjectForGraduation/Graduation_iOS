@@ -9,6 +9,8 @@ import UIKit
 
 class MyListCell: UITableViewCell{
     
+    var index : Int!
+    
     var mainProfileImg = UIImageView()
     var myId = UILabel()
     var myName = UILabel()
@@ -23,7 +25,6 @@ class MyListCell: UITableViewCell{
     var commentBtn = UIButton()
     var mapBtn = UIButton()
 
-    
     let apiManager = ApiManager()
     let users = UserDefaults.standard
     
@@ -92,19 +93,19 @@ class MyListCell: UITableViewCell{
     }
     
     func likeBtnActions(){
-        
+        MyListVC.index = self.index
     }
     
     func mapBtnActions(){
-        
+        MyListVC.index = self.index
     }
     
     func commentBtnActions(){
-        
+        MyListVC.index = self.index
     }
     
     func optionBtnActions(){
-        
+        MyListVC.index = self.index
     }
 
    
