@@ -72,7 +72,7 @@ class ApiManager2 {
         
     }
    
-    func requestReply(completion : @escaping ([AroundContentList])->Void){
+    func getReply(completion : @escaping ([AroundContentList])->Void){
         
         Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
             switch(response.result) {
@@ -97,8 +97,19 @@ class ApiManager2 {
         }
     }
 
-    func getReply(){
-    
+    func requestReply(){
+        Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
+            switch(response.result){
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                }
+                
+                break
+            case .failure(_):
+                break
+            }
+        }
     }
     
     func requestLike(select:Int){

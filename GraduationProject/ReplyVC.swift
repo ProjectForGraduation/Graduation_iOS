@@ -62,9 +62,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     override func viewDidAppear(_ animated: Bool) {
         apiManager2.setApi(path: "", method: .get, parameters: [:], header: [:])
-        apiManager2.requestReply { (reply) in
-            //reply
-        }
+        
         
         
     }
@@ -123,7 +121,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         content.setTextView(fontName: "AppleSDGothicNeo-Medium", size: 12)
         content.textColor = UIColor.black
-        content.layer.borderWidth = 1
+        //content.layer.borderWidth = 1
         content.isUserInteractionEnabled = false
         
         
@@ -133,17 +131,10 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         replyLabel.setLabel(text: "댓글 \(ReplyVC.receivedReplyCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
         
         
-        
-        
-        
-        
-        
         likeButton.setButton(imageName: "like", target: self, action: #selector(likeButtonAction))
         
         
-        
         likeInfoLabel.setLabel(text: "좋아요", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color: UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
-        
         
         
         view.addSubview(navBar)
