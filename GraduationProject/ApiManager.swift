@@ -87,7 +87,7 @@ class ApiManager {
     }
     
     func requestMyContents(completion : @escaping ([MyContentList])->Void){
-        
+        print(url)
         Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
             switch(response.result) {
                 
@@ -104,24 +104,25 @@ class ApiManager {
                 }
                 break
             case .failure(_):
+                print("fail")
                 break
             }
         }
     }
     
     func requestUserInfo(completion: @escaping (UserInfo)->Void){
-
         Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
             switch(response.result){
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
                     print(resp)
-                    let userInfo = UserInfo(login_id: resp["data"][0]["login_id"].stringValue, profile_dir: resp["data"][0]["profile_dir"].stringValue, user_name: resp["data"][0]["user_name"].stringValue)
+                    let userInfo = UserInfo(login_id: resp["data"][0]["login_id"].stringValue, profile_dir: resp["data"][0]["profile_dir"].stringValue, user_name: resp["data"][0]["user_name"].stringValue,user_id: resp["data"][0]["user_id"].intValue)
                     completion(userInfo)
                 }
                 break
             case .failure(_):
+                print("fail")
                 break
             }
         }

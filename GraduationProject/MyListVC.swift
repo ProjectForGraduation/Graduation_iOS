@@ -39,7 +39,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     }
     
     func setTableView(){
-        self.tableView.rframe(x: 0, y: 0, width: 375, height: 625)
+        self.tableView.rframe(x: 0, y: 0, width: 375, height: 667)
         self.tableView.bounces = false
         self.tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         self.tableView.showsVerticalScrollIndicator = false
@@ -49,16 +49,17 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     
     func setUpView(){
         
-        apiManager.setApi(path: "/contents/my", method: .get, parameters: [:], header: ["authorization":self.token])
-        apiManager.requestMyContents { (mylist) in
-            self.myContentList = mylist
-           
-            self.apiManager.setApi(path: "/users/id", method: .get, parameters: [:], header: ["authorization":self.token])
-            self.apiManager.requestUserInfo { (userInfo) in
-                self.userInfo = userInfo
+        self.apiManager.setApi(path: "/users/my", method: .get, parameters: [:], header: ["authorization":self.token])
+        apiManager.requestUserInfo { (userInfo) in
+            self.userInfo = userInfo
+            let userId = self.userInfo!.user_id!
+            self.apiManager.setApi(path: "/contents/\(userId)/info", method: .get, parameters: [:], header: ["authorization":self.token])
+            self.apiManager.requestMyContents(completion: { (mylist) in
+                self.myContentList = mylist
                 self.tableView.reloadData()
-            }
+            })
         }
+        
     }
     
     func changeProfileImage(){
@@ -167,7 +168,7 @@ extension MyListVC {
                     cell.myId.text = userInfo?.login_id
                     cell.myName.text = userInfo?.user_name
                     if userInfo?.profile_dir != "0"{
-                        cell.mylistProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: myContentList[indexPath.row/2 - 1].profileImg!) as! URL)! as Data)!
+                        cell.mainProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: (userInfo?.profile_dir)!) as! URL)! as Data)!
                     }
                 }
                 
