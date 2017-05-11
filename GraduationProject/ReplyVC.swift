@@ -34,13 +34,15 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var likeButton = UIButton()
     var likeInfoLabel = UILabel()
     
-    var receivedProfileImg = UIImage(named:"gguggu")
-    var receivedUserName = "신꾸꾸"
-    var receivedWriteTime = "20160731"
-    var receivedContent = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요"
+    static var receivedProfileImg = UIImage(named:"gguggu")
+    static var receivedUserName = "신꾸꾸"
+    static var receivedWriteTime = "20160731"
+    static var receivedContent = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요"
+    static var receivedImg = UIImage(named:"gguggu")
+    static var receivedLikeCount = 30
+    static var receivedReplyCount = 22
     
-    var receivedLikeCount = 30
-    var receivedReplyCount = 22
+    var apiManager2 = ApiManager2()
     
     //
     var emojiFlag : Int = 0
@@ -55,6 +57,15 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         setBasicView()
         setContents()
         setTableView()
+        
+        replyTextField.delegate = self
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        apiManager2.setApi(path: "", method: .get, parameters: [:], header: [:])
+        apiManager2.requestReply { (reply) in
+            //reply
+        }
+        
         
     }
     func setBasicView(){
@@ -108,7 +119,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
                 ,targetView: receivedView)
         }
         
-        contentImg.image = UIImage(named:"gguggu")
+        contentImg.image = ReplyVC.receivedImg
         
         content.setTextView(fontName: "AppleSDGothicNeo-Medium", size: 12)
         content.textColor = UIColor.black
@@ -116,10 +127,10 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         content.isUserInteractionEnabled = false
         
         
-        likeLabel.setLabel(text: "좋아요 \(receivedLikeCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
+        likeLabel.setLabel(text: "좋아요 \(ReplyVC.receivedLikeCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
         
         
-        replyLabel.setLabel(text: "댓글 \(receivedReplyCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
+        replyLabel.setLabel(text: "댓글 \(ReplyVC.receivedReplyCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
         
         
         
@@ -157,8 +168,8 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     
     func leftButtonAction(){
-        //dismiss(animated: false, completion: nil)
-        print("dismissssss")
+        dismiss(animated: false, completion: nil)
+        //print("dismissssss")
     }
     
     func likeButtonAction(){
@@ -176,10 +187,10 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func setContents(){
         
-        profileImg.image = receivedProfileImg
-        userName.text = receivedUserName
-        writeTime.text = receivedWriteTime
-        content.text = receivedContent
+        profileImg.image = ReplyVC.receivedProfileImg
+        userName.text = ReplyVC.receivedUserName
+        writeTime.text = ReplyVC.receivedWriteTime
+        content.text = ReplyVC.receivedContent
     }
     
     func setTableView(){
@@ -202,6 +213,10 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with: UIEvent?) {
         replyTextField.endEditing(true) // textBox는 textFiled 오브젝트 outlet 연동할때의 이름.
