@@ -15,10 +15,11 @@ extension UILabel{
     사용법 :  label.setLabel(text: "hi", align: .center, size: 40, target: self.view)
     */
     
-    public func setLabel(text: String, align: NSTextAlignment, fontName: String = ".SFUIText", fontSize: CGFloat, color: UIColor = UIColor.black){
+    public func setLabel(text: String, align: NSTextAlignment, fontName: String = ".SFUIText", fontSize: CGFloat, color: UIColor){
         self.text = text
         self.textAlignment = align
         self.font = UIFont(name: fontName, size: fontSize*widthRatio)
+        self.textColor = color
     }
     
     // 행간

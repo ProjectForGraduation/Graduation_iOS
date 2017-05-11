@@ -20,18 +20,32 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     @IBOutlet weak var sendButton: UIButton!
     
+    var navBar = UINavigationBar()
     var profileImg = UIImageView()
     var userName = UILabel()
     var writeTime = UILabel()
+    var contentImg = UIImageView()
     var content = UITextView()
+    
+    
+    var likeLabel = UILabel()
+    var replyLabel = UILabel()
+    
+    var likeButton = UIButton()
+    var likeInfoLabel = UILabel()
     
     var receivedProfileImg = UIImage(named:"gguggu")
     var receivedUserName = "신꾸꾸"
     var receivedWriteTime = "20160731"
     var receivedContent = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요"
     
+    var receivedLikeCount = 30
+    var receivedReplyCount = 22
+    
     //
     var emojiFlag : Int = 0
+    var likeFlag : Bool = false
+    var hasImgFlag : Bool = true
     
     var replyContent: [ReplyList] = [ReplyList(profileImg: "",userName: "한경이",reply: "안녕하세요1",writeTime: "20160726"),ReplyList(profileImg: "",userName: "한경이2",reply: "안녕하세요2",writeTime: "20160727"),ReplyList(profileImg: "",userName: "한경이3",reply: "안녕하세요3",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이4",reply: "안녕하세요4",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이5",reply: "안녕하세요5",writeTime: "20160728")]
     
@@ -44,7 +58,15 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
     }
     func setBasicView(){
-        receivedView.rframe(x: 0, y: 0, width: 375, height: 500)
+        
+        
+        navBar.rframe(x: 0, y: 0, width: 375, height: 66)
+        
+        let navItem = UINavigationItem(title: "자세히 보기")
+        let doneItem = UIBarButtonItem(title: "뒤로가기", style: UIBarButtonItemStyle.plain, target: self, action: #selector(leftButtonAction))
+        doneItem.tintColor = UIColor.black
+        navItem.leftBarButtonItem = doneItem
+        navBar.setItems([navItem], animated: false)
         
         
         profileImg.rframe(x: 10, y: 10, width: 70, height: 70)
@@ -54,27 +76,76 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         profileImg.clipsToBounds = true
         
         userName.rframe(x: 95, y: 20, width: 50, height: 14)
-        userName.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 14, color: UIColor.black)
+        userName.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Bold", fontSize: 14, color: UIColor.black)
+        
         
         writeTime.rframe(x: 95, y: 40, width: 70, height: 10)
         writeTime.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
         
-        content.rframe(x: 20, y: 100, width: 335, height: 100)
+        
+        if hasImgFlag{
+            receivedView.rframe(x: 0, y: 0, width: 375, height: 650)
+            contentImg.rframe(x: 37.5, y: 100, width: 300, height: 300)
+            content.rframe(x: 20, y: 450, width: 335, height: 100)
+            likeLabel.rframe(x: 230, y: 580, width: 70, height: 12)
+            replyLabel.rframe(x: 300, y: 580, width: 70, height: 12)
+            drawLine(startX: 0, startY: 600.multiplyHeightRatio(), width: 375.multiplyWidthRatio(), height: 1, border: false, color: UIColor.blue
+                ,targetView: receivedView)
+            likeButton.rframe(x: 25, y: 615, width: 20, height: 23)
+            likeInfoLabel.rframe(x: 50, y: 620, width: 40, height: 12)
+            drawLine(startX: 0, startY: 650.multiplyHeightRatio(), width: 375.multiplyWidthRatio(), height: 1, border: false, color: UIColor.blue
+                ,targetView: receivedView)
+        }else{
+            receivedView.rframe(x: 0, y: 0, width: 375, height: 500)
+            content.rframe(x: 20, y: 100, width: 335, height: 100)
+            likeLabel.rframe(x: 230, y: 430, width: 70, height: 12)
+            replyLabel.rframe(x: 300, y: 430, width: 70, height: 12)
+            drawLine(startX: 0, startY: 450.multiplyHeightRatio(), width: 375.multiplyWidthRatio(), height: 1, border: false, color: UIColor.blue
+                ,targetView: receivedView)
+            likeButton.rframe(x: 25, y: 465, width: 20, height: 23)
+            likeInfoLabel.rframe(x: 50, y: 470, width: 40, height: 12)
+            drawLine(startX: 0, startY: 500.multiplyHeightRatio(), width: 375.multiplyWidthRatio(), height: 1, border: false, color: UIColor.blue
+                ,targetView: receivedView)
+        }
+        
+        contentImg.image = UIImage(named:"gguggu")
+        
         content.setTextView(fontName: "AppleSDGothicNeo-Medium", size: 12)
         content.textColor = UIColor.black
         content.layer.borderWidth = 1
         content.isUserInteractionEnabled = false
         
-        drawLine(startX: 0, startY: 450.multiplyHeightRatio(), width: 375.multiplyWidthRatio(), height: 1, border: false, color: UIColor.blue
-,targetView: receivedView)
         
-        drawLine(startX: 0, startY: 500.multiplyHeightRatio(), width: 375.multiplyWidthRatio(), height: 1, border: false, color: UIColor.blue
-,targetView: receivedView)
+        likeLabel.setLabel(text: "좋아요 \(receivedLikeCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
+        
+        
+        replyLabel.setLabel(text: "댓글 \(receivedReplyCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
+        
+        
+        
+        
+        
+        
+        
+        likeButton.setButton(imageName: "like", target: self, action: #selector(likeButtonAction))
+        
+        
+        
+        likeInfoLabel.setLabel(text: "좋아요", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color: UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
+        
+        
+        
+        view.addSubview(navBar)
         
         receivedView.addSubview(profileImg)
         receivedView.addSubview(userName)
         receivedView.addSubview(writeTime)
+        receivedView.addSubview(contentImg)
         receivedView.addSubview(content)
+        receivedView.addSubview(likeLabel)
+        receivedView.addSubview(replyLabel)
+        receivedView.addSubview(likeButton)
+        receivedView.addSubview(likeInfoLabel)
         
         
         bottomBar.rframe(x: 0, y: 623, width: 375, height: 44)
@@ -82,6 +153,24 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         NotificationCenter.default.addObserver(self, selector: #selector(ReplyVC.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(ReplyVC.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+    }
+    
+    func leftButtonAction(){
+        //dismiss(animated: false, completion: nil)
+        print("dismissssss")
+    }
+    
+    func likeButtonAction(){
+        if !likeFlag{
+            likeButton.setImage(UIImage(named: "likeFill"), for: UIControlState.normal)
+            likeFlag = true
+
+        }else{
+            likeButton.setImage(UIImage(named: "like"), for: UIControlState.normal)
+            likeFlag = false
+
+        }
         
     }
     
@@ -171,9 +260,6 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
             }
         })
         
-        //print("height :\(changeInHeight)")
-        //print("emojiFlag :\(emojiFlag)")
-        //print("밑바닥 :\(self.view.frame.origin.y)")
         
         //범위 밖 충돌 현상 또는 3rd party keyboard 버그 발생시
         if self.bottomBar.frame.origin.y < -258.0 || keyboardFrame.height == 0.0{
@@ -198,8 +284,17 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         //self.target.addSubview(line)
         targetView.addSubview(line)
     }
-
-
+    
+    
+    func changeDate(_ date: String)->String{
+        let year = date.substring(to: date.index(date.startIndex, offsetBy: 4))
+        let month = date.substring(with: date.index(date.startIndex, offsetBy:5)..<date.index(date.startIndex, offsetBy:7))
+        let day = date.substring(with: date.index(date.startIndex, offsetBy:8)..<date.index(date.startIndex, offsetBy:10))
+        let date = year+"년 " + "\(Int(month)!)" + "월 " + "\(Int(day)!)" + "일"
+        return date
+    }
+    
+    
     
 }
 
