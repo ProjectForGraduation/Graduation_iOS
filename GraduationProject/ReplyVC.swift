@@ -42,6 +42,8 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var receivedLikeCount = 30
     var receivedReplyCount = 22
     
+    var apiManager2 = ApiManager2()
+    
     //
     var emojiFlag : Int = 0
     var likeFlag : Bool = false
@@ -55,6 +57,15 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         setBasicView()
         setContents()
         setTableView()
+        
+        replyTextField.delegate = self
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        apiManager2.setApi(path: "", method: .get, parameters: [:], header: [:])
+        apiManager2.requestReply { (reply) in
+            //reply
+        }
+        
         
     }
     func setBasicView(){
@@ -202,6 +213,10 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with: UIEvent?) {
         replyTextField.endEditing(true) // textBox는 textFiled 오브젝트 outlet 연동할때의 이름.
