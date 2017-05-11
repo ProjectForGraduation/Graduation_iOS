@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="HQn-Lp-oYw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="i5o-eS-Wu9">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -36,7 +36,7 @@
         <scene sceneID="nj6-im-skv">
             <objects>
                 <navigationController id="gTc-8O-t1B" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mYK-qG-GNs">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="mYK-qG-GNs">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -280,7 +280,7 @@
             <objects>
                 <navigationController id="k4m-h6-Gd8" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="XWz-PY-iZ0"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="M5Y-rc-iGc">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="M5Y-rc-iGc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -321,7 +321,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PLs-6x-vo2" id="UoK-rn-Ghx">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="50.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -475,7 +475,7 @@
                                         <rect key="frame" x="0.0" y="72" width="375" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WFP-Zu-tPo" id="qcH-xm-390">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="99.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -558,7 +558,7 @@
                     <tabBarItem key="tabBarItem" title="" image="timeline" id="f2x-vM-Gk9">
                         <inset key="imageInsets" minX="0.0" minY="7" maxX="0.0" maxY="-7"/>
                     </tabBarItem>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="09k-mR-NL8">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="09k-mR-NL8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -574,7 +574,7 @@
         <scene sceneID="YPp-bQ-EFU">
             <objects>
                 <navigationController id="ecN-6h-2Yi" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZQu-2X-mpo">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="ZQu-2X-mpo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -640,7 +640,7 @@
                     <tabBarItem key="tabBarItem" title="" image="mylist" id="dTw-1J-Eft">
                         <inset key="imageInsets" minX="0.0" minY="7" maxX="0.0" maxY="-7"/>
                     </tabBarItem>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="kMi-mS-rWp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="kMi-mS-rWp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -717,7 +717,7 @@
         <scene sceneID="1Xs-1R-DAV">
             <objects>
                 <navigationController id="80c-j2-Ekv" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="DhQ-ee-ZTt">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="DhQ-ee-ZTt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

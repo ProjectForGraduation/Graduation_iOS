@@ -34,13 +34,13 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var likeButton = UIButton()
     var likeInfoLabel = UILabel()
     
-    var receivedProfileImg = UIImage(named:"gguggu")
-    var receivedUserName = "신꾸꾸"
-    var receivedWriteTime = "20160731"
-    var receivedContent = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요"
+    static var receivedProfileImg = UIImage(named:"gguggu")
+    static var receivedUserName = "신꾸꾸"
+    static var receivedWriteTime = "20160731"
+    static var receivedContent = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요"
     
-    var receivedLikeCount = 30
-    var receivedReplyCount = 22
+    static var receivedLikeCount = 30
+    static var receivedReplyCount = 22
     
     var apiManager2 = ApiManager2()
     
@@ -127,10 +127,10 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         content.isUserInteractionEnabled = false
         
         
-        likeLabel.setLabel(text: "좋아요 \(receivedLikeCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
+        likeLabel.setLabel(text: "좋아요 \(ReplyVC.receivedLikeCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
         
         
-        replyLabel.setLabel(text: "댓글 \(receivedReplyCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
+        replyLabel.setLabel(text: "댓글 \(ReplyVC.receivedReplyCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
         
         
         
@@ -168,8 +168,8 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     
     func leftButtonAction(){
-        //dismiss(animated: false, completion: nil)
-        print("dismissssss")
+        dismiss(animated: false, completion: nil)
+        //print("dismissssss")
     }
     
     func likeButtonAction(){
@@ -187,10 +187,10 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func setContents(){
         
-        profileImg.image = receivedProfileImg
-        userName.text = receivedUserName
-        writeTime.text = receivedWriteTime
-        content.text = receivedContent
+        profileImg.image = ReplyVC.receivedProfileImg
+        userName.text = ReplyVC.receivedUserName
+        writeTime.text = ReplyVC.receivedWriteTime
+        content.text = ReplyVC.receivedContent
     }
     
     func setTableView(){
