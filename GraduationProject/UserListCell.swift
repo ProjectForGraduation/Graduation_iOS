@@ -43,8 +43,7 @@ class UserListCell: UITableViewCell{
         userName.setLabel(text: "윤민섭", align: .center, fontName: "AppleSDGothicNeo-Medium", fontSize: 13, color: UIColor.black)
         
         requestBtn.rcenter(y: 160, width: 30, height: 30, targetWidth: 375)
-        requestBtn.setImage(UIImage(named: "add-contact"), for: .normal)
-        requestBtn.addAction(target: self, action: #selector(requestFriend))
+        requestBtn.setButton(imageName: "add-contact", target: self, action: #selector(requestFriends))
         //친구 아니면 까만색 친구 신청했으면 빨간색 친구 됐으면 파란색 아마되겠지?
         
         mylistProfileImg.rframe(x: 10, y: 10, width: 30, height: 30)
@@ -115,8 +114,8 @@ class UserListCell: UITableViewCell{
         
     }
     
-    func requestFriend(){
-        print("1")
+    func requestFriends(){
+        print(self.requestBtn.tintColor)
         self.requestBtn.tintColor = UIColor.red
     }
     

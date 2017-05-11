@@ -78,7 +78,7 @@ class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     
     func requestFriend(){
-        
+    //    print("2")
     }
     
 }
