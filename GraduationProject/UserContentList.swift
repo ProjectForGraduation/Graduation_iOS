@@ -11,6 +11,7 @@ import Foundation
 
 class UserContentList: NSObject{
     
+    public var friendState : Int?
     public var contentId : Int?
     public var userId : Int?
     public var userName : String?
@@ -23,8 +24,13 @@ class UserContentList: NSObject{
     public var location_range: Int?
     public var isLiked : Int?
     public var likeCount : Int?
+    public var lng : Double?
+    public var lat : Double?
+    public var replyCount : Int?
+    public var login_id : String?
     
-    init(contentId: Int?, userId: Int?, userName: String?, profileImg: String?, contentText: String?, contentImage: String?, createdAt: String?, updatedAt: String?, share_range: Int?, location_range: Int?, isLiked: Int?, likeCount: Int?) {
+    init(friendState: Int?, contentId: Int?, userId: Int?, userName: String?, profileImg: String?, contentText: String?, contentImage: String?, createdAt: String?, updatedAt: String?, share_range: Int?, location_range: Int?, isLiked: Int?, likeCount: Int?,lng: Double?, lat: Double?, replyCount: Int, login_id: String) {
+        self.friendState = friendState
         self.contentId = contentId
         self.userId = userId
         self.userName = userName
@@ -37,6 +43,10 @@ class UserContentList: NSObject{
         self.location_range = location_range
         self.isLiked = isLiked
         self.likeCount = likeCount
+        self.lng = lng
+        self.lat = lat
+        self.replyCount = replyCount
+        self.login_id = login_id
     }
     
     

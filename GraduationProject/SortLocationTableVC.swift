@@ -10,18 +10,17 @@ import UIKit
 class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
-    
-    final let hasImage :String = "http://0"
-    
+    var contentPic : [UIImage] = []
+    var user_id: Int = 0
+
     // MARK: - location
     var locationManager = LocationManager()
     var locValue: Dictionary<String,Double> = [:]
     var locationTimer = Timer()
     static var index: Int = 0
     
-    // temp
-    var liked : [Bool] = [true,false,true,true,true,true,true,false,false,true]
-    
+
+
     //Api
     
     var apiManager = ApiManager()
@@ -57,13 +56,17 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     func setUpView(){
-        //locationTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
+        locationTimer = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
         // 일단 15초
         let userLati = Float(locValue["latitude"]!)
         let userLong = Float(locValue["longitude"]!)
+        print(userLati,userLong)
         apiManager.setApi(path: "/contents/around?lat=\(userLati)&lng=\(userLong)", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
         apiManager.requestAroundContents { (ContentList) in
             self.aroundContentList = ContentList
+            for i in 0..<self.aroundContentList.count{
+                self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.aroundContentList[i].contentImage!) as! URL)! as Data)!)
+            }
             self.tableView.reloadData()
         }
         
@@ -77,9 +80,9 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     
     func openMap(){
         // index/2에 해당하는 lati 와 longi 를 받아서 넘긴다.
-        print(TimeLineTableVC.index)
-        MapVC.latitude = 37.676357
-        MapVC.longitude = 126.773339
+        
+        MapVC.latitude = aroundContentList[SortLocationTableVC.index/2].lat!
+        MapVC.longitude = aroundContentList[SortLocationTableVC.index/2].lng!
         performSegue(withIdentifier: "mapSegue2", sender: self)
     }
     
@@ -91,8 +94,31 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         apiManager.setApi(path: "contents/:contentId", method: .delete, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
         // 만약 해당 게시글의 id 가 내 아이디와 같다면 삭제 alert
         // 아니면 신고 alert
-     
     }
+    
+    func likeBtnAction(){
+        if aroundContentList[SortLocationTableVC.index/2].isLiked == 0 {
+            aroundContentList[SortLocationTableVC.index/2].isLiked = 1
+        }else{
+            aroundContentList[SortLocationTableVC.index/2].isLiked = 0
+        }
+    }
+    
+    func commentBtnAction(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let replyVC = storyboard.instantiateViewController(withIdentifier: "ReplyVC")
+        
+        ReplyVC.receivedContent = self.aroundContentList[SortLocationTableVC.index/2].contentText!
+        ReplyVC.receivedUserName = self.aroundContentList[SortLocationTableVC.index/2].userName!
+        ReplyVC.receivedLikeCount = self.aroundContentList[SortLocationTableVC.index/2].likeCount!
+        ReplyVC.receivedWriteTime = changeDate(self.aroundContentList[SortLocationTableVC.index/2].createdAt!)
+        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.aroundContentList[UserTimeLineVC.index/2].contentImage!)) as! URL)! as Data)!
+        ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.aroundContentList[SortLocationTableVC.index/2].profileImg!)) as! URL)! as Data)!
+        
+        
+        self.present(replyVC, animated: false, completion: nil)
+    }
+    
     
     func contentAlert(isMine : Bool){
         
@@ -145,6 +171,14 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         }
     }
     
+    func changeDate(_ date: String)->String{
+        let year = date.substring(to: date.index(date.startIndex, offsetBy: 4))
+        let month = date.substring(with: date.index(date.startIndex, offsetBy:5)..<date.index(date.startIndex, offsetBy:7))
+        let day = date.substring(with: date.index(date.startIndex, offsetBy:8)..<date.index(date.startIndex, offsetBy:10))
+        let date = year+"년 " + "\(Int(month)!)" + "월 " + "\(Int(day)!)" + "일"
+        return date
+    }
+    
 }
 
 
@@ -154,6 +188,7 @@ extension SortLocationTableVC{
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        print("hihihi")
         return 1
     }
     
@@ -192,17 +227,19 @@ extension SortLocationTableVC{
             cell.mapBtn.addTarget(self, action: #selector(openMap), for: .touchUpInside)
             
             if aroundContentList[indexPath.row/2].contentImage != "0"{
-                cell.contentPic.image = UIImage(data: NSData(contentsOf: NSURL(string: aroundContentList[indexPath.row/2].contentImage!) as! URL)! as Data)!
+                cell.contentPic.image = contentPic[indexPath.row/2]
                 cell.contentPic.y = (cell.contentText.y+cell.contentText.height+10.multiplyHeightRatio()).remultiplyHeightRatio()
                 cell.anotherBtnDown()
             }else{
                 cell.contentPic.image = nil
                 cell.anotherBtnUp()
             }
+            cell.likeBtn.addTarget(self, action: #selector(likeBtnAction), for: .touchUpInside)
             
+            cell.content_id = aroundContentList[indexPath.row/2].contentId!
             cell.likeCountLabel.text = "좋아요 \(aroundContentList[indexPath.row/2].likeCount!)개"
             cell.likeCountLabel.sizeToFit()
-            
+             cell.commentBtn.addTarget(self, action: #selector(commentBtnAction), for: .touchUpInside)
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "spaceCell", for: indexPath) as! SpaceCell
