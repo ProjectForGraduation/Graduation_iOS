@@ -195,7 +195,6 @@ class ApiManager {
                             }
                             break
                         case .failure(_):
-                            print("error")
                             break
                         }
                     }

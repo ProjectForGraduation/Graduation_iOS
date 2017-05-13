@@ -13,6 +13,7 @@ import Fusuma
 class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,FusumaDelegate {
     
     static var index: Int = 0
+    let NO_IMAGE = "http://13.124.115.238:8080/image/no_image.png"
     
     @IBOutlet weak var tableView: UITableView!
     let apiManager = ApiManager()
@@ -21,6 +22,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     var myContentList: [UserContentList] = []
     var userInfo : UserInfo?
     var contentPic : [UIImage] = []
+    var profilePic : UIImage!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,11 +50,14 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     }
     
     func setUpView(){
-        self.myContentList.removeAll()
+        contentPic.removeAll()
+        profilePic = nil
+        
         self.apiManager.setApi(path: "/users/my", method: .get, parameters: [:], header: ["authorization":self.token])
         apiManager.requestUserInfo { (userInfo) in
             self.userInfo = userInfo
             let userId = self.userInfo!.user_id!
+            self.profilePic = UIImage(data: NSData(contentsOf: NSURL(string: (self.userInfo!.profile_dir)!) as! URL)! as Data)!
             self.apiManager.setApi(path: "/contents/\(userId)/info", method: .get, parameters: [:], header: ["authorization":self.token])
             self.apiManager.requestUserContents(completion: { (mylist) in
                 self.myContentList = mylist
@@ -201,23 +206,19 @@ extension MyListVC {
             if userInfo != nil{
                 cell.myId.text = userInfo?.login_id
                 cell.myName.text = userInfo?.user_name
-                if userInfo?.profile_dir != "0"{
-                    cell.mainProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: (userInfo?.profile_dir)!) as! URL)! as Data)!
-                    }
+                cell.mainProfileImg.image = profilePic
+                
             }
             
             if (indexPath.row != 0) , !myContentList.isEmpty{
-                if myContentList[indexPath.row/2 - 1].profileImg != "0"{
-                    cell.mylistProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: myContentList[indexPath.row/2 - 1].profileImg!) as! URL)! as Data)!
-                    
-                }
+                cell.mylistProfileImg.image = profilePic
                 cell.mylistName.text = myContentList[indexPath.row/2 - 1].userName!
                 cell.createdDate.text = changeDate(myContentList[indexPath.row/2 - 1].createdAt!)
                 cell.contentText.text = myContentList[indexPath.row/2 - 1].contentText!
                 
                 
                 cell.contentText.sizeToFit()
-                if myContentList[indexPath.row/2 - 1].contentImage != "0"{
+                if myContentList[indexPath.row/2 - 1].contentImage != NO_IMAGE{
                     cell.contentPic.image = contentPic[indexPath.row/2 - 1]
                     cell.contentPic.y = (cell.contentText.y+cell.contentText.height+10.multiplyHeightRatio()).remultiplyHeightRatio()
                     cell.anotherBtnDown()

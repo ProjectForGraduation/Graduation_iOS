@@ -10,7 +10,10 @@ import UIKit
 class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
+    let NO_IMAGE = "http://13.124.115.238:8080/image/no_image.png"
+
     var contentPic : [UIImage] = []
+    var profilePic : [UIImage] = []
     var user_id: Int = 0
 
     // MARK: - location
@@ -56,16 +59,20 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     func setUpView(){
+        
+        contentPic.removeAll()
+        profilePic.removeAll()
+        
         locationTimer = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
         // 일단 15초
         let userLati = Float(locValue["latitude"]!)
         let userLong = Float(locValue["longitude"]!)
-        print(userLati,userLong)
         apiManager.setApi(path: "/contents/around?lat=\(userLati)&lng=\(userLong)", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
         apiManager.requestAroundContents { (ContentList) in
             self.aroundContentList = ContentList
             for i in 0..<self.aroundContentList.count{
                 self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.aroundContentList[i].contentImage!) as! URL)! as Data)!)
+                self.profilePic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.aroundContentList[i].profileImg!) as! URL)! as Data)!)
             }
             self.tableView.reloadData()
         }
@@ -188,7 +195,6 @@ extension SortLocationTableVC{
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        print("hihihi")
         return 1
     }
     
@@ -205,9 +211,7 @@ extension SortLocationTableVC{
             cell.content_id = aroundContentList[indexPath.row/2].contentId!
             cell.user_id = aroundContentList[indexPath.row/2].userId!
             //유저 프로필 사진
-            if aroundContentList[indexPath.row/2].profileImg != "0" {
-                cell.profileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: aroundContentList[indexPath.row/2].profileImg!) as! URL)! as Data)!
-            }
+            cell.profileImg.image = profilePic[indexPath.row/2]
             cell.profileImg.addAction(target: self, action: #selector(userBtnAction))
             // 좋아요
             cell.isLiked = aroundContentList[indexPath.row/2].isLiked!
@@ -226,7 +230,7 @@ extension SortLocationTableVC{
             
             cell.mapBtn.addTarget(self, action: #selector(openMap), for: .touchUpInside)
             
-            if aroundContentList[indexPath.row/2].contentImage != "0"{
+            if aroundContentList[indexPath.row/2].contentImage != NO_IMAGE{
                 cell.contentPic.image = contentPic[indexPath.row/2]
                 cell.contentPic.y = (cell.contentText.y+cell.contentText.height+10.multiplyHeightRatio()).remultiplyHeightRatio()
                 cell.anotherBtnDown()
