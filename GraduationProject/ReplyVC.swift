@@ -42,8 +42,12 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     static var receivedLikeCount = 30
     static var receivedReplyCount = 22
     
+    static var receivedContentId = 0
+    
     var apiManager2 = ApiManager2()
     
+    
+    let users = UserDefaults.standard
     //
     var emojiFlag : Int = 0
     var likeFlag : Bool = false
@@ -61,10 +65,20 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         replyTextField.delegate = self
     }
     override func viewDidAppear(_ animated: Bool) {
-        apiManager2.setApi(path: "", method: .get, parameters: [:], header: [:])
+        loadReply()
+        tableView.reloadData()
         
+    }
+    
+    func loadReply(){
+        apiManager2.setApi(path: "/content/\(ReplyVC.receivedContentId)/reply", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+        //reply get func
+        //1.model create
+        //2.load in model and make completion
+        //3. 전역모델리스트에 할당 끝~
         
-        
+        //4. 글쓰면 모델삭제하고 다시 로드하고 reload해줌..
+    
     }
     func setBasicView(){
         
@@ -174,6 +188,18 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
 
         }
         
+    }
+    
+    func sendButtonAction(){
+    
+        apiManager2.setApi(path: "/content/\(ReplyVC.receivedContentId)/reply", method: .post, parameters: ["reply":replyTextField.text], header: ["authorization":users.string(forKey: "token")!])
+        apiManager2.requestReply()
+        
+        //4. 글쓰면 모델삭제하고????? 다시 로드하고 reload해줌..
+        replyContent.removeAll()
+        loadReply()
+        tableView.reloadData()
+
     }
     
     func setContents(){
