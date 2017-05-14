@@ -10,6 +10,9 @@ import UIKit
 class UserListCell: UITableViewCell{
     
     var index : Int!
+    var content_id = 0
+    var user_id = 0
+    var likeCount = 0
     
     var mainProfileImg = UIImageView()
     var userId = UILabel()
@@ -21,12 +24,23 @@ class UserListCell: UITableViewCell{
     var contentText = UILabel()
     var contentPic = UIImageView()
     var likeBtn = UIButton()
-    var likeCount = UILabel()
+    var likeCountLabel = UILabel()
     var commentBtn = UIButton()
     var mapBtn = UIButton()
     
     let apiManager = ApiManager()
     let users = UserDefaults.standard
+    
+    var isLiked : Int = 1 {
+        willSet(newValue){
+            if newValue == 1{
+                likeBtn.setImage(UIImage(named: "likeFill"), for: .normal)
+            }else {
+                likeBtn.setImage(UIImage(named: "like"), for: .normal)
+                
+            }
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -66,9 +80,9 @@ class UserListCell: UITableViewCell{
         likeBtn.rframe(x: 10, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)
         likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnActions))
         
-        likeCount.rframe(x: 45, y: (contentPic.y+contentPic.height+20.multiplyHeightRatio()).remultiplyHeightRatio(), width: 100, height: 0)
-        likeCount.setLabel(text: "좋아요 0개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
-        likeCount.sizeToFit()
+        likeCountLabel.rframe(x: 45, y: (contentPic.y+contentPic.height+20.multiplyHeightRatio()).remultiplyHeightRatio(), width: 100, height: 0)
+        likeCountLabel.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
+        likeCountLabel.sizeToFit()
         
         mapBtn.rframe(x: 300, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)
         mapBtn.setButton(imageName: "marker", target: self, action: #selector(mapBtnActions))
@@ -87,25 +101,44 @@ class UserListCell: UITableViewCell{
         contentView.addSubview(contentText)
         contentView.addSubview(contentPic)
         contentView.addSubview(likeBtn)
-        contentView.addSubview(likeCount)
+        contentView.addSubview(likeCountLabel)
         contentView.addSubview(mapBtn)
         contentView.addSubview(commentBtn)
     }
     
     func likeBtnActions(){
-        MyListVC.index = self.index
+        apiManager.setApi(path: "/contents/like", method: .post, parameters: ["content_id":content_id,"is_like":isLiked], header: ["authorization":users.string(forKey: "token")!])
+        apiManager.requestLike { (code) in
+        }
+        
+        if isLiked == 1{
+            isLiked = 0
+            if likeCount > 0 {
+                likeCountLabel.text = "좋아요 \(likeCount-1)개"
+            }else{
+                likeCountLabel.text = "좋아요 0개"
+            }
+            likeCountLabel.sizeToFit()
+        }else{
+            isLiked = 1
+            likeCountLabel.text = "좋아요 \(likeCount+1)개"
+            likeCountLabel.sizeToFit()
+        }
+        
+        UserTimeLineVC.index = self.index
+        
     }
     
     func mapBtnActions(){
-        MyListVC.index = self.index
+        UserTimeLineVC.index = self.index
     }
     
     func commentBtnActions(){
-        MyListVC.index = self.index
+        UserTimeLineVC.index = self.index
     }
     
     func optionBtnActions(){
-        MyListVC.index = self.index
+        UserTimeLineVC.index = self.index
     }
     
     
@@ -126,7 +159,7 @@ class UserListCell: UITableViewCell{
         contentText.isHidden = !isindexOne
         contentPic.isHidden = !isindexOne
         likeBtn.isHidden = !isindexOne
-        likeCount.isHidden = !isindexOne
+        likeCountLabel.isHidden = !isindexOne
         mapBtn.isHidden = !isindexOne
         commentBtn.isHidden = !isindexOne
     }
@@ -134,14 +167,14 @@ class UserListCell: UITableViewCell{
     func anotherBtnUp(){
         mapBtn.frame.origin.y = contentText.y + contentText.height + 10.multiplyHeightRatio()
         likeBtn.frame.origin.y = contentText.y + contentText.height + 10.multiplyHeightRatio()
-        likeCount.frame.origin.y = contentText.y + contentText.height + 20.multiplyHeightRatio()
+        likeCountLabel.frame.origin.y = contentText.y + contentText.height + 20.multiplyHeightRatio()
         commentBtn.frame.origin.y = contentText.y + contentText.height + 10.multiplyHeightRatio()
     }
     
     func anotherBtnDown(){
         mapBtn.frame.origin.y = contentPic.y + contentPic.height + 10.multiplyHeightRatio()
         likeBtn.frame.origin.y = contentPic.y + contentPic.height + 10.multiplyHeightRatio()
-        likeCount.frame.origin.y = contentPic.y + contentPic.height + 20.multiplyHeightRatio()
+        likeCountLabel.frame.origin.y = contentPic.y + contentPic.height + 20.multiplyHeightRatio()
         commentBtn.frame.origin.y = contentPic.y + contentPic.height + 10.multiplyHeightRatio()
     }
 }

@@ -11,9 +11,9 @@ import UIKit
 class TimeLineCell: UITableViewCell{
     
     var index = 0;
-    var content_id = 0;
-    var user_id = 0;
-    var likeCount = 0;
+    var content_id = 0
+    var user_id = 0
+    var likeCount = 0
     
     var profileImg = UIImageView()
     var userName = UIButton()
@@ -63,7 +63,7 @@ class TimeLineCell: UITableViewCell{
         likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnAction))
         
         likeCountLabel.rframe(x: 45, y: (contentPic.y+contentPic.height+20.multiplyHeightRatio()).remultiplyHeightRatio(), width: 100, height: 0)
-        likeCountLabel.setLabel(text: "좋아요 개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
+        likeCountLabel.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
         likeCountLabel.sizeToFit()
         
         mapBtn.rframe(x: 300, y: (contentPic.y+contentPic.height+14.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 25)
@@ -112,18 +112,28 @@ class TimeLineCell: UITableViewCell{
     // MARK: - button action
     
     func likeBtnAction(){
-        // 이곳에서 서버로 내가 눌렀는지 안눌렀는지 보낸다.
-        print(isLiked)
-        if isLiked == 1{
-            isLiked = 0
-        }else{
-            isLiked = 1
-        }
         
         apiManager.setApi(path: "/contents/like", method: .post, parameters: ["content_id":content_id,"is_like":isLiked], header: ["authorization":users.string(forKey: "token")!])
         apiManager.requestLike { (code) in
-            print(code)
         }
+        
+        if isLiked == 1{
+            isLiked = 0
+            if likeCount > 0 {
+                likeCountLabel.text = "좋아요 \(likeCount-1)개"
+            }else{
+                likeCountLabel.text = "좋아요 0개"
+            }
+            likeCountLabel.sizeToFit()
+        }else{
+            isLiked = 1
+            likeCountLabel.text = "좋아요 \(likeCount+1)개"
+            likeCountLabel.sizeToFit()
+        }
+        
+        TimeLineTableVC.index = self.index
+        SortLocationTableVC.index = self.index
+
         
     }
     
@@ -133,7 +143,8 @@ class TimeLineCell: UITableViewCell{
     }
     
     func commentBtnAction(){
-        
+        TimeLineTableVC.index = self.index
+        SortLocationTableVC.index = self.index
     }
  
     

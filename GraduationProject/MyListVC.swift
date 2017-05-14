@@ -13,6 +13,7 @@ import Fusuma
 class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,FusumaDelegate {
     
     static var index: Int = 0
+    let NO_IMAGE = "http://13.124.115.238:8080/image/no_image.png"
     
     @IBOutlet weak var tableView: UITableView!
     let apiManager = ApiManager()
@@ -20,7 +21,8 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     var token : String!
     var myContentList: [UserContentList] = []
     var userInfo : UserInfo?
-    
+    var contentPic : [UIImage] = []
+    var profilePic : UIImage!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,14 +50,20 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     }
     
     func setUpView(){
+        contentPic.removeAll()
+        profilePic = nil
         
         self.apiManager.setApi(path: "/users/my", method: .get, parameters: [:], header: ["authorization":self.token])
         apiManager.requestUserInfo { (userInfo) in
             self.userInfo = userInfo
             let userId = self.userInfo!.user_id!
+            self.profilePic = UIImage(data: NSData(contentsOf: NSURL(string: (self.userInfo!.profile_dir)!) as! URL)! as Data)!
             self.apiManager.setApi(path: "/contents/\(userId)/info", method: .get, parameters: [:], header: ["authorization":self.token])
             self.apiManager.requestUserContents(completion: { (mylist) in
                 self.myContentList = mylist
+                for i in 0..<self.myContentList.count{
+                    self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.myContentList[i].contentImage!) as! URL)! as Data)!)
+                }
                 self.tableView.reloadData()
             })
         }
@@ -165,6 +173,21 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         self.present(replyVC, animated: false, completion: nil)
         
     }
+    
+    func likeBtnAction(){
+        if myContentList[MyListVC.index/2 - 1].isLiked == 0 {
+            myContentList[MyListVC.index/2 - 1].isLiked = 1
+        }else{
+            myContentList[MyListVC.index/2 - 1].isLiked = 0
+        }
+    }
+    
+    func mapBtnAction(){
+        MapVC.latitude = myContentList[MyListVC.index/2 - 1].lat!
+        MapVC.longitude = myContentList[MyListVC.index/2 - 1].lng!
+        performSegue(withIdentifier: "mapSegue3", sender: self)
+        
+    }
 }
 
 extension MyListVC {
@@ -180,42 +203,43 @@ extension MyListVC {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mytimeline", for: indexPath) as! MyListCell
             cell.selectionStyle = .none
             cell.index = indexPath.row
-            if indexPath.row == 0 {
-                if userInfo != nil{
-                    cell.myId.text = userInfo?.login_id
-                    cell.myName.text = userInfo?.user_name
-                    if userInfo?.profile_dir != "0"{
-                        cell.mainProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: (userInfo?.profile_dir)!) as! URL)! as Data)!
-                    }
-                }
+            if userInfo != nil{
+                cell.myId.text = userInfo?.login_id
+                cell.myName.text = userInfo?.user_name
+                cell.mainProfileImg.image = profilePic
                 
             }
             
             if (indexPath.row != 0) , !myContentList.isEmpty{
-                if myContentList[indexPath.row/2 - 1].profileImg != "0"{
-                    cell.mylistProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: myContentList[indexPath.row/2 - 1].profileImg!) as! URL)! as Data)!
-                    
-                }
+                cell.mylistProfileImg.image = profilePic
                 cell.mylistName.text = myContentList[indexPath.row/2 - 1].userName!
                 cell.createdDate.text = changeDate(myContentList[indexPath.row/2 - 1].createdAt!)
                 cell.contentText.text = myContentList[indexPath.row/2 - 1].contentText!
                 
                 
                 cell.contentText.sizeToFit()
-                if myContentList[indexPath.row/2 - 1].contentImage != "0"{
-                    cell.contentPic.image = UIImage(data: NSData(contentsOf: NSURL(string: myContentList[indexPath.row/2 - 1].contentImage!) as! URL)! as Data)!
+                if myContentList[indexPath.row/2 - 1].contentImage != NO_IMAGE{
+                    cell.contentPic.image = contentPic[indexPath.row/2 - 1]
                     cell.contentPic.y = (cell.contentText.y+cell.contentText.height+10.multiplyHeightRatio()).remultiplyHeightRatio()
                     cell.anotherBtnDown()
                 }else{
                     cell.contentPic.image = nil
                     cell.anotherBtnUp()
                 }
-                cell.likeCount.text = "좋아요 \(myContentList[indexPath.row/2 - 1].likeCount!)개"
-                cell.likeCount.sizeToFit()
+                
+                cell.likeBtn.addTarget(self, action: #selector(likeBtnAction), for: .touchUpInside)
+                
+                cell.likeCountLabel.text = "좋아요 \(myContentList[indexPath.row/2 - 1].likeCount!)개"
+                cell.likeCountLabel.sizeToFit()
+                
+                cell.isLiked = myContentList[indexPath.row/2 - 1].isLiked!
+                cell.likeCount = myContentList[indexPath.row/2 - 1].likeCount!
+                cell.content_id = myContentList[indexPath.row/2 - 1].contentId!
             }
             
             cell.mainProfileImg.addAction(target: self, action: #selector(changeProfileImage))
             cell.commentBtn.addTarget(self, action: #selector(commentBtnAction), for: .touchUpInside)
+            cell.mapBtn.addTarget(self, action: #selector(mapBtnAction), for: .touchUpInside)
             
             if indexPath.row == 0 {
                 cell.profileHidden(false)
@@ -250,8 +274,12 @@ extension MyListVC {
                 
                 // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
                 
-                return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
-                
+                if myContentList[indexPath.row/2 - 1].contentImage! == "0" {
+                    return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
+                }else{
+                    return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
+                }
+
             }
         default:
             return 7

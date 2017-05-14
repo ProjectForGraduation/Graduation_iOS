@@ -13,15 +13,16 @@ import Fusuma
 class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
     static var index: Int = 0
-    
+    let NO_IMAGE = "http://13.124.115.238:8080/image/no_image.png"
+
     var user_id: Int = 0
     @IBOutlet weak var tableView: UITableView!
     let apiManager = ApiManager()
     let users = UserDefaults.standard
     var token : String!
     var userContentList: [UserContentList] = []
-    
-    
+    var contentPic : [UIImage] = []
+    var profilePic : UIImage!
     override func viewDidLoad() {
         super.viewDidLoad()
         token = users.string(forKey: "token")
@@ -48,10 +49,15 @@ class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     
     func setUpView(){
-        
+        contentPic.removeAll()
+        profilePic = nil
         self.apiManager.setApi(path: "/contents/\(user_id)/info", method: .get, parameters: [:], header: ["authorization":self.token])
         self.apiManager.requestUserContents(completion: { (userlist) in
                 self.userContentList = userlist
+                for i in 0..<self.userContentList.count{
+                    self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.userContentList[i].contentImage!) as! URL)! as Data)!)
+                }
+            self.profilePic = UIImage(data: NSData(contentsOf: NSURL(string: self.userContentList[0].profileImg!) as! URL)! as Data)!
                 self.tableView.reloadData()
         })
     }
@@ -67,8 +73,34 @@ class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     
     func commentBtnAction(){
-
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let replyVC = storyboard.instantiateViewController(withIdentifier: "ReplyVC")
+        
+        ReplyVC.receivedContent = self.userContentList[UserTimeLineVC.index/2-1].contentText!
+        ReplyVC.receivedUserName = self.userContentList[UserTimeLineVC.index/2-1].userName!
+        ReplyVC.receivedLikeCount = self.userContentList[UserTimeLineVC.index/2-1].likeCount!
+        ReplyVC.receivedWriteTime = changeDate(self.userContentList[UserTimeLineVC.index/2-1].createdAt!)
+        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.userContentList[UserTimeLineVC.index/2-1].contentImage!)) as! URL)! as Data)!
+        ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.userContentList[UserTimeLineVC.index/2-1].profileImg!)) as! URL)! as Data)!
+        
+        
+        self.present(replyVC, animated: false, completion: nil)
     }
+    
+    func likeBtnAction(){
+        if userContentList[UserTimeLineVC.index/2 - 1].isLiked == 0 {
+            userContentList[UserTimeLineVC.index/2 - 1].isLiked = 1
+        }else{
+            userContentList[UserTimeLineVC.index/2 - 1].isLiked = 0
+        }
+    }
+    
+    func mapBtnAction(){
+        MapVC.latitude = userContentList[UserTimeLineVC.index/2 - 1].lat!
+        MapVC.longitude = userContentList[UserTimeLineVC.index/2 - 1].lng!
+        performSegue(withIdentifier: "mapSegue3", sender: self)
+    }
+    
     @IBAction func backBtn(_ sender: UIButton) {
         self.dismiss(animated: false, completion: nil)
     }
@@ -88,35 +120,39 @@ extension UserTimeLineVC {
             cell.selectionStyle = .none
             cell.index = indexPath.row
             if indexPath.row == 0 ,!userContentList.isEmpty{
-                cell.userId.text = "\(userContentList[0].userId)"
+                cell.userId.text = "\(userContentList[0].login_id!)"
                 cell.userName.text = userContentList[0].userName
-                if userContentList[0].profileImg != "0"{
-                    cell.mainProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: (userContentList[0].profileImg)!) as! URL)! as Data)!
-                }
+                cell.mainProfileImg.image = profilePic
             }
-            
             if (indexPath.row != 0) , !userContentList.isEmpty{
-                if userContentList[indexPath.row/2 - 1].profileImg != "0"{
-                    cell.userlistProfileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: userContentList[indexPath.row/2 - 1].profileImg!) as! URL)! as Data)!
-                }
+                cell.userlistProfileImg.image = profilePic
                 cell.userlistName.text = userContentList[indexPath.row/2 - 1].userName!
                 cell.createdDate.text = changeDate(userContentList[indexPath.row/2 - 1].createdAt!)
                 cell.contentText.text = userContentList[indexPath.row/2 - 1].contentText!
                 
-                
                 cell.contentText.sizeToFit()
-                if userContentList[indexPath.row/2 - 1].contentImage != "0"{
-                    cell.contentPic.image = UIImage(data: NSData(contentsOf: NSURL(string: userContentList[indexPath.row/2 - 1].contentImage!) as! URL)! as Data)!
+                if userContentList[indexPath.row/2 - 1].contentImage != NO_IMAGE{
+                    cell.contentPic.image = contentPic[indexPath.row/2 - 1]
                     cell.contentPic.y = (cell.contentText.y+cell.contentText.height+10.multiplyHeightRatio()).remultiplyHeightRatio()
                     cell.anotherBtnDown()
                 }else{
                     cell.contentPic.image = nil
                     cell.anotherBtnUp()
                 }
+                
+                cell.likeBtn.addTarget(self, action: #selector(likeBtnAction), for: .touchUpInside)
+                
+                cell.likeCountLabel.text = "좋아요 \(userContentList[indexPath.row/2 - 1].likeCount!)개"
+                cell.likeCountLabel.sizeToFit()
+                
+                cell.isLiked = userContentList[indexPath.row/2 - 1].isLiked!
+                cell.likeCount = userContentList[indexPath.row/2 - 1].likeCount!
+                cell.content_id = userContentList[indexPath.row/2 - 1].contentId!
             }
             
             cell.commentBtn.addTarget(self, action: #selector(commentBtnAction), for: .touchUpInside)
-            
+            cell.mapBtn.addTarget(self, action: #selector(mapBtnAction), for: .touchUpInside)
+
             if indexPath.row == 0 {
                 cell.profileHidden(false)
             }else {
@@ -126,7 +162,6 @@ extension UserTimeLineVC {
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "spaceCell", for: indexPath) as! SpaceCell
             cell.selectionStyle = .none
-            
             return cell
         }
         
@@ -150,7 +185,11 @@ extension UserTimeLineVC {
                 
                 // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
                 
-                return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
+                if userContentList[indexPath.row/2 - 1].contentImage! == "0" {
+                    return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
+                }else{
+                    return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
+                }
                 
             }
         default:

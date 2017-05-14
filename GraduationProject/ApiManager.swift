@@ -69,10 +69,9 @@ class ApiManager {
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
-                    print(resp)
                     var contentList = [AroundContentList]()
                     for idx in 0..<resp["data"].count{
-                        let content = AroundContentList(contentId: resp["data"][idx]["content_id"].intValue, userId: resp["data"][idx]["user_id"].intValue,userName: resp["data"][idx]["user_name"].stringValue, profileImg: resp["data"][idx]["profile_dir"].stringValue, contentText: resp["data"][idx]["content_text"].stringValue, contentImage: resp["data"][idx]["image_dir"].stringValue,createdAt: resp["data"][idx]["create_at"].stringValue ,updatedAt: resp["data"][idx]["update_at"].stringValue, share_range: resp["data"][idx]["share_range"].intValue, location_range: resp["data"][idx]["location_range"].intValue , isLiked: resp["data"][idx]["is_like"].intValue, likeCount: resp["data"][idx]["like_cnt"].intValue)
+                        let content = AroundContentList(contentId: resp["data"][idx]["content_id"].intValue, userId: resp["data"][idx]["user_id"].intValue,userName: resp["data"][idx]["user_name"].stringValue, profileImg: resp["data"][idx]["profile_dir"].stringValue, contentText: resp["data"][idx]["content_text"].stringValue, contentImage: resp["data"][idx]["image_dir"].stringValue,createdAt: resp["data"][idx]["create_at"].stringValue ,updatedAt: resp["data"][idx]["update_at"].stringValue, share_range: resp["data"][idx]["share_range"].intValue, location_range: resp["data"][idx]["location_range"].intValue , isLiked: resp["data"][idx]["is_like"].intValue, likeCount: resp["data"][idx]["like_cnt"].intValue,lng: resp["data"][idx]["lng"].doubleValue, lat: resp["data"][idx]["lat"].doubleValue, replyCount: resp["data"][idx]["reply_cnt"].intValue, login_id: resp["data"][idx]["login_id"].stringValue)
                         contentList += [content]
                     }
                     completion(contentList)
@@ -87,17 +86,16 @@ class ApiManager {
     }
     
     func requestUserContents(completion : @escaping ([UserContentList])->Void){
-        print(url)
         Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
             switch(response.result) {
                 
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
-                    print(resp)
+                    print(json)
                     var contentList = [UserContentList]()
                     for idx in 0..<resp["myContents"].count{
-                        let content = UserContentList(contentId: resp["myContents"][idx]["content_id"].intValue, userId: resp["myContents"][idx]["user_id"].intValue,userName: resp["myContents"][idx]["user_name"].stringValue, profileImg: resp["myContents"][idx]["profile_dir"].stringValue, contentText: resp["myContents"][idx]["content_text"].stringValue, contentImage: resp["myContents"][idx]["image_dir"].stringValue,createdAt: resp["myContents"][idx]["create_at"].stringValue ,updatedAt: resp["myContents"][idx]["update_at"].stringValue, share_range: resp["myContents"][idx]["share_range"].intValue, location_range: resp["myContents"][idx]["location_range"].intValue , isLiked: resp["myContents"][idx]["is_like"].intValue, likeCount: resp["myContents"][idx]["like_cnt"].intValue)
+                        let content = UserContentList(friendState: resp["friend_status"].intValue, contentId: resp["myContents"][idx]["content_id"].intValue, userId: resp["myContents"][idx]["user_id"].intValue,userName: resp["myContents"][idx]["user_name"].stringValue, profileImg: resp["myContents"][idx]["profile_dir"].stringValue, contentText: resp["myContents"][idx]["content_text"].stringValue, contentImage: resp["myContents"][idx]["image_dir"].stringValue,createdAt: resp["myContents"][idx]["create_at"].stringValue ,updatedAt: resp["myContents"][idx]["update_at"].stringValue, share_range: resp["myContents"][idx]["share_range"].intValue, location_range: resp["myContents"][idx]["location_range"].intValue , isLiked: resp["myContents"][idx]["is_like"].intValue, likeCount: resp["myContents"][idx]["like_cnt"].intValue, lng: resp["myContents"][idx]["lng"].doubleValue, lat: resp["myContents"][idx]["lat"].doubleValue, replyCount: resp["myContents"][idx]["reply_cnt"].intValue, login_id: resp["myContents"][idx]["login_id"].stringValue)
                         contentList += [content]
                     }
                     completion(contentList)
@@ -116,7 +114,6 @@ class ApiManager {
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
-                    print(resp)
                     let userInfo = UserInfo(login_id: resp["data"][0]["login_id"].stringValue, profile_dir: resp["data"][0]["profile_dir"].stringValue, user_name: resp["data"][0]["user_name"].stringValue,user_id: resp["data"][0]["user_id"].intValue)
                     completion(userInfo)
                 }
@@ -198,7 +195,6 @@ class ApiManager {
                             }
                             break
                         case .failure(_):
-                            print("error")
                             break
                         }
                     }
@@ -220,7 +216,6 @@ class ApiManager {
                 }
                 break
             case .failure(_):
-                print("fail")
                 break
                 
             }
