@@ -169,6 +169,10 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.myContentList[MyListVC.index/2-1].contentImage!)) as! URL)! as Data)!
         ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.myContentList[MyListVC.index/2-1].profileImg!)) as! URL)! as Data)!
         
+        ReplyVC.receivedContentId = self.myContentList[MyListVC.index/2-1].contentId!
+        ReplyVC.receivedReplyCount = self.myContentList[MyListVC.index/2-1].replyCount!
+        ReplyVC.receivedIsLiked = self.myContentList[MyListVC.index/2-1].isLiked!
+        
         
         self.present(replyVC, animated: false, completion: nil)
         
@@ -180,6 +184,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         }else{
             myContentList[MyListVC.index/2 - 1].isLiked = 0
         }
+        
     }
     
     func mapBtnAction(){

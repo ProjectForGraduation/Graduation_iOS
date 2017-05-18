@@ -36,7 +36,7 @@
         <scene sceneID="nj6-im-skv">
             <objects>
                 <navigationController id="gTc-8O-t1B" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mYK-qG-GNs">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="mYK-qG-GNs">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -84,7 +84,7 @@
         <scene sceneID="5qv-d6-KPP">
             <objects>
                 <navigationController id="vWz-JM-9Iz" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="SZz-N1-lez">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="SZz-N1-lez">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -282,7 +282,7 @@
             <objects>
                 <navigationController id="k4m-h6-Gd8" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="XWz-PY-iZ0"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="M5Y-rc-iGc">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="M5Y-rc-iGc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -323,7 +323,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PLs-6x-vo2" id="UoK-rn-Ghx">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="50.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -364,7 +364,7 @@
         <scene sceneID="dy0-xz-IHv">
             <objects>
                 <navigationController id="Em9-6n-9iY" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="EqV-No-C1i">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="EqV-No-C1i">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -477,7 +477,7 @@
                                         <rect key="frame" x="0.0" y="72" width="375" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WFP-Zu-tPo" id="qcH-xm-390">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="99.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -560,7 +560,7 @@
                     <tabBarItem key="tabBarItem" title="" image="timeline" id="f2x-vM-Gk9">
                         <inset key="imageInsets" minX="0.0" minY="7" maxX="0.0" maxY="-7"/>
                     </tabBarItem>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="09k-mR-NL8">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="09k-mR-NL8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -805,7 +805,7 @@
                     <tabBarItem key="tabBarItem" title="" image="location" id="VbO-Oa-Lw9">
                         <inset key="imageInsets" minX="0.0" minY="7" maxX="0.0" maxY="-7"/>
                     </tabBarItem>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="OAU-4n-nn2">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="OAU-4n-nn2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

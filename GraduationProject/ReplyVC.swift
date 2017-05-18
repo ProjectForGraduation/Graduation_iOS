@@ -37,19 +37,24 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     static var receivedProfileImg = UIImage(named:"gguggu")
     static var receivedUserName = "신꾸꾸"
     static var receivedWriteTime = "20160731"
-    static var receivedContent = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요"
+    static var receivedContent = "안녕하세요안녕하세요안녕하세요"
     static var receivedImg = UIImage(named:"gguggu")
     static var receivedLikeCount = 30
     static var receivedReplyCount = 22
+    static var receivedIsLiked = 0
+    
+    static var receivedContentId = 0
     
     var apiManager2 = ApiManager2()
     
+    
+    let users = UserDefaults.standard
     //
     var emojiFlag : Int = 0
-    var likeFlag : Bool = false
+    var likeFlag : Int = ReplyVC.receivedIsLiked
     var hasImgFlag : Bool = true
     
-    var replyContent: [ReplyList] = [ReplyList(profileImg: "",userName: "한경이",reply: "안녕하세요1",writeTime: "20160726"),ReplyList(profileImg: "",userName: "한경이2",reply: "안녕하세요2",writeTime: "20160727"),ReplyList(profileImg: "",userName: "한경이3",reply: "안녕하세요3",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이4",reply: "안녕하세요4",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이5",reply: "안녕하세요5",writeTime: "20160728")]
+    var replyContent: [ReplyList] = []//= [ReplyList(profileImg: "",userName: "한경이",reply: "안녕하세요1",writeTime: "20160726"),ReplyList(profileImg: "",userName: "한경이2",reply: "안녕하세요2",writeTime: "20160727"),ReplyList(profileImg: "",userName: "한경이3",reply: "안녕하세요3",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이4",reply: "안녕하세요4",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이5",reply: "안녕하세요5",writeTime: "20160728")]
     
     
     override func viewDidLoad() {
@@ -58,13 +63,32 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         setContents()
         setTableView()
         
+        
         replyTextField.delegate = self
     }
     override func viewDidAppear(_ animated: Bool) {
-        apiManager2.setApi(path: "", method: .get, parameters: [:], header: [:])
+        loadReply()
+        //tableView.reloadData()
         
+    }
+    
+    func loadReply(){
         
+        apiManager2.setApi(path: "/contents/\(ReplyVC.receivedContentId)/reply", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+        apiManager2.getReply { (replyContents) in
+            self.replyContent = replyContents
+            self.tableView.reloadData()
+            //댓글 ui 갱신
+            //ReplyVC.receivedReplyCount = replyContent[0
+        }
         
+        //reply get func
+        //1.model create
+        //2.load in model and make completion
+        //3. 전역모델리스트에 할당 끝~
+        
+        //4. 글쓰면 모델삭제하고 다시 로드하고 reload해줌..
+    
     }
     func setBasicView(){
         
@@ -130,9 +154,11 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         replyLabel.setLabel(text: "댓글 \(ReplyVC.receivedReplyCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
         
-        
-        likeButton.setButton(imageName: "like", target: self, action: #selector(likeButtonAction))
-        
+        if likeFlag == 0{
+            likeButton.setButton(imageName: "like", target: self, action: #selector(likeButtonAction))
+        }else{
+            likeButton.setButton(imageName: "likeFill", target: self, action: #selector(likeButtonAction))
+        }
         
         likeInfoLabel.setLabel(text: "좋아요", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color: UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
         
@@ -151,6 +177,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         
         bottomBar.rframe(x: 0, y: 623, width: 375, height: 44)
+        sendButton.addTarget(self, action: #selector(sendButtonAction), for: .touchUpInside)
         
         NotificationCenter.default.addObserver(self, selector: #selector(ReplyVC.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
@@ -160,20 +187,53 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func leftButtonAction(){
         dismiss(animated: false, completion: nil)
-        //print("dismissssss")
+       
     }
     
     func likeButtonAction(){
-        if !likeFlag{
-            likeButton.setImage(UIImage(named: "likeFill"), for: UIControlState.normal)
-            likeFlag = true
+        
+        apiManager2.setApi(path: "/contents/like", method: .post, parameters: ["content_id":ReplyVC.receivedContentId,"is_like":likeFlag], header: ["authorization":users.string(forKey: "token")!])
+        
+        if likeFlag == 0{
+            apiManager2.requestLike(completion: { (result) in
+                self.likeButton.setImage(UIImage(named: "likeFill"), for: UIControlState.normal)
+                self.likeFlag = 1
+                self.likeLabel.text = "좋아요 \(ReplyVC.receivedLikeCount+1)개"
+            })
 
         }else{
-            likeButton.setImage(UIImage(named: "like"), for: UIControlState.normal)
-            likeFlag = false
+            apiManager2.requestLike(completion: { (result) in
+                self.likeButton.setImage(UIImage(named: "like"), for: UIControlState.normal)
+                self.likeFlag = 0
+                self.likeLabel.text = "좋아요 \(ReplyVC.receivedLikeCount-1)개"
+            })
 
         }
         
+    }
+    
+    func sendButtonAction(){
+        
+        apiManager2.setApi(path: "/contents/\(ReplyVC.receivedContentId)/reply", method: .post, parameters: ["reply": replyTextField.text!], header: ["authorization":users.string(forKey: "token")!])
+        apiManager2.requestReply { (result) in
+            if result == 0{
+                self.replyTextField.endEditing(true)
+                self.replyTextField.text = ""
+                self.replyContent.removeAll()
+                self.loadReply()
+                ReplyVC.receivedReplyCount += 1
+                self.replyLabel.text = "댓글 \(ReplyVC.receivedReplyCount)개"
+                //reply ui reload
+            }
+        }
+        
+        
+        
+        //4. 글쓰면 모델삭제하고????? 다시 로드하고 reload해줌..
+        //replyContent.removeAll()
+        //loadReply()
+        //tableView.reloadData()
+
     }
     
     func setContents(){
@@ -321,9 +381,9 @@ extension ReplyVC{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "replyCell", for: indexPath) as! ReplyCell
         
-        cell.profileImg.image = UIImage(named:"default")
+        cell.profileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: (self.replyContent[indexPath.row].profileImg!)) as! URL)! as Data)!
         cell.userName.text = replyContent[indexPath.row].userName
-        cell.writeTime.text = replyContent[indexPath.row].writeTime
+        cell.writeTime.text = changeDate(replyContent[indexPath.row].writeTime!)
         cell.reply.text = replyContent[indexPath.row].reply
         
         
