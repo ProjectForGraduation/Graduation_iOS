@@ -62,6 +62,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         
         contentPic.removeAll()
         profilePic.removeAll()
+        aroundContentList.removeAll()
         
         locationTimer = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
         // 일단 15초
@@ -99,6 +100,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     
     func optionBtnAction(){
         apiManager.setApi(path: "contents/:contentId", method: .delete, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+        contentAlert(isMine: aroundContentList[SortLocationTableVC.index/2].login_id == self.users.string(forKey: "userid")!)
         // 만약 해당 게시글의 id 가 내 아이디와 같다면 삭제 alert
         // 아니면 신고 alert
     }
@@ -130,34 +132,22 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     func contentAlert(isMine : Bool){
         
         let alertView = UIAlertController(title: "", message: "이 글에 대하여", preferredStyle: .actionSheet)
-        
-        let reportContent = UIAlertAction(title: "신고하기", style: UIAlertActionStyle.destructive, handler: { (UIAlertAction) in
-            
-            alertView.dismiss(animated: true, completion: nil)
-        })
-        
-        let modifyContent = UIAlertAction(title: "게시물 수정", style: UIAlertActionStyle.default, handler: { (UIAlertAction) in
-            alertView.dismiss(animated: true, completion: nil)
-        })
-        
-        
+
         let removeContent = UIAlertAction(title: "게시물 삭제", style: UIAlertActionStyle.destructive, handler: { (UIAlertAction) in
-            
-            self.apiManager.setApi(path: "contents/:contentId", method: .delete, parameters: [:], header: ["authorization":self.users.string(forKey: "token")!])
+            let contentId = (self.aroundContentList[SortLocationTableVC.index/2].contentId!)
+            self.apiManager.setApi(path: "/contents/\(contentId)", method: .delete, parameters: [:], header: ["authorization":self.users.string(forKey: "token")!])
             self.apiManager.requestDeleteContents(completion: { (code) in
-                print(code)
+                if(code == 0){
+                    self.setUpView()
+                }
             })
-            
             alertView.dismiss(animated: true, completion: nil)
         })
         
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { (_) in }
         
         if isMine{
-            alertView.addAction(modifyContent)
             alertView.addAction(removeContent)
-        }else{
-            alertView.addAction(reportContent)
         }
         
         alertView.addAction(cancelAction)
@@ -171,6 +161,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("hello segue")
         if segue.identifier == "userSegue" {
             let des = segue.destination as! UINavigationController
             let target = des.topViewController as! UserTimeLineVC

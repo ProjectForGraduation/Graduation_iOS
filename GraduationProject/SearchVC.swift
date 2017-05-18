@@ -22,24 +22,30 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
-        
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.bounces = false
-        self.tableView.frame = CGRect(x: 0, y: self.searchBar.y+self.searchBar.height, width: 375.multiplyWidthRatio(), height: 667.multiplyHeightRatio() - (self.searchBar.y+self.searchBar.height))
-        self.tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
-        self.tableView.showsVerticalScrollIndicator = false
         self.searchBar.delegate = self
-        
-        // Do any additional setup after loading the view.
+        viewinit()
+        tableViewinit()
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
+       // Do any additional setup after loading the view.
         
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func tableViewinit(){
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.bounces = false
+        self.tableView.frame = CGRect(x: 0, y: self.searchBar.y+self.searchBar.height, width: 375.multiplyWidthRatio(), height: 667.multiplyHeightRatio() - (self.searchBar.y+self.searchBar.height))
+        self.tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+        self.tableView.showsVerticalScrollIndicator = false
+    }
+    
+    func viewinit(){
+        
     }
     
     @IBAction func backBtn(_ sender: UIButton) {

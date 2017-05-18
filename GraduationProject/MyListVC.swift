@@ -157,7 +157,10 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     }
     
     func commentBtnAction(){
-        //print(MyListVC.index)
+
+        let liked = myContentList[MyListVC.index/2 - 1].isLiked!
+        print(liked)
+
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let replyVC = storyboard.instantiateViewController(withIdentifier: "ReplyVC")
@@ -179,10 +182,13 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     }
     
     func likeBtnAction(){
-        if myContentList[MyListVC.index/2 - 1].isLiked == 0 {
+        let liked = myContentList[MyListVC.index/2 - 1].isLiked!
+        if liked == 0 {
             myContentList[MyListVC.index/2 - 1].isLiked = 1
+            myContentList[MyListVC.index/2 - 1].likeCount! += 1
         }else{
             myContentList[MyListVC.index/2 - 1].isLiked = 0
+            myContentList[MyListVC.index/2 - 1].likeCount! -= 1
         }
         
     }
@@ -191,6 +197,37 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         MapVC.latitude = myContentList[MyListVC.index/2 - 1].lat!
         MapVC.longitude = myContentList[MyListVC.index/2 - 1].lng!
         performSegue(withIdentifier: "mapSegue3", sender: self)
+        
+    }
+    
+    func optionBtnAction(){
+        contentAlert()
+    }
+    
+    func contentAlert(){
+        
+        let alertView = UIAlertController(title: "", message: "이 글에 대하여", preferredStyle: .actionSheet)
+        
+        let removeContent = UIAlertAction(title: "게시물 삭제", style: UIAlertActionStyle.destructive, handler: { (UIAlertAction) in
+            let contentId = (self.myContentList[MyListVC.index].contentId!)
+            self.apiManager.setApi(path: "/contents/\(contentId)", method: .delete, parameters: [:], header: ["authorization":self.users.string(forKey: "token")!])
+            self.apiManager.requestDeleteContents(completion: { (code) in
+                print(code)
+            })
+            self.tableView.reloadData()
+            alertView.dismiss(animated: true, completion: nil)
+        })
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { (_) in }
+        
+        alertView.addAction(cancelAction)
+        alertView.addAction(removeContent)
+        
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alertView, animated: true, completion: nil)
         
     }
 }
@@ -241,7 +278,7 @@ extension MyListVC {
                 cell.likeCount = myContentList[indexPath.row/2 - 1].likeCount!
                 cell.content_id = myContentList[indexPath.row/2 - 1].contentId!
             }
-            
+            cell.optionBtn.addAction(target: self, action: #selector(optionBtnAction))
             cell.mainProfileImg.addAction(target: self, action: #selector(changeProfileImage))
             cell.commentBtn.addTarget(self, action: #selector(commentBtnAction), for: .touchUpInside)
             cell.mapBtn.addTarget(self, action: #selector(mapBtnAction), for: .touchUpInside)

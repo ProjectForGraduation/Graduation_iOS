@@ -51,7 +51,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     let users = UserDefaults.standard
     //
     var emojiFlag : Int = 0
-    var likeFlag : Int = ReplyVC.receivedIsLiked
+    var likeFlag : Int = 0
     var hasImgFlag : Bool = true
     
     var replyContent: [ReplyList] = []//= [ReplyList(profileImg: "",userName: "한경이",reply: "안녕하세요1",writeTime: "20160726"),ReplyList(profileImg: "",userName: "한경이2",reply: "안녕하세요2",writeTime: "20160727"),ReplyList(profileImg: "",userName: "한경이3",reply: "안녕하세요3",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이4",reply: "안녕하세요4",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이5",reply: "안녕하세요5",writeTime: "20160728")]
@@ -59,6 +59,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        likeFlag = ReplyVC.receivedIsLiked
         setBasicView()
         setContents()
         setTableView()
@@ -69,7 +70,6 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     override func viewDidAppear(_ animated: Bool) {
         loadReply()
         //tableView.reloadData()
-        
     }
     
     func loadReply(){

@@ -127,6 +127,7 @@ class ApiManager {
     }
     
     func requestUpdatePosition(){
+        
         Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
             switch(response.result){
             case .success(_):
@@ -142,6 +143,7 @@ class ApiManager {
     }
     
     func requestDeleteContents(completion: @escaping (Int)->Void){
+        print(url)
         Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
             switch(response.result){
             case .success(_):
@@ -152,6 +154,7 @@ class ApiManager {
                 }
                 break
             case .failure(_):
+                print("fail")
                 break
             }
         }
