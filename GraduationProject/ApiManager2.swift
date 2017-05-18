@@ -118,8 +118,21 @@ class ApiManager2 {
     
     
     
-    func requestLike(select:Int){
-    
+    func requestLike(completion : @escaping (Int)->Void){
+        Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
+            switch(response.result) {
+                
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    completion(resp["meta"]["code"].intValue)
+                }
+                break
+            case .failure(_):
+                break
+                
+            }
+        }
     }
     
     

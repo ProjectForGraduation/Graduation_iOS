@@ -171,7 +171,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         
         ReplyVC.receivedContentId = self.myContentList[MyListVC.index/2-1].contentId!
         ReplyVC.receivedReplyCount = self.myContentList[MyListVC.index/2-1].replyCount!
-
+        ReplyVC.receivedIsLiked = self.myContentList[MyListVC.index/2-1].isLiked!
         
         
         self.present(replyVC, animated: false, completion: nil)
@@ -184,6 +184,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         }else{
             myContentList[MyListVC.index/2 - 1].isLiked = 0
         }
+        
     }
     
     func mapBtnAction(){

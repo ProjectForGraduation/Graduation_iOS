@@ -41,6 +41,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     static var receivedImg = UIImage(named:"gguggu")
     static var receivedLikeCount = 30
     static var receivedReplyCount = 22
+    static var receivedIsLiked = 0
     
     static var receivedContentId = 0
     
@@ -50,7 +51,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     let users = UserDefaults.standard
     //
     var emojiFlag : Int = 0
-    var likeFlag : Bool = false
+    var likeFlag : Int = ReplyVC.receivedIsLiked
     var hasImgFlag : Bool = true
     
     var replyContent: [ReplyList] = []//= [ReplyList(profileImg: "",userName: "한경이",reply: "안녕하세요1",writeTime: "20160726"),ReplyList(profileImg: "",userName: "한경이2",reply: "안녕하세요2",writeTime: "20160727"),ReplyList(profileImg: "",userName: "한경이3",reply: "안녕하세요3",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이4",reply: "안녕하세요4",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이5",reply: "안녕하세요5",writeTime: "20160728")]
@@ -153,9 +154,11 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
         
         replyLabel.setLabel(text: "댓글 \(ReplyVC.receivedReplyCount)개", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color:UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
         
-        
-        likeButton.setButton(imageName: "like", target: self, action: #selector(likeButtonAction))
-        
+        if likeFlag == 0{
+            likeButton.setButton(imageName: "like", target: self, action: #selector(likeButtonAction))
+        }else{
+            likeButton.setButton(imageName: "likeFill", target: self, action: #selector(likeButtonAction))
+        }
         
         likeInfoLabel.setLabel(text: "좋아요", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 12, color: UIColor(red: 191/255, green: 196/255, blue: 204/255, alpha: 1.0))
         
@@ -188,13 +191,22 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     }
     
     func likeButtonAction(){
-        if !likeFlag{
-            likeButton.setImage(UIImage(named: "likeFill"), for: UIControlState.normal)
-            likeFlag = true
+        
+        apiManager2.setApi(path: "/contents/like", method: .post, parameters: ["content_id":ReplyVC.receivedContentId,"is_like":likeFlag], header: ["authorization":users.string(forKey: "token")!])
+        
+        if likeFlag == 0{
+            apiManager2.requestLike(completion: { (result) in
+                self.likeButton.setImage(UIImage(named: "likeFill"), for: UIControlState.normal)
+                self.likeFlag = 1
+                self.likeLabel.text = "좋아요 \(ReplyVC.receivedLikeCount+1)개"
+            })
 
         }else{
-            likeButton.setImage(UIImage(named: "like"), for: UIControlState.normal)
-            likeFlag = false
+            apiManager2.requestLike(completion: { (result) in
+                self.likeButton.setImage(UIImage(named: "like"), for: UIControlState.normal)
+                self.likeFlag = 0
+                self.likeLabel.text = "좋아요 \(ReplyVC.receivedLikeCount-1)개"
+            })
 
         }
         
