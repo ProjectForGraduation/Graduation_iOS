@@ -169,6 +169,10 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.myContentList[MyListVC.index/2-1].contentImage!)) as! URL)! as Data)!
         ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.myContentList[MyListVC.index/2-1].profileImg!)) as! URL)! as Data)!
         
+        ReplyVC.receivedContentId = self.myContentList[MyListVC.index/2-1].contentId!
+        ReplyVC.receivedReplyCount = self.myContentList[MyListVC.index/2-1].replyCount!
+
+        
         
         self.present(replyVC, animated: false, completion: nil)
         

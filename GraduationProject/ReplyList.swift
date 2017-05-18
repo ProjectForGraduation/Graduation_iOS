@@ -11,18 +11,40 @@ import Foundation
 
 class ReplyList: NSObject{
     
+//    public var profileImg : String?
+//    public var userName : String?
+//    public var reply : String?
+//    public var writeTime : String?
+    
+    
     public var profileImg : String?
     public var userName : String?
     public var reply : String?
     public var writeTime : String?
+    public var userId : Int?
+    public var replyId : Int?
+    public var contentId : Int?
     
     
-    init(profileImg: String?, userName: String?, reply: String?, writeTime: String?) {
+    init(profileImg: String?, userName: String?, reply: String?, writeTime: String?, userId: Int?, replyId: Int?, contentId: Int?) {
         self.profileImg = profileImg
         self.userName = userName
         self.reply = reply
         self.writeTime = writeTime
+        self.userId = userId
+        self.replyId = replyId
+        self.contentId = contentId
     }
+    
+    
+    
+    
+//    init(profileImg: String?, userName: String?, reply: String?, writeTime: String?) {
+//        self.profileImg = profileImg
+//        self.userName = userName
+//        self.reply = reply
+//        self.writeTime = writeTime
+//    }
     
     
     

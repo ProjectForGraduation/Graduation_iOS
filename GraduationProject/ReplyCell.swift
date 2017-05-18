@@ -27,7 +27,7 @@ class ReplyCell: UITableViewCell {
         userName.rframe(x: 55, y: 20, width: 50, height: 14)
         userName.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 14, color: UIColor.black)
         
-        writeTime.rframe(x: 300, y: 20, width: 50, height: 10)
+        writeTime.rframe(x: 290, y: 20, width: 70, height: 10)
         writeTime.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 10, color: UIColor.black)
         
         reply.rframe(x: 20, y: 50, width: 335, height: 12)
