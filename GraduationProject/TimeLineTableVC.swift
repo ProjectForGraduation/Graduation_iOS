@@ -94,11 +94,11 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
         MapVC.latitude = timeContentList[TimeLineTableVC.index/2].lat!
         MapVC.longitude = timeContentList[TimeLineTableVC.index/2].lng!
-        performSegue(withIdentifier: "mapSegue2", sender: self)
+        performSegue(withIdentifier: "MapSegue", sender: self)
     }
     
     func userBtnAction(){
-        performSegue(withIdentifier: "userSegue", sender: self)
+        performSegue(withIdentifier: "userSegue2", sender: self)
     }
     
     func optionBtnAction(){
@@ -164,7 +164,7 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "userSegue" {
+        if segue.identifier == "userSegue2" {
             let des = segue.destination as! UINavigationController
             let target = des.topViewController as! UserTimeLineVC
             target.user_id = timeContentList[TimeLineTableVC.index/2].userId!

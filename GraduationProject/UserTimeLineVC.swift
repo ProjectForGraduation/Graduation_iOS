@@ -13,6 +13,7 @@ import Fusuma
 class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
     static var index: Int = 0
+    static var friendState: Int = 0
     let NO_IMAGE = "http://13.124.115.238:8080/image/no_image.png"
 
     var user_id: Int!
@@ -117,7 +118,6 @@ class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     func reqFriendBtnAction(){
         let friendState = userContentList[0].friendState!
-        print(friendState, "친구상태")
         if let userid = userInfo?.user_id! , friendState == 0{
             self.apiManager.setApi(path: "/relation/send", method: .post, parameters: ["opponent_id":userid], header: ["authorization":token])
         }else if let userid = userInfo?.user_id!, friendState == 1{
@@ -125,7 +125,28 @@ class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate
             self.apiManager.setApi(path: "/relation", method: .post, parameters: ["opponent_id":userid], header: ["authorization":token])
         }else if let userid = userInfo?.user_id! , friendState == 2{
             //친구 삭제
-            self.apiManager.setApi(path: "/relation", method: .post, parameters: ["opponent_id":userid], header: ["authorization":token])
+            let userName = (userInfo?.user_name)!
+            let alertView = UIAlertController(title: "친구 끊기", message: "\(userName)님과 정말 친구를 끊으시겠습니까?", preferredStyle: .alert)
+            
+            let action = UIAlertAction(title: "네, 끊겠습니다.", style: UIAlertActionStyle.destructive, handler: { (UIAlertAction) in
+                 self.apiManager.setApi(path: "/relation", method: .post, parameters: ["opponent_id":userid], header: ["authorization":self.token])
+                 self.apiManager.requestFriend { (code) in
+                    if code == 0 {
+                        alertView.dismiss(animated: true, completion: nil)
+                    }
+                 }
+            })
+            
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel) { (_) in
+                self.tableView.reloadData()
+            }
+            
+            alertView.addAction(action)
+            alertView.addAction(cancelAction)
+            
+            alertWindow(alertView: alertView)
+            
+           
         }
         apiManager.requestFriend { (code) in
             print("metacode: ",code)

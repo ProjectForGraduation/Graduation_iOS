@@ -76,7 +76,6 @@ class ApiManager {
                 break
             }
         }
-
     }
     
     func requestContents(completion : @escaping ([ContentList])->Void){

@@ -25,7 +25,7 @@
                     <connections>
                         <segue destination="gTc-8O-t1B" kind="show" identifier="registerSegue" animates="NO" id="5ng-2l-MdP"/>
                         <segue destination="vWz-JM-9Iz" kind="show" identifier="loginSegue" animates="NO" id="xKh-7x-OIG"/>
-                        <segue destination="26s-ul-QBA" kind="show" identifier="validTokenSegue" id="enJ-Kg-zrA"/>
+                        <segue destination="26s-ul-QBA" kind="show" identifier="validTokenSegue" animates="NO" id="enJ-Kg-zrA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7n8-eU-taP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -446,6 +446,7 @@
                         <outlet property="tableView" destination="VG8-wc-3e3" id="LtB-oh-J7P"/>
                         <segue destination="ecN-6h-2Yi" kind="show" identifier="MapSegue" animates="NO" id="Lsp-Iu-ijA"/>
                         <segue destination="Irf-Mh-HhV" kind="showDetail" identifier="segueToReply" id="E2h-1c-NCy"/>
+                        <segue destination="80c-j2-Ekv" kind="show" identifier="userSegue2" id="0S7-Z3-2kG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BL0-O4-ptU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -682,10 +683,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="지금 여기 우리" id="cMY-NP-7Qg">
                         <barButtonItem key="leftBarButtonItem" style="plain" id="axg-AI-87p">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="TPA-KX-lLa">
-                                <rect key="frame" x="16" y="7" width="53" height="30"/>
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="TPA-KX-lLa">
+                                <rect key="frame" x="16" y="9" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="logout">
+                                <state key="normal" image="logout">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -904,16 +905,17 @@
     <resources>
         <image name="alarm" width="32" height="32"/>
         <image name="location" width="25" height="25"/>
+        <image name="logout" width="64" height="64"/>
         <image name="mylist" width="25" height="25"/>
         <image name="search" width="25" height="25"/>
         <image name="timeline" width="25" height="25"/>
         <image name="write" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="I6f-iO-c0e"/>
-        <segue reference="7at-rp-um2"/>
-        <segue reference="UlI-ev-gaN"/>
+        <segue reference="enJ-Kg-zrA"/>
         <segue reference="OtL-Bi-Ssg"/>
-        <segue reference="Lsp-Iu-ijA"/>
+        <segue reference="0S7-Z3-2kG"/>
+        <segue reference="7at-rp-um2"/>
+        <segue reference="juf-UB-xg9"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -44,6 +44,7 @@ class ReqFriendVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
             for i in 0..<self.reqFriendList.count{
                 self.reqProfileImage.append(UIImage(data: NSData(contentsOf: NSURL(string: self.reqFriendList[i].profile_dir!) as! URL)! as Data)!)
             }
+            self.tableView.reloadData()
         }
     }
     
@@ -85,21 +86,21 @@ extension ReqFriendVC {
    
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let agree = UITableViewRowAction(style: .normal, title: "수락") { action, index in
-            self.reqFriendList.remove(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
             // 승낙했을 때
             self.apiManager.setApi(path: "/relation/receive", method: .post, parameters: ["opponent_id":self.reqFriendList[indexPath.row].req_user_id!], header: ["authorization":self.users.string(forKey: "token")!])
             self.apiManager.requestFriend(completion: { (code) in
                 print(code)
+                self.reqFriendList.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
             })
         }
         let delete = UITableViewRowAction(style: .default, title: "삭제") { action, index in
-            self.reqFriendList.remove(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
             // 거절했을 때
             self.apiManager.setApi(path: "/relation", method: .post, parameters: ["opponent_id":self.reqFriendList[indexPath.row].req_user_id!], header: ["authorization":self.users.string(forKey: "token")!])
             self.apiManager.requestFriend(completion: { (code) in
                 print(code)
+                self.reqFriendList.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
             })
             
         }
