@@ -13,10 +13,12 @@ class UserListCell: UITableViewCell{
     var content_id = 0
     var user_id = 0
     var likeCount = 0
+    var friendState = 0
     
     var mainProfileImg = UIImageView()
     var userId = UILabel()
     var userName = UILabel()
+    var addFriendButton = UIButton()
     var userlistProfileImg = UIImageView()
     var userlistName = UILabel()
     var createdDate = UILabel()
@@ -49,6 +51,10 @@ class UserListCell: UITableViewCell{
         mainProfileImg.layer.masksToBounds = false
         mainProfileImg.layer.cornerRadius = 50.multiplyWidthRatio()
         mainProfileImg.clipsToBounds = true
+        
+        addFriendButton.rframe(x: 335, y: 10, width: 30, height: 30)
+       // addFriendButton.setImage(UIImage(named:"add-contact"), for: .normal)
+        addFriendButton.setButton(imageName: "add-contact", target: self, action: #selector(friendBtnAction))
         
         userId.rcenter(y: 120, width: 375, height: 14, targetWidth: 375)
         userId.setLabel(text: "", align: .center, fontName: "AppleSDGothicNeo-Medium", fontSize: 15, color: UIColor.black)
@@ -94,6 +100,7 @@ class UserListCell: UITableViewCell{
         contentView.addSubview(mainProfileImg)
         contentView.addSubview(userId)
         contentView.addSubview(userName)
+        contentView.addSubview(addFriendButton)
         contentView.addSubview(userlistProfileImg)
         contentView.addSubview(userlistName)
         contentView.addSubview(createdDate)
@@ -141,6 +148,16 @@ class UserListCell: UITableViewCell{
         UserTimeLineVC.index = self.index
     }
     
+    func friendBtnAction(){
+        if friendState == 0{
+            addFriendButton.setImage(UIImage(named: "reqfriend"), for: .normal)
+        }else if friendState == 1{
+            addFriendButton.setImage(UIImage(named: "add-contact"), for: .normal)
+        }else{
+            addFriendButton.setImage(UIImage(named: "add-contact"), for: .normal)
+        }
+    }
+    
     
     
     
@@ -152,6 +169,7 @@ class UserListCell: UITableViewCell{
         mainProfileImg.isHidden = isindexOne
         userId.isHidden = isindexOne
         userName.isHidden = isindexOne
+        addFriendButton.isHidden = isindexOne
         userlistProfileImg.isHidden = !isindexOne
         userlistName.isHidden = !isindexOne
         createdDate.isHidden = !isindexOne

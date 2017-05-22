@@ -16,9 +16,14 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
     
     @IBOutlet weak var tableView: UITableView!
     
+    var tableClickIndex : Int = 0
     var searchActive : Bool = false
-    var data = ["윤민섭","정우희","전한경","이나영","조용주","김나박이","사람","사람2","사람3","사람4"]
-    var filtered:[String] = []
+    var filtered: [(String,UIImage,Int)] = []
+    var userInfo : [UserInfo] = []
+    
+    var datas : [(name: String,image: UIImage,uid: Int)] = []
+    var apiManager = ApiManager()
+    var users = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +33,10 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
        // Do any additional setup after loading the view.
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableClickIndex = -1
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,7 +54,15 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
     }
     
     func viewinit(){
-        
+        apiManager.setApi(path: "/users", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+        apiManager.requestAllUsers { (UserInfo) in
+            self.userInfo = UserInfo
+            for i in 0..<self.userInfo.count{
+                let data = (name: self.userInfo[i].user_name!,image: UIImage(data: NSData(contentsOf: NSURL(string: self.userInfo[i].profile_dir!) as! URL)! as Data)!, uid: self.userInfo[i].user_id!)
+                self.datas.append(data)
+            }
+            self.tableView.reloadData()
+        }
     }
     
     @IBAction func backBtn(_ sender: UIButton) {
@@ -86,12 +103,13 @@ extension SearchVC{
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        filtered = data.filter({ (text) -> Bool in
-            let tmp: NSString = text as NSString
+
+        filtered = datas.filter({ ( text : (name: String, image: UIImage, uid: Int)) -> Bool in
+            let tmp: NSString = text.name as NSString
             let range = tmp.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
             return range.location != NSNotFound
         })
+        
         
         if(filtered.count == 0){
             searchActive = false;
@@ -102,6 +120,7 @@ extension SearchVC{
         self.tableView.reloadData()
     }
     
+
 }
 
 extension SearchVC{
@@ -114,25 +133,39 @@ extension SearchVC{
         if(searchActive) {
             return filtered.count
         }
-        return data.count;
+        return datas.count;
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! FriendCell
         cell.selectionStyle = .default
 
-        if(searchActive){
-            cell.imageView?.image = UIImage(named: "default")
-            cell.textLabel?.text = filtered[indexPath.row]
+        if searchActive {
+            cell.imageView?.image = filtered[indexPath.row].1
+            cell.textLabel?.text = filtered[indexPath.row].0
         } else {
-            cell.imageView?.image = UIImage(named: "default")
-            cell.textLabel?.text = data[indexPath.row];
+            cell.imageView?.image = datas[indexPath.row].image
+            cell.textLabel?.text = datas[indexPath.row].name
         }
         
         return cell;
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableClickIndex = indexPath.row
+        performSegue(withIdentifier: "showUserInfo", sender: self)
         self.tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showUserInfo"{
+            let destination = segue.destination as! UINavigationController
+            let targetView = destination.topViewController as! UserTimeLineVC
+            if !filtered.isEmpty, searchActive{
+                targetView.user_id = filtered[tableClickIndex].2
+            }else{
+                targetView.user_id = datas[tableClickIndex].uid
+            }
+        }
     }
 }

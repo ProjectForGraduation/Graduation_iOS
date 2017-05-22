@@ -29,7 +29,7 @@ class UserContentList: NSObject{
     public var replyCount : Int?
     public var login_id : String?
     
-    init(friendState: Int?, contentId: Int?, userId: Int?, userName: String?, profileImg: String?, contentText: String?, contentImage: String?, createdAt: String?, updatedAt: String?, share_range: Int?, location_range: Int?, isLiked: Int?, likeCount: Int?,lng: Double?, lat: Double?, replyCount: Int, login_id: String) {
+    init(friendState: Int?, contentId: Int?, userId: Int?, userName: String?, profileImg: String?, contentText: String?, contentImage: String?, createdAt: String?, updatedAt: String?, share_range: Int?, location_range: Int?, isLiked: Int?, likeCount: Int?,lng: Double?, lat: Double?, replyCount: Int?, login_id: String?) {
         self.friendState = friendState
         self.contentId = contentId
         self.userId = userId

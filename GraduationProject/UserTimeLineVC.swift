@@ -15,7 +15,7 @@ class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate
     static var index: Int = 0
     let NO_IMAGE = "http://13.124.115.238:8080/image/no_image.png"
 
-    var user_id: Int = 0
+    var user_id: Int!
     @IBOutlet weak var tableView: UITableView!
     let apiManager = ApiManager()
     let users = UserDefaults.standard
@@ -23,10 +23,13 @@ class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate
     var userContentList: [UserContentList] = []
     var contentPic : [UIImage] = []
     var profilePic : UIImage!
+    var userInfo : UserInfo?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         token = users.string(forKey: "token")
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
+        print(user_id)
         setTableView()
     }
     
@@ -51,15 +54,26 @@ class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate
     func setUpView(){
         contentPic.removeAll()
         profilePic = nil
-        self.apiManager.setApi(path: "/contents/\(user_id)/info", method: .get, parameters: [:], header: ["authorization":self.token])
+        self.apiManager.setApi(path: "/users/\(user_id!)/info", method: .get, parameters: [:], header: ["authorization":self.token])
+        self.apiManager.requestUserInfo { (userInfo) in
+            self.userInfo = userInfo
+            if let userInfo = self.userInfo {
+                self.profilePic = UIImage(data: NSData(contentsOf: NSURL(string: userInfo.profile_dir!) as! URL)! as Data)!
+            }else{
+                
+            }
+        }
+        self.apiManager.setApi(path: "/contents/\(user_id!)/info", method: .get, parameters: [:], header: ["authorization":self.token])
         self.apiManager.requestUserContents(completion: { (userlist) in
                 self.userContentList = userlist
                 for i in 0..<self.userContentList.count{
-                    self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.userContentList[i].contentImage!) as! URL)! as Data)!)
+                    if let contentImage = self.userContentList[i].contentImage {
+                        self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: contentImage) as! URL)! as Data)!)
+                    }
                 }
-            self.profilePic = UIImage(data: NSData(contentsOf: NSURL(string: self.userContentList[0].profileImg!) as! URL)! as Data)!
                 self.tableView.reloadData()
         })
+        
     }
     
 
@@ -101,6 +115,23 @@ class UserTimeLineVC: UIViewController,UITableViewDataSource,UITableViewDelegate
         performSegue(withIdentifier: "mapSegue3", sender: self)
     }
     
+    func reqFriendBtnAction(){
+        let friendState = userContentList[0].friendState!
+        print(friendState, "친구상태")
+        if let userid = userInfo?.user_id! , friendState == 0{
+            self.apiManager.setApi(path: "/relation/send", method: .post, parameters: ["opponent_id":userid], header: ["authorization":token])
+        }else if let userid = userInfo?.user_id!, friendState == 1{
+            //친구 요청 취소
+            self.apiManager.setApi(path: "/relation", method: .post, parameters: ["opponent_id":userid], header: ["authorization":token])
+        }else if let userid = userInfo?.user_id! , friendState == 2{
+            //친구 삭제
+            self.apiManager.setApi(path: "/relation", method: .post, parameters: ["opponent_id":userid], header: ["authorization":token])
+        }
+        apiManager.requestFriend { (code) in
+            print("metacode: ",code)
+        }
+    }
+    
     @IBAction func backBtn(_ sender: UIButton) {
         self.dismiss(animated: false, completion: nil)
     }
@@ -120,12 +151,13 @@ extension UserTimeLineVC {
             let cell = tableView.dequeueReusableCell(withIdentifier: "usertimeline", for: indexPath) as! UserListCell
             cell.selectionStyle = .none
             cell.index = indexPath.row
-            if indexPath.row == 0 ,!userContentList.isEmpty{
-                cell.userId.text = "\(userContentList[0].login_id!)"
-                cell.userName.text = userContentList[0].userName
+            if let userInfo = self.userInfo, indexPath.row == 0 {
+                cell.userId.text = userInfo.login_id
+                cell.userName.text = userInfo.user_name
                 cell.mainProfileImg.image = profilePic
+                
             }
-            if (indexPath.row != 0) , !userContentList.isEmpty{
+            if (indexPath.row != 0) , !userContentList.isEmpty , userContentList[indexPath.row/2 - 1].userName != nil{
                 cell.userlistProfileImg.image = profilePic
                 cell.userlistName.text = userContentList[indexPath.row/2 - 1].userName!
                 cell.createdDate.text = changeDate(userContentList[indexPath.row/2 - 1].createdAt!)
@@ -140,7 +172,7 @@ extension UserTimeLineVC {
                     cell.contentPic.image = nil
                     cell.anotherBtnUp()
                 }
-                
+               
                 cell.likeBtn.addTarget(self, action: #selector(likeBtnAction), for: .touchUpInside)
                 
                 cell.likeCountLabel.text = "좋아요 \(userContentList[indexPath.row/2 - 1].likeCount!)개"
@@ -153,11 +185,34 @@ extension UserTimeLineVC {
             
             cell.commentBtn.addTarget(self, action: #selector(commentBtnAction), for: .touchUpInside)
             cell.mapBtn.addTarget(self, action: #selector(mapBtnAction), for: .touchUpInside)
-
+            cell.addFriendButton.addTarget(self, action: #selector(reqFriendBtnAction), for: .touchUpInside)
+            
             if indexPath.row == 0 {
                 cell.profileHidden(false)
+                
+                if let id = userInfo?.login_id , id != (users.string(forKey: "userid")!) {
+                    // 내가 아닌 경우
+                    cell.addFriendButton.isHidden = false
+                    let friendState = userContentList[indexPath.row].friendState
+                    if friendState == 0{
+                        cell.addFriendButton.setImage(UIImage(named: "add-contact"), for: .normal)
+                        cell.friendState = 0
+                    }else if friendState == 1{
+                        cell.friendState = 1
+                        cell.addFriendButton.setImage(UIImage(named: "reqfriend"), for: .normal)
+                    }else{
+                        cell.friendState = 2
+                        cell.addFriendButton.setImage(UIImage(named: "alreadyfriend"), for: .normal)
+                    }
+                }else{
+                    cell.addFriendButton.isHidden = true
+                }
             }else {
                 cell.profileHidden(true)
+                if userContentList[indexPath.row/2 - 1].userName == nil{
+                    cell.optionBtn.isHidden = true
+                    cell.userlistProfileImg.isHidden = true
+                }
             }
             return cell
         default:
@@ -178,15 +233,17 @@ extension UserTimeLineVC {
                 let picHeight = UIImageView()
                 textHeight.rframe(x: 10, y: 50, width: 375, height: 0)
                 textHeight.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
-                textHeight.text = userContentList[indexPath.row/2 - 1].contentText!
-                textHeight.sizeToFit()
+                if let contentText = userContentList[indexPath.row/2 - 1].contentText {
+                    textHeight.text = contentText
+                    textHeight.sizeToFit()
+                }
                 
                 picHeight.rframe(x: 0, y: (textHeight.y+textHeight.height+10), width: 375, height: 375)
                 picHeight.image = UIImage(named: "gguggu")
                 
                 // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
                 
-                if userContentList[indexPath.row/2 - 1].contentImage! == "0" {
+                if let contentImage = userContentList[indexPath.row/2 - 1].contentImage , contentImage == NO_IMAGE{
                     return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
                 }else{
                     return (picHeight.y+picHeight.height+50.multiplyHeightRatio())

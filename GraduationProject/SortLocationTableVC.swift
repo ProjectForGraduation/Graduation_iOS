@@ -27,7 +27,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     //Api
     
     var apiManager = ApiManager()
-    var aroundContentList: [AroundContentList] = []
+    var aroundContentList: [ContentList] = []
     
     // userdefaults
     let users = UserDefaults.standard
@@ -69,7 +69,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         let userLati = Float(locValue["latitude"]!)
         let userLong = Float(locValue["longitude"]!)
         apiManager.setApi(path: "/contents/around?lat=\(userLati)&lng=\(userLong)", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
-        apiManager.requestAroundContents { (ContentList) in
+        apiManager.requestContents { (ContentList) in
             self.aroundContentList = ContentList
             for i in 0..<self.aroundContentList.count{
                 self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.aroundContentList[i].contentImage!) as! URL)! as Data)!)
@@ -121,7 +121,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         ReplyVC.receivedUserName = self.aroundContentList[SortLocationTableVC.index/2].userName!
         ReplyVC.receivedLikeCount = self.aroundContentList[SortLocationTableVC.index/2].likeCount!
         ReplyVC.receivedWriteTime = changeDate(self.aroundContentList[SortLocationTableVC.index/2].createdAt!)
-        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.aroundContentList[UserTimeLineVC.index/2].contentImage!)) as! URL)! as Data)!
+        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.aroundContentList[SortLocationTableVC.index/2].contentImage!)) as! URL)! as Data)!
         ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.aroundContentList[SortLocationTableVC.index/2].profileImg!)) as! URL)! as Data)!
         
         
@@ -161,7 +161,6 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("hello segue")
         if segue.identifier == "userSegue" {
             let des = segue.destination as! UINavigationController
             let target = des.topViewController as! UserTimeLineVC

@@ -40,6 +40,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         // 디비에 현재 위치를 저장한다.
         let latitude = locationValue["latitude"]
         let longitude = locationValue["longitude"]
+        
         apiManager.setApi(path: "/users/position", method: .post, parameters: ["lat":latitude!,"lng":longitude!], header: ["authorization":token])
         apiManager.requestUpdatePosition()
         

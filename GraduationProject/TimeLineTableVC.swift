@@ -8,24 +8,28 @@
 
 import UIKit
 class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
-
-    @IBOutlet weak var tableView: UITableView!
     
-    final let hasImage :String = "http://0"
+    @IBOutlet weak var tableView: UITableView!
+    let NO_IMAGE = "http://13.124.115.238:8080/image/no_image.png"
+    var contentPic : [UIImage] = []
+    var profilePic : [UIImage] = []
+    var user_id: Int = 0
+    
+    // MARK: - static
+    static var index: Int = 0
+
     
     // MARK: - location
     var locationManager = LocationManager()
     var locValue: Dictionary<String,Double> = [:]
     var locationTimer = Timer()
-    static var index: Int = 0
-    var token : String!
-    // temp
-    var liked : [Bool] = [true,false,true,true,true,true,true,false,false,true]
+    
+    
     
     //Api
     
     var apiManager = ApiManager()
-    var timeLineContent: [AroundContentList] = []
+    var timeContentList: [ContentList] = []
     
     // userdefaults
     let users = UserDefaults.standard
@@ -33,7 +37,7 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
-        token = users.string(forKey: "token")
+        updateLocation()
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
     }
     
@@ -46,9 +50,9 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     // MARK: - set Table
-
+    
     func setTableView(){
-        self.tableView.rframe(x: 0, y: 0, width: 375, height: 625)
+        self.tableView.rframe(x: 0, y: 0, width: 375, height: 667)
         self.tableView.bounces = false
         self.tableView.separatorInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         self.tableView.showsVerticalScrollIndicator = false
@@ -57,70 +61,96 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func setUpView(){
-        locationTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
-        // 일단 15초
-//        apiManager.setApi(path: "/contents/all", method: .get, parameters: [:], header: [:])
-//        apiManager.requestContents { (ContentList) in
-//
-//            self.timeLineContent = ContentList
-//            
-//            self.tableView.reloadData()
-//        }
-
+        
+        contentPic.removeAll()
+        profilePic.removeAll()
+        timeContentList.removeAll()
+        
+        locationTimer = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
+        // 일단 300초
+        let userLati = Float(locValue["latitude"]!)
+        let userLong = Float(locValue["longitude"]!)
+        apiManager.setApi(path: "/contents/friend?lat=\(userLati)&lng=\(userLong)", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+        apiManager.requestContents { (ContentList) in
+            self.timeContentList = ContentList
+            for i in 0..<self.timeContentList.count{
+                self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.timeContentList[i].contentImage!) as! URL)! as Data)!)
+                self.profilePic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.timeContentList[i].profileImg!) as! URL)! as Data)!)
+            }
+            self.tableView.reloadData()
+        }
+        
+        
     }
     
     func updateLocation(){
         locValue = locationManager.getUserLocation()
-        locationManager.setLocationDB(token)
+        print(locValue)
+        locationManager.setLocationDB(users.string(forKey: "token")!)
     }
     
     func openMap(){
         // index/2에 해당하는 lati 와 longi 를 받아서 넘긴다.
-        print(TimeLineTableVC.index)
-        MapVC.latitude = 37.676357
-        MapVC.longitude = 126.773339
-        performSegue(withIdentifier: "MapSegue", sender: self)
+        
+        MapVC.latitude = timeContentList[TimeLineTableVC.index/2].lat!
+        MapVC.longitude = timeContentList[TimeLineTableVC.index/2].lng!
+        performSegue(withIdentifier: "mapSegue2", sender: self)
     }
     
     func userBtnAction(){
-        print("1")
+        performSegue(withIdentifier: "userSegue", sender: self)
     }
     
     func optionBtnAction(){
-        print(TimeLineTableVC.index)
+        apiManager.setApi(path: "contents/:contentId", method: .delete, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+        contentAlert(isMine: timeContentList[TimeLineTableVC.index/2].login_id == self.users.string(forKey: "userid")!)
+        // 만약 해당 게시글의 id 가 내 아이디와 같다면 삭제 alert
+        // 아니면 신고 alert
     }
+    
+    func likeBtnAction(){
+        if timeContentList[TimeLineTableVC.index/2].isLiked == 0 {
+            timeContentList[TimeLineTableVC.index/2].isLiked = 1
+        }else{
+            timeContentList[TimeLineTableVC.index/2].isLiked = 0
+        }
+    }
+    
+    func commentBtnAction(){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let replyVC = storyboard.instantiateViewController(withIdentifier: "ReplyVC")
+        
+        ReplyVC.receivedContent = self.timeContentList[TimeLineTableVC.index/2].contentText!
+        ReplyVC.receivedUserName = self.timeContentList[TimeLineTableVC.index/2].userName!
+        ReplyVC.receivedLikeCount = self.timeContentList[TimeLineTableVC.index/2].likeCount!
+        ReplyVC.receivedWriteTime = changeDate(self.timeContentList[TimeLineTableVC.index/2].createdAt!)
+        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.timeContentList[TimeLineTableVC.index/2].contentImage!)) as! URL)! as Data)!
+        ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.timeContentList[TimeLineTableVC.index/2].profileImg!)) as! URL)! as Data)!
+        
+        
+        self.present(replyVC, animated: false, completion: nil)
+    }
+    
     
     func contentAlert(isMine : Bool){
         
         let alertView = UIAlertController(title: "", message: "이 글에 대하여", preferredStyle: .actionSheet)
         
-        let reportContent = UIAlertAction(title: "신고하기", style: UIAlertActionStyle.destructive, handler: { (UIAlertAction) in
-            
-            alertView.dismiss(animated: true, completion: nil)
-        })
-        
-        let modifyContent = UIAlertAction(title: "게시물 수정", style: UIAlertActionStyle.default, handler: { (UIAlertAction) in
-            alertView.dismiss(animated: true, completion: nil)
-        })
-        
-        
         let removeContent = UIAlertAction(title: "게시물 삭제", style: UIAlertActionStyle.destructive, handler: { (UIAlertAction) in
-            
-            self.apiManager.setApi(path: "contents/:contentId", method: .delete, parameters: [:], header: ["authorization":self.users.string(forKey: "token")!])
+            let contentId = (self.timeContentList[TimeLineTableVC.index/2].contentId!)
+            self.apiManager.setApi(path: "/contents/\(contentId)", method: .delete, parameters: [:], header: ["authorization":self.users.string(forKey: "token")!])
             self.apiManager.requestDeleteContents(completion: { (code) in
-                print(code)
+                if(code == 0){
+                    self.setUpView()
+                }
             })
-            
             alertView.dismiss(animated: true, completion: nil)
         })
         
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { (_) in }
         
         if isMine{
-            alertView.addAction(modifyContent)
             alertView.addAction(removeContent)
-        }else{
-            alertView.addAction(reportContent)
         }
         
         alertView.addAction(cancelAction)
@@ -133,20 +163,36 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "userSegue" {
+            let des = segue.destination as! UINavigationController
+            let target = des.topViewController as! UserTimeLineVC
+            target.user_id = timeContentList[TimeLineTableVC.index/2].userId!
+        }
+    }
+    
+    func changeDate(_ date: String)->String{
+        let year = date.substring(to: date.index(date.startIndex, offsetBy: 4))
+        let month = date.substring(with: date.index(date.startIndex, offsetBy:5)..<date.index(date.startIndex, offsetBy:7))
+        let day = date.substring(with: date.index(date.startIndex, offsetBy:8)..<date.index(date.startIndex, offsetBy:10))
+        let date = year+"년 " + "\(Int(month)!)" + "월 " + "\(Int(day)!)" + "일"
+        return date
+    }
+    
 }
 
 
 // MARK: - extension tableVC
 
 extension TimeLineTableVC{
-
+    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return timeLineContent.count*2
+        return timeContentList.count*2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -155,35 +201,42 @@ extension TimeLineTableVC{
             let cell = tableView.dequeueReusableCell(withIdentifier: "timelineCell", for: indexPath) as! TimeLineCell
             cell.selectionStyle = .none
             cell.index = indexPath.row
-            cell.content_id = timeLineContent[indexPath.row/2].contentId!
-            cell.user_id = timeLineContent[indexPath.row/2].userId!
-   
-            
+            cell.content_id = timeContentList[indexPath.row/2].contentId!
+            cell.user_id = timeContentList[indexPath.row/2].userId!
+            //유저 프로필 사진
+            cell.profileImg.image = profilePic[indexPath.row/2]
+            cell.profileImg.addAction(target: self, action: #selector(userBtnAction))
             // 좋아요
-            //cell.isLiked = liked[indexPath.row/2]
+            cell.isLiked = timeContentList[indexPath.row/2].isLiked!
+            cell.likeCount = timeContentList[indexPath.row/2].likeCount!
+            // 옵션
+            cell.optionBtn.addTarget(self, action: #selector(optionBtnAction), for: .touchUpInside)
             
             
-            cell.userName.setTitle(timeLineContent[indexPath.row/2].userName!, for: .normal)
+            
+            cell.userName.setTitle(timeContentList[indexPath.row/2].userName!, for: .normal)
             cell.userName.contentHorizontalAlignment = .left
             cell.userName.addTarget(self, action: #selector(userBtnAction), for: .touchUpInside)
-            cell.optionBtn.setButton(imageName: "option", target: self, action: #selector(optionBtnAction))
-
-            if timeLineContent[indexPath.row/2].contentImage! != hasImage{
-                //cell.contentPic.image = UIImage(data: NSData(contentsOf: NSURL(string: timeLineContent[indexPath.row/2].contentImage!) as! URL)! as Data)!
-            }else{
-                //cell.contentPic.image = nil
-            }
-            cell.contentText.text = timeLineContent[indexPath.row/2].contentText!
+            
+            cell.contentText.text = timeContentList[indexPath.row/2].contentText!
             cell.contentText.sizeToFit()
             
             cell.mapBtn.addTarget(self, action: #selector(openMap), for: .touchUpInside)
             
-            if (timeLineContent[indexPath.row/2].contentImage! == hasImage){
-                cell.anotherBtnUp()
-            }else{
+            if timeContentList[indexPath.row/2].contentImage != NO_IMAGE{
+                cell.contentPic.image = contentPic[indexPath.row/2]
+                cell.contentPic.y = (cell.contentText.y+cell.contentText.height+10.multiplyHeightRatio()).remultiplyHeightRatio()
                 cell.anotherBtnDown()
+            }else{
+                cell.contentPic.image = nil
+                cell.anotherBtnUp()
             }
+            cell.likeBtn.addTarget(self, action: #selector(likeBtnAction), for: .touchUpInside)
             
+            cell.content_id = timeContentList[indexPath.row/2].contentId!
+            cell.likeCountLabel.text = "좋아요 \(timeContentList[indexPath.row/2].likeCount!)개"
+            cell.likeCountLabel.sizeToFit()
+            cell.commentBtn.addTarget(self, action: #selector(commentBtnAction), for: .touchUpInside)
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "spaceCell", for: indexPath) as! SpaceCell
@@ -205,9 +258,7 @@ extension TimeLineTableVC{
             picHeight.rframe(x: 0, y: (textHeight.y+textHeight.height+10).remultiplyHeightRatio(), width: 375, height: 375)
             picHeight.image = UIImage(named: "gguggu")
             
-            // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
-           
-            if timeLineContent[indexPath.row/2].contentImage! == hasImage {
+            if timeContentList[indexPath.row/2].contentImage! == "0" {
                 return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
             }else{
                 return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
@@ -219,3 +270,15 @@ extension TimeLineTableVC{
     }
     
 }
+
+
+/*
+ 
+ func findLocation(){
+ let userId: String! = ""
+ locValue = locationManager.getUserLocation()
+ print(locValue)
+ locationManager.setLocationDB(userId)
+ }
+ 
+ */

@@ -62,7 +62,9 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
             self.apiManager.requestUserContents(completion: { (mylist) in
                 self.myContentList = mylist
                 for i in 0..<self.myContentList.count{
-                    self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.myContentList[i].contentImage!) as! URL)! as Data)!)
+                    if let contentImage = self.myContentList[i].contentImage {
+                        self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: contentImage) as! URL)! as Data)!)
+                    }
                 }
                 self.tableView.reloadData()
             })
@@ -116,6 +118,19 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         }
         
         //performSegue(withIdentifier: "writeSegue", sender: self)
+    }
+    @IBAction func logoutBtnAction(_ sender: UIButton) {
+        apiManager.setApi(path: "/users/:id", method: .delete, parameters: [:], header: ["authorization":token])
+        apiManager.requestLogout { (code) in
+            if code == 0{
+                self.users.set("RE_LOGIN", forKey: "token")
+                //present id : preview
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let PreViewVC = storyboard.instantiateViewController(withIdentifier: "preview")
+                self.present(PreViewVC, animated: false, completion: nil)
+
+            }
+        }
     }
     
     func fusumaCameraRollUnauthorized() {
@@ -252,7 +267,7 @@ extension MyListVC {
                 
             }
             
-            if (indexPath.row != 0) , !myContentList.isEmpty{
+            if (indexPath.row != 0) , !myContentList.isEmpty, myContentList[indexPath.row/2 - 1].userName != nil{
                 cell.mylistProfileImg.image = profilePic
                 cell.mylistName.text = myContentList[indexPath.row/2 - 1].userName!
                 cell.createdDate.text = changeDate(myContentList[indexPath.row/2 - 1].createdAt!)
@@ -287,6 +302,10 @@ extension MyListVC {
                 cell.profileHidden(false)
             }else {
                 cell.profileHidden(true)
+                if myContentList[indexPath.row/2 - 1].userName == nil{
+                    cell.optionBtn.isHidden = true
+                    cell.mylistProfileImg.isHidden = true
+                }
             }
             return cell
         default:
@@ -308,20 +327,21 @@ extension MyListVC {
                 let picHeight = UIImageView()
                 textHeight.rframe(x: 10, y: 50, width: 375, height: 0)
                 textHeight.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
-                textHeight.text = myContentList[indexPath.row/2 - 1].contentText!
-                textHeight.sizeToFit()
+                if let contentText = myContentList[indexPath.row/2 - 1].contentText {
+                    textHeight.text = contentText
+                    textHeight.sizeToFit()
+                }
                 
                 picHeight.rframe(x: 0, y: (textHeight.y+textHeight.height+10), width: 375, height: 375)
                 picHeight.image = UIImage(named: "gguggu")
                 
                 // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
                 
-                if myContentList[indexPath.row/2 - 1].contentImage! == "0" {
+                if let contentImage = myContentList[indexPath.row/2 - 1].contentImage , contentImage == NO_IMAGE {
                     return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
                 }else{
                     return (picHeight.y+picHeight.height+50.multiplyHeightRatio())
                 }
-
             }
         default:
             return 7

@@ -56,22 +56,43 @@ class ApiManager {
                 }
                 break
             case .failure(_):
+                print("fail")
                 break
             }
         }
     }
     
-    func requestAroundContents(completion : @escaping ([AroundContentList])->Void){
+    func requestLogout(completion: @escaping(Int)->Void){
         
+        Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
+            switch(response.result){
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    completion(resp["meta"]["code"].intValue)
+                }
+                break
+            case .failure(_):
+                break
+            }
+        }
+
+    }
+    
+    func requestContents(completion : @escaping ([ContentList])->Void){
+        print(url)
+        print(method)
+        print(encode)
         Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
             switch(response.result) {
                 
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
-                    var contentList = [AroundContentList]()
+                    print(resp)
+                    var contentList = [ContentList]()
                     for idx in 0..<resp["data"].count{
-                        let content = AroundContentList(contentId: resp["data"][idx]["content_id"].intValue, userId: resp["data"][idx]["user_id"].intValue,userName: resp["data"][idx]["user_name"].stringValue, profileImg: resp["data"][idx]["profile_dir"].stringValue, contentText: resp["data"][idx]["content_text"].stringValue, contentImage: resp["data"][idx]["image_dir"].stringValue,createdAt: resp["data"][idx]["create_at"].stringValue ,updatedAt: resp["data"][idx]["update_at"].stringValue, share_range: resp["data"][idx]["share_range"].intValue, location_range: resp["data"][idx]["location_range"].intValue , isLiked: resp["data"][idx]["is_like"].intValue, likeCount: resp["data"][idx]["like_cnt"].intValue,lng: resp["data"][idx]["lng"].doubleValue, lat: resp["data"][idx]["lat"].doubleValue, replyCount: resp["data"][idx]["reply_cnt"].intValue, login_id: resp["data"][idx]["login_id"].stringValue)
+                        let content = ContentList(contentId: resp["data"][idx]["content_id"].intValue, userId: resp["data"][idx]["user_id"].intValue,userName: resp["data"][idx]["user_name"].stringValue, profileImg: resp["data"][idx]["profile_dir"].stringValue, contentText: resp["data"][idx]["content_text"].stringValue, contentImage: resp["data"][idx]["image_dir"].stringValue,createdAt: resp["data"][idx]["create_at"].stringValue ,updatedAt: resp["data"][idx]["update_at"].stringValue, share_range: resp["data"][idx]["share_range"].intValue, location_range: resp["data"][idx]["location_range"].intValue , isLiked: resp["data"][idx]["is_like"].intValue, likeCount: resp["data"][idx]["like_cnt"].intValue,lng: resp["data"][idx]["lng"].doubleValue, lat: resp["data"][idx]["lat"].doubleValue, replyCount: resp["data"][idx]["reply_cnt"].intValue, login_id: resp["data"][idx]["login_id"].stringValue)
                         contentList += [content]
                     }
                     completion(contentList)
@@ -86,6 +107,7 @@ class ApiManager {
     }
     
     func requestUserContents(completion : @escaping ([UserContentList])->Void){
+        print(url)
         Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
             switch(response.result) {
                 
@@ -94,9 +116,14 @@ class ApiManager {
                     let resp = JSON(json)
                     print(json)
                     var contentList = [UserContentList]()
-                    for idx in 0..<resp["myContents"].count{
-                        let content = UserContentList(friendState: resp["friend_status"].intValue, contentId: resp["myContents"][idx]["content_id"].intValue, userId: resp["myContents"][idx]["user_id"].intValue,userName: resp["myContents"][idx]["user_name"].stringValue, profileImg: resp["myContents"][idx]["profile_dir"].stringValue, contentText: resp["myContents"][idx]["content_text"].stringValue, contentImage: resp["myContents"][idx]["image_dir"].stringValue,createdAt: resp["myContents"][idx]["create_at"].stringValue ,updatedAt: resp["myContents"][idx]["update_at"].stringValue, share_range: resp["myContents"][idx]["share_range"].intValue, location_range: resp["myContents"][idx]["location_range"].intValue , isLiked: resp["myContents"][idx]["is_like"].intValue, likeCount: resp["myContents"][idx]["like_cnt"].intValue, lng: resp["myContents"][idx]["lng"].doubleValue, lat: resp["myContents"][idx]["lat"].doubleValue, replyCount: resp["myContents"][idx]["reply_cnt"].intValue, login_id: resp["myContents"][idx]["login_id"].stringValue)
+                    if resp["meta"]["code"].intValue == 200{
+                      let content = UserContentList(friendState: resp["friend_status"].intValue, contentId: nil, userId: nil, userName: nil, profileImg: nil, contentText: nil, contentImage: nil, createdAt: nil, updatedAt: nil, share_range: nil, location_range: nil, isLiked: nil, likeCount: nil, lng: nil, lat: nil, replyCount: nil, login_id: nil)
                         contentList += [content]
+                    } else{
+                        for idx in 0..<resp["myContents"].count{
+                            let content = UserContentList(friendState: resp["friend_status"].intValue, contentId: resp["myContents"][idx]["content_id"].intValue, userId: resp["myContents"][idx]["user_id"].intValue,userName: resp["myContents"][idx]["user_name"].stringValue, profileImg: resp["myContents"][idx]["profile_dir"].stringValue, contentText: resp["myContents"][idx]["content_text"].stringValue, contentImage: resp["myContents"][idx]["image_dir"].stringValue,createdAt: resp["myContents"][idx]["create_at"].stringValue ,updatedAt: resp["myContents"][idx]["update_at"].stringValue, share_range: resp["myContents"][idx]["share_range"].intValue, location_range: resp["myContents"][idx]["location_range"].intValue , isLiked: resp["myContents"][idx]["is_like"].intValue, likeCount: resp["myContents"][idx]["like_cnt"].intValue, lng: resp["myContents"][idx]["lng"].doubleValue, lat: resp["myContents"][idx]["lat"].doubleValue, replyCount: resp["myContents"][idx]["reply_cnt"].intValue, login_id: resp["myContents"][idx]["login_id"].stringValue)
+                            contentList += [content]
+                        }
                     }
                     completion(contentList)
                 }
@@ -224,38 +251,75 @@ class ApiManager {
             }
         }
     }
-    func requestUpload(completion : @escaping (String)->Void){
-        
-        
+    
+    func requestAllUsers(completion : @escaping ([UserInfo])->Void){
+        Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
+            switch(response.result){
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    var userInfo = [UserInfo]()
+                    print(resp)
+                    for i in 0..<resp["users"].count{
+                        let user = UserInfo(login_id: resp["users"][i]["login_id"].stringValue, profile_dir: resp["users"][i]["profile_dir"].stringValue, user_name: resp["users"][i]["user_name"].stringValue,user_id: resp["users"][i]["user_id"].intValue)
+                        userInfo += [user]
+                    }
+                    
+                    completion(userInfo)
+                }
+                break
+            case .failure(_):
+                break
+            }
+        }
+    }
+    
+    func requestFriend(completion: @escaping(Int)->Void){
+        print(url)
+        print(parameters)
+        print(header)
+        print(method)
         Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
-            print("faffa")
-            print(response.result.value!)
             switch(response.result) {
                 
             case .success(_):
                 if let json = response.result.value{
                     let resp = JSON(json)
-                    //print("aa")
-                    //print(resp)
-                    
-                    completion(resp.description)
+                    print(resp)
+                    completion(resp["meta"]["code"].intValue)
                 }
                 break
             case .failure(_):
-                
                 break
                 
             }
         }
-//        Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseString { response in
-//            
-//            print(response.result.value!)
-//            
-//        }
-
-        
-        
     }
     
-    
+    func requestReceiveFriend(completion: @escaping([ReceivedFriendList])->Void){
+        print(url)
+        print(method)
+        print(header)
+        Alamofire.request(url,method: method,parameters: parameters,encoding: encode, headers: header).responseJSON{ response in
+            switch(response.result) {
+                
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    var lists = [ReceivedFriendList]()
+                    print(resp)
+                    for i in 0..<resp["data"].count{
+                        let list = ReceivedFriendList(req_user_id: resp["data"][i]["req_user_id"].intValue, user_name: resp["data"][i]["user_name"].stringValue, profile_dir: resp["data"][i]["profile_dir"].stringValue)
+                        lists += [list]
+                    }
+                    completion(lists)
+                }
+                break
+            case .failure(_):
+                print("fail")
+                break
+                
+            }
+        }
+    }
 }
