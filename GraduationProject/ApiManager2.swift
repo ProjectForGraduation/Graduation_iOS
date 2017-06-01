@@ -135,6 +135,24 @@ class ApiManager2 {
         }
     }
     
+    func requestDeleteReply(completion: @escaping (Int)->Void){
+        print(url)
+        Alamofire.request(url,method: method, parameters: parameters, encoding: encode, headers: header).responseJSON { (response) in
+            switch(response.result){
+            case .success(_):
+                if let json = response.result.value{
+                    let resp = JSON(json)
+                    print("kakakak")
+                    print(resp)
+                    completion(resp["meta"]["code"].intValue)
+                }
+                break
+            case .failure(_):
+                print("fail")
+                break
+            }
+        }
+    }
     
     
     

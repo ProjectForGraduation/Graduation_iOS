@@ -397,4 +397,27 @@ extension ReplyVC{
         return 100
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            
+            apiManager2.setApi(path: "/contents/\(replyContent[indexPath.row].replyId!)/reply", method: .delete, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+            apiManager2.requestDeleteReply(completion: { (result) in
+                
+                print("result:\(result)")
+                
+            })
+            self.replyContent.removeAll()
+            self.loadReply()
+            
+            
+            //tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+    }
+    
 }
