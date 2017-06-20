@@ -48,7 +48,7 @@ class WriteVC: UIViewController, FusumaDelegate, UITextViewDelegate, UIScrollVie
     var change : CGFloat = 0.0
     
     var userId : Int = 8
-    var apiManager = ApiManager2()
+    var apiManager = ApiManager()
     
     let users = UserDefaults.standard
     

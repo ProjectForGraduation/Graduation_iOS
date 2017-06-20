@@ -27,7 +27,6 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var contentImg = UIImageView()
     var content = UITextView()
     
-    
     var likeLabel = UILabel()
     var replyLabel = UILabel()
     
@@ -45,7 +44,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     static var receivedContentId = 0
     
-    var apiManager2 = ApiManager2()
+    var apiManager = ApiManager()
     
     
     let users = UserDefaults.standard
@@ -54,7 +53,7 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     var likeFlag : Int = 0
     var hasImgFlag : Bool = true
     
-    var replyContent: [ReplyList] = []//= [ReplyList(profileImg: "",userName: "한경이",reply: "안녕하세요1",writeTime: "20160726"),ReplyList(profileImg: "",userName: "한경이2",reply: "안녕하세요2",writeTime: "20160727"),ReplyList(profileImg: "",userName: "한경이3",reply: "안녕하세요3",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이4",reply: "안녕하세요4",writeTime: "20160728"),ReplyList(profileImg: "",userName: "한경이5",reply: "안녕하세요5",writeTime: "20160728")]
+    var replyContent: [ReplyList] = []
     
     
     override func viewDidLoad() {
@@ -74,8 +73,8 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func loadReply(){
         
-        apiManager2.setApi(path: "/contents/\(ReplyVC.receivedContentId)/reply", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
-        apiManager2.getReply { (replyContents) in
+        apiManager.setApi(path: "/contents/\(ReplyVC.receivedContentId)/reply", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+        apiManager.getReply { (replyContents) in
             self.replyContent = replyContents
             self.tableView.reloadData()
             //댓글 ui 갱신
@@ -192,17 +191,17 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func likeButtonAction(){
         
-        apiManager2.setApi(path: "/contents/like", method: .post, parameters: ["content_id":ReplyVC.receivedContentId,"is_like":likeFlag], header: ["authorization":users.string(forKey: "token")!])
+        apiManager.setApi(path: "/contents/like", method: .post, parameters: ["content_id":ReplyVC.receivedContentId,"is_like":likeFlag], header: ["authorization":users.string(forKey: "token")!])
         
         if likeFlag == 0{
-            apiManager2.requestLike(completion: { (result) in
+            apiManager.requestLike(completion: { (result) in
                 self.likeButton.setImage(UIImage(named: "likeFill"), for: UIControlState.normal)
                 self.likeFlag = 1
                 self.likeLabel.text = "좋아요 \(ReplyVC.receivedLikeCount+1)개"
             })
 
         }else{
-            apiManager2.requestLike(completion: { (result) in
+            apiManager.requestLike(completion: { (result) in
                 self.likeButton.setImage(UIImage(named: "like"), for: UIControlState.normal)
                 self.likeFlag = 0
                 self.likeLabel.text = "좋아요 \(ReplyVC.receivedLikeCount-1)개"
@@ -214,8 +213,8 @@ class ReplyVC: UIViewController,UITableViewDelegate,UITableViewDataSource,UIText
     
     func sendButtonAction(){
         
-        apiManager2.setApi(path: "/contents/\(ReplyVC.receivedContentId)/reply", method: .post, parameters: ["reply": replyTextField.text!], header: ["authorization":users.string(forKey: "token")!])
-        apiManager2.requestReply { (result) in
+        apiManager.setApi(path: "/contents/\(ReplyVC.receivedContentId)/reply", method: .post, parameters: ["reply": replyTextField.text!], header: ["authorization":users.string(forKey: "token")!])
+        apiManager.requestReply { (result) in
             if result == 0{
                 self.replyTextField.endEditing(true)
                 self.replyTextField.text = ""
@@ -404,8 +403,8 @@ extension ReplyVC{
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            apiManager2.setApi(path: "/contents/\(replyContent[indexPath.row].replyId!)/reply", method: .delete, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
-            apiManager2.requestDeleteReply(completion: { (result) in
+            apiManager.setApi(path: "/contents/\(replyContent[indexPath.row].replyId!)/reply", method: .delete, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
+            apiManager.requestDeleteReply(completion: { (result) in
                 
                 print("result:\(result)")
                 

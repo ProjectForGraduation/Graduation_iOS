@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		373490471EC33E64001E0347 /* ApiManager2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373490461EC33E64001E0347 /* ApiManager2.swift */; };
 		373490491EC33F06001E0347 /* ReplyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373490481EC33F06001E0347 /* ReplyCell.swift */; };
 		3734904B1EC33F2B001E0347 /* ReplyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3734904A1EC33F2B001E0347 /* ReplyVC.swift */; };
 		3734904D1EC33F66001E0347 /* ReplyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3734904C1EC33F66001E0347 /* ReplyList.swift */; };
@@ -67,7 +66,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		373490461EC33E64001E0347 /* ApiManager2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiManager2.swift; sourceTree = "<group>"; };
 		373490481EC33F06001E0347 /* ReplyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplyCell.swift; sourceTree = "<group>"; };
 		3734904A1EC33F2B001E0347 /* ReplyVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplyVC.swift; sourceTree = "<group>"; };
 		3734904C1EC33F66001E0347 /* ReplyList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplyList.swift; sourceTree = "<group>"; };
@@ -169,7 +167,7 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		674BD8911E7C011E00B4CBE5 /* Model */ = {
+		674BD8911E7C011E00B4CBE5 /* ValueObject */ = {
 			isa = PBXGroup;
 			children = (
 				67FBA25E1E9D455D006CE2EA /* ContentList.swift */,
@@ -178,7 +176,7 @@
 				3734904C1EC33F66001E0347 /* ReplyList.swift */,
 				677F96261ED1AF9B0022BBB2 /* ReceivedFriendList.swift */,
 			);
-			name = Model;
+			name = ValueObject;
 			sourceTree = "<group>";
 		};
 		674BD8941E7C026800B4CBE5 /* MainVC */ = {
@@ -263,8 +261,7 @@
 			isa = PBXGroup;
 			children = (
 				67AD4E1E1E7C009700D36FFB /* ApiManager.swift */,
-				373490461EC33E64001E0347 /* ApiManager2.swift */,
-				674BD8911E7C011E00B4CBE5 /* Model */,
+				674BD8911E7C011E00B4CBE5 /* ValueObject */,
 			);
 			name = Api;
 			sourceTree = "<group>";
@@ -495,7 +492,6 @@
 				6760BDF91E7C69B800BED7C6 /* SortLocationTableVC.swift in Sources */,
 				674BD88A1E7C010200B4CBE5 /* iOSDevCenters+GIF.swift in Sources */,
 				67AD4E1F1E7C009700D36FFB /* ApiManager.swift in Sources */,
-				373490471EC33E64001E0347 /* ApiManager2.swift in Sources */,
 				674BD8961E7C029100B4CBE5 /* WriteVC.swift in Sources */,
 				3734904B1EC33F2B001E0347 /* ReplyVC.swift in Sources */,
 				67D158561EC3131B002B38B8 /* FriendCell.swift in Sources */,
