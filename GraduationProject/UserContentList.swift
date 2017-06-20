@@ -49,10 +49,4 @@ class UserContentList: NSObject{
         self.login_id = login_id
     }
     
-    
-    
-    
 }
-
-//[{"content_id":13,"user_id":3,"content_text":"first text","hasImage":0,"create_at":"2017-04-10T05:13:16.000Z","update_at":null,"share_range":1,"location_range":1}
-//"{

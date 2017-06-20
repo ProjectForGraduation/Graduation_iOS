@@ -10,13 +10,7 @@
 import Foundation
 
 class ReplyList: NSObject{
-    
-//    public var profileImg : String?
-//    public var userName : String?
-//    public var reply : String?
-//    public var writeTime : String?
-    
-    
+      
     public var profileImg : String?
     public var userName : String?
     public var reply : String?
@@ -35,19 +29,5 @@ class ReplyList: NSObject{
         self.replyId = replyId
         self.contentId = contentId
     }
-    
-    
-    
-    
-//    init(profileImg: String?, userName: String?, reply: String?, writeTime: String?) {
-//        self.profileImg = profileImg
-//        self.userName = userName
-//        self.reply = reply
-//        self.writeTime = writeTime
-//    }
-    
-    
-    
-    
     
 }

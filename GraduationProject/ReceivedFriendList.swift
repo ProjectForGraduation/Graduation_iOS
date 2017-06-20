@@ -20,5 +20,4 @@ class ReceivedFriendList{
         self.profile_dir = profile_dir
     }
     
-    
 }
