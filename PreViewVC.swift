@@ -24,7 +24,6 @@ class PreViewVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if let token = users.string(forKey: "token"), token != "RE_LOGIN" {
-            print(token)
             apiManager.setApi(path: "/token", method: .get, parameters: [:], header: ["authorization":token])
             self.apiManager.requestToken { (token) in
                 if token != "OPEN_LOGINVC"{
@@ -35,13 +34,12 @@ class PreViewVC: UIViewController {
                 }
             }
         }else{
-            setUpView()
+            setup()
         }
         
-        // Do any additional setup after loading the view.
     }
 
-    func setUpView(){
+    func setup(){
         mainImage = UIImageView()
         mainImage.rcenter(y: 160, width: 120, height: 140, targetWidth: 375)
         mainImage.image = UIImage(named: "pic")
@@ -92,28 +90,8 @@ class PreViewVC: UIViewController {
             self.present(loginVC, animated: false, completion: nil)
         })
         
-        
-        
         alertView.addAction(action)
         
-        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-        alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindowLevelAlert + 1
-        alertWindow.makeKeyAndVisible()
-        alertWindow.rootViewController?.present(alertView, animated: true, completion: nil)
+        alertWindow(alertView: alertView)
     }
-    
-
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

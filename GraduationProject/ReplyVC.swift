@@ -380,7 +380,7 @@ extension ReplyVC{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "replyCell", for: indexPath) as! ReplyCell
         
-        cell.profileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: (self.replyContent[indexPath.row].profileImg!)) as! URL)! as Data)!
+        cell.profileImg.image = UIImage(data: NSData(contentsOf: NSURL(string: (self.replyContent[indexPath.row].profileImg!))! as URL)! as Data)!
         cell.userName.text = replyContent[indexPath.row].userName
         cell.writeTime.text = changeDate(replyContent[indexPath.row].writeTime!)
         cell.reply.text = replyContent[indexPath.row].reply

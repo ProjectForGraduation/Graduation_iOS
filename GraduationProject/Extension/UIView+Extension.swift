@@ -126,7 +126,7 @@ extension UIView {
     */
     
     public func drawCircle(startX: CGFloat,startY:CGFloat,radius: CGFloat,color: UIColor){
-        let circlePath = UIBezierPath(arcCenter: CGPoint(x: startX*widthRatio,y: startY*heightRatio), radius: radius*widthRatio, startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
+        let circlePath = UIBezierPath(arcCenter: CGPoint(x: startX*widthRatio,y: startY*heightRatio), radius: radius*widthRatio, startAngle: CGFloat(0), endAngle:CGFloat(Double.pi * 2), clockwise: true)
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = circlePath.cgPath
         shapeLayer.strokeColor = color.cgColor

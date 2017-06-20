@@ -9,6 +9,18 @@
 import Foundation
 import UIKit
 
+func basicAlert(title : String,message : String, _ agree: Bool){
+    let alertView = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    
+    let action = UIAlertAction(title: "네", style: UIAlertActionStyle.default, handler: { (UIAlertAction) in
+        alertView.dismiss(animated: true, completion: nil)
+    })
+    
+    alertView.addAction(action)
+    
+    alertWindow(alertView: alertView)
+}
+
 
 func alertWindow(alertView: UIAlertController){
     let alertWindow = UIWindow(frame: UIScreen.main.bounds)

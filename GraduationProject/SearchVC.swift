@@ -58,7 +58,7 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         apiManager.requestAllUsers { (UserInfo) in
             self.userInfo = UserInfo
             for i in 0..<self.userInfo.count{
-                let data = (name: self.userInfo[i].user_name!,image: UIImage(data: NSData(contentsOf: NSURL(string: self.userInfo[i].profile_dir!) as! URL)! as Data)!, uid: self.userInfo[i].user_id!)
+                let data = (name: self.userInfo[i].user_name!,image: UIImage(data: NSData(contentsOf: NSURL(string: self.userInfo[i].profile_dir!)! as URL)! as Data)!, uid: self.userInfo[i].user_id!)
                 self.datas.append(data)
             }
             self.tableView.reloadData()

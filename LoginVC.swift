@@ -22,17 +22,13 @@ class LoginVC: UIViewController , UITextFieldDelegate{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
-        setUpView()
-        // Do any additional setup after loading the view.
+        setup()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    func setUpView(){
+    func setup(){
+        
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
+        
         idImage = UIImageView()
         idImage.rframe(x: 52, y: 200, width: 38, height: 38)
         idImage.image = UIImage(named: "loginID")
@@ -74,13 +70,12 @@ class LoginVC: UIViewController , UITextFieldDelegate{
     func loginBtnAction(){
         apiManager.setApi(path: "/users/login", method: .post, parameters: ["login_id":inputId.text!,"login_pw":inputPw.text!], header: [:])
         apiManager.requestLogin { (meta, token) in
-            print(meta,token)
             if meta == 0 {
                 self.users.set(token, forKey: "token")
                 self.users.set(self.inputId.text!, forKey: "userid")
                 self.performSegue(withIdentifier: "mainSegue", sender: self)
             }else{
-                self.basicAlert(title: "오류!", message: "아이디, 비밀번호를 확인해주세요.", false)
+                basicAlert(title: "오류!", message: "아이디, 비밀번호를 확인해주세요.", false)
             }
         }
     }
@@ -100,35 +95,4 @@ class LoginVC: UIViewController , UITextFieldDelegate{
         self.dismiss(animated: false, completion: nil)
     }
     
-    func basicAlert(title : String,message : String, _ agree: Bool){
-        let alertView = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: "네", style: UIAlertActionStyle.default, handler: { (UIAlertAction) in
-            alertView.dismiss(animated: true, completion: nil)
-        })
-        
-        alertView.addAction(action)
-        
-        alertWindow(alertView: alertView)
-    }
-    
-    func alertWindow(alertView: UIAlertController){
-        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-        alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindowLevelAlert + 1
-        alertWindow.makeKeyAndVisible()
-        alertWindow.rootViewController?.present(alertView, animated: true, completion: nil)
-    }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -7,9 +7,10 @@
 //
 
 import UIKit
-class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class TimeLineTableVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    
     let NO_IMAGE = "http://13.124.115.238:8080/image/no_image.png"
     var contentPic : [UIImage] = []
     var profilePic : [UIImage] = []
@@ -17,17 +18,13 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     // MARK: - static
     static var index: Int = 0
-
     
     // MARK: - location
     var locationManager = LocationManager()
     var locValue: Dictionary<String,Double> = [:]
     var locationTimer = Timer()
     
-    
-    
-    //Api
-    
+    // MARK: - Api
     var apiManager = ApiManager()
     var timeContentList: [ContentList] = []
     
@@ -42,11 +39,7 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setUpView()
-    }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        setup()
     }
     
     // MARK: - set Table
@@ -60,38 +53,32 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         self.tableView.dataSource = self
     }
     
-    func setUpView(){
+    func setup(){
         
         contentPic.removeAll()
         profilePic.removeAll()
         timeContentList.removeAll()
         
         locationTimer = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
-        // 일단 300초
         let userLati = Float(locValue["latitude"]!)
         let userLong = Float(locValue["longitude"]!)
         apiManager.setApi(path: "/contents/friend?lat=\(userLati)&lng=\(userLong)", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
         apiManager.requestContents { (ContentList) in
             self.timeContentList = ContentList
             for i in 0..<self.timeContentList.count{
-                self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.timeContentList[i].contentImage!) as! URL)! as Data)!)
-                self.profilePic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.timeContentList[i].profileImg!) as! URL)! as Data)!)
+                self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.timeContentList[i].contentImage!)! as URL)! as Data)!)
+                self.profilePic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.timeContentList[i].profileImg!)! as URL)! as Data)!)
             }
             self.tableView.reloadData()
         }
-        
-        
     }
     
     func updateLocation(){
         locValue = locationManager.getUserLocation()
-        print(locValue)
         locationManager.setLocationDB(users.string(forKey: "token")!)
     }
     
     func openMap(){
-        // index/2에 해당하는 lati 와 longi 를 받아서 넘긴다.
-        
         MapVC.latitude = timeContentList[TimeLineTableVC.index/2].lat!
         MapVC.longitude = timeContentList[TimeLineTableVC.index/2].lng!
         performSegue(withIdentifier: "MapSegue", sender: self)
@@ -104,8 +91,6 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func optionBtnAction(){
         apiManager.setApi(path: "contents/:contentId", method: .delete, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
         contentAlert(isMine: timeContentList[TimeLineTableVC.index/2].login_id == self.users.string(forKey: "userid")!)
-        // 만약 해당 게시글의 id 가 내 아이디와 같다면 삭제 alert
-        // 아니면 신고 alert
     }
     
     func likeBtnAction(){
@@ -124,8 +109,8 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         ReplyVC.receivedUserName = self.timeContentList[TimeLineTableVC.index/2].userName!
         ReplyVC.receivedLikeCount = self.timeContentList[TimeLineTableVC.index/2].likeCount!
         ReplyVC.receivedWriteTime = changeDate(self.timeContentList[TimeLineTableVC.index/2].createdAt!)
-        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.timeContentList[TimeLineTableVC.index/2].contentImage!)) as! URL)! as Data)!
-        ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.timeContentList[TimeLineTableVC.index/2].profileImg!)) as! URL)! as Data)!
+        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.timeContentList[TimeLineTableVC.index/2].contentImage!))! as URL)! as Data)!
+        ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.timeContentList[TimeLineTableVC.index/2].profileImg!))! as URL)! as Data)!
         
         
         self.present(replyVC, animated: false, completion: nil)
@@ -141,7 +126,7 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
             self.apiManager.setApi(path: "/contents/\(contentId)", method: .delete, parameters: [:], header: ["authorization":self.users.string(forKey: "token")!])
             self.apiManager.requestDeleteContents(completion: { (code) in
                 if(code == 0){
-                    self.setUpView()
+                    self.setup()
                 }
             })
             alertView.dismiss(animated: true, completion: nil)
@@ -155,11 +140,7 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
         alertView.addAction(cancelAction)
         
-        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-        alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindowLevelAlert + 1
-        alertWindow.makeKeyAndVisible()
-        alertWindow.rootViewController?.present(alertView, animated: true, completion: nil)
+        alertWindow(alertView: alertView)
         
     }
     
@@ -170,21 +151,12 @@ class TimeLineTableVC: UIViewController,UITableViewDelegate,UITableViewDataSourc
             target.user_id = timeContentList[TimeLineTableVC.index/2].userId!
         }
     }
-    
-    func changeDate(_ date: String)->String{
-        let year = date.substring(to: date.index(date.startIndex, offsetBy: 4))
-        let month = date.substring(with: date.index(date.startIndex, offsetBy:5)..<date.index(date.startIndex, offsetBy:7))
-        let day = date.substring(with: date.index(date.startIndex, offsetBy:8)..<date.index(date.startIndex, offsetBy:10))
-        let date = year+"년 " + "\(Int(month)!)" + "월 " + "\(Int(day)!)" + "일"
-        return date
-    }
-    
 }
 
 
 // MARK: - extension tableVC
 
-extension TimeLineTableVC{
+extension TimeLineTableVC: UITableViewDataSource{
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -244,6 +216,9 @@ extension TimeLineTableVC{
             return cell
         }
     }
+}
+
+extension TimeLineTableVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row % 2 {
@@ -268,17 +243,5 @@ extension TimeLineTableVC{
             return 7.multiplyHeightRatio()
         }
     }
-    
 }
 
-
-/*
- 
- func findLocation(){
- let userId: String! = ""
- locValue = locationManager.getUserLocation()
- print(locValue)
- locationManager.setLocationDB(userId)
- }
- 
- */

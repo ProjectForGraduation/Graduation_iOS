@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ReqFriendVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class RequestFriendVC: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     var reqFriendList : [ReceivedFriendList] = []
@@ -18,17 +18,11 @@ class ReqFriendVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
-        tableViewinit()
-        viewInit()
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        tableSetup()
+        setup()
     }
     
-    func tableViewinit(){
+    func tableSetup(){
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.bounces = false
@@ -37,17 +31,16 @@ class ReqFriendVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         self.tableView.showsVerticalScrollIndicator = false
     }
     
-    func viewInit(){
+    func setup(){
         apiManager.setApi(path: "/relation/receive", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
         apiManager.requestReceiveFriend { (receivedFriendList) in
             self.reqFriendList = receivedFriendList
             for i in 0..<self.reqFriendList.count{
-                self.reqProfileImage.append(UIImage(data: NSData(contentsOf: NSURL(string: self.reqFriendList[i].profile_dir!) as! URL)! as Data)!)
+                self.reqProfileImage.append(UIImage(data: NSData(contentsOf: NSURL(string: self.reqFriendList[i].profile_dir!)! as URL)! as Data)!)
             }
             self.tableView.reloadData()
         }
     }
-    
     
     @IBAction func backBtnAction(_ sender: UIButton) {
         self.dismiss(animated: false, completion: nil)
@@ -55,7 +48,7 @@ class ReqFriendVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
 
 }
 
-extension ReqFriendVC {
+extension RequestFriendVC: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -72,6 +65,9 @@ extension ReqFriendVC {
         return cell
     }
     
+}
+
+extension RequestFriendVC: UITableViewDelegate{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80.multiplyHeightRatio()
     }
@@ -83,13 +79,12 @@ extension ReqFriendVC {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-   
+    
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let agree = UITableViewRowAction(style: .normal, title: "수락") { action, index in
             // 승낙했을 때
             self.apiManager.setApi(path: "/relation/receive", method: .post, parameters: ["opponent_id":self.reqFriendList[indexPath.row].req_user_id!], header: ["authorization":self.users.string(forKey: "token")!])
             self.apiManager.requestFriend(completion: { (code) in
-                print(code)
                 self.reqFriendList.remove(at: indexPath.row)
                 self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
             })
@@ -98,7 +93,6 @@ extension ReqFriendVC {
             // 거절했을 때
             self.apiManager.setApi(path: "/relation", method: .post, parameters: ["opponent_id":self.reqFriendList[indexPath.row].req_user_id!], header: ["authorization":self.users.string(forKey: "token")!])
             self.apiManager.requestFriend(completion: { (code) in
-                print(code)
                 self.reqFriendList.remove(at: indexPath.row)
                 self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
             })

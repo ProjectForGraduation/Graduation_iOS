@@ -22,21 +22,26 @@ class RegisterUserVC: UIViewController ,UITextFieldDelegate{
     var reInputPw : UITextField!
     var registerBtn : UIButton!
     
-    
+    override var isEditing: Bool{
+        willSet(newValue){
+            if !newValue {
+                let myViews = view.subviews.filter{$0 is UITextField}
+                for view in myViews{
+                    let tf = view as! UITextField
+                    tf.endEditing(true)
+                }
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
-        setUpView()
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        setup()
     }
     
-    func setUpView(){
+    func setup(){
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "tvNEnjoystoriesM", size: 27)!]
+        
         idImage = UIImageView()
         idImage.rframe(x: 52, y: 150, width: 38, height: 38)
         idImage.image = UIImage(named: "loginID")
@@ -101,15 +106,7 @@ class RegisterUserVC: UIViewController ,UITextFieldDelegate{
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        inputPw.endEditing(true)
-        inputId.endEditing(true)
-        reInputPw.endEditing(true)
-        inputName.endEditing(true)
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+        self.isEditing = false
     }
     
     @IBAction func backBtnAction(_ sender: UIButton) {

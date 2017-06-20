@@ -7,7 +7,7 @@
 //
 
 import UIKit
-class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class SortLocationTableVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     let NO_IMAGE = "http://13.124.115.238:8080/image/no_image.png"
@@ -21,8 +21,6 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     var locValue: Dictionary<String,Double> = [:]
     var locationTimer = Timer()
     static var index: Int = 0
-    
-
 
     //Api
     
@@ -40,11 +38,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setUpView()
-    }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        setup()
     }
     
     // MARK: - set Table
@@ -58,7 +52,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         self.tableView.dataSource = self
     }
     
-    func setUpView(){
+    func setup(){
         
         contentPic.removeAll()
         profilePic.removeAll()
@@ -72,13 +66,11 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         apiManager.requestContents { (ContentList) in
             self.aroundContentList = ContentList
             for i in 0..<self.aroundContentList.count{
-                self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.aroundContentList[i].contentImage!) as! URL)! as Data)!)
-                self.profilePic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.aroundContentList[i].profileImg!) as! URL)! as Data)!)
+                self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.aroundContentList[i].contentImage!)! as URL)! as Data)!)
+                self.profilePic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.aroundContentList[i].profileImg!)! as URL)! as Data)!)
             }
             self.tableView.reloadData()
         }
-        
-        
     }
     
     func updateLocation(){
@@ -87,8 +79,6 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     func openMap(){
-        // index/2에 해당하는 lati 와 longi 를 받아서 넘긴다.
-        
         MapVC.latitude = aroundContentList[SortLocationTableVC.index/2].lat!
         MapVC.longitude = aroundContentList[SortLocationTableVC.index/2].lng!
         performSegue(withIdentifier: "mapSegue2", sender: self)
@@ -101,8 +91,6 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
     func optionBtnAction(){
         apiManager.setApi(path: "contents/:contentId", method: .delete, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
         contentAlert(isMine: aroundContentList[SortLocationTableVC.index/2].login_id == self.users.string(forKey: "userid")!)
-        // 만약 해당 게시글의 id 가 내 아이디와 같다면 삭제 alert
-        // 아니면 신고 alert
     }
     
     func likeBtnAction(){
@@ -121,8 +109,8 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         ReplyVC.receivedUserName = self.aroundContentList[SortLocationTableVC.index/2].userName!
         ReplyVC.receivedLikeCount = self.aroundContentList[SortLocationTableVC.index/2].likeCount!
         ReplyVC.receivedWriteTime = changeDate(self.aroundContentList[SortLocationTableVC.index/2].createdAt!)
-        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.aroundContentList[SortLocationTableVC.index/2].contentImage!)) as! URL)! as Data)!
-        ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.aroundContentList[SortLocationTableVC.index/2].profileImg!)) as! URL)! as Data)!
+        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.aroundContentList[SortLocationTableVC.index/2].contentImage!))! as URL)! as Data)!
+        ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.aroundContentList[SortLocationTableVC.index/2].profileImg!))! as URL)! as Data)!
         
         
         self.present(replyVC, animated: false, completion: nil)
@@ -138,7 +126,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
             self.apiManager.setApi(path: "/contents/\(contentId)", method: .delete, parameters: [:], header: ["authorization":self.users.string(forKey: "token")!])
             self.apiManager.requestDeleteContents(completion: { (code) in
                 if(code == 0){
-                    self.setUpView()
+                    self.setup()
                 }
             })
             alertView.dismiss(animated: true, completion: nil)
@@ -152,12 +140,7 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         
         alertView.addAction(cancelAction)
         
-        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-        alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindowLevelAlert + 1
-        alertWindow.makeKeyAndVisible()
-        alertWindow.rootViewController?.present(alertView, animated: true, completion: nil)
-        
+        alertWindow(alertView: alertView)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -168,20 +151,13 @@ class SortLocationTableVC: UIViewController,UITableViewDelegate,UITableViewDataS
         }
     }
     
-    func changeDate(_ date: String)->String{
-        let year = date.substring(to: date.index(date.startIndex, offsetBy: 4))
-        let month = date.substring(with: date.index(date.startIndex, offsetBy:5)..<date.index(date.startIndex, offsetBy:7))
-        let day = date.substring(with: date.index(date.startIndex, offsetBy:8)..<date.index(date.startIndex, offsetBy:10))
-        let date = year+"년 " + "\(Int(month)!)" + "월 " + "\(Int(day)!)" + "일"
-        return date
-    }
-    
+
 }
 
 
 // MARK: - extension tableVC
 
-extension SortLocationTableVC{
+extension SortLocationTableVC: UITableViewDataSource{
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -241,6 +217,9 @@ extension SortLocationTableVC{
             return cell
         }
     }
+}
+
+extension SortLocationTableVC: UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row % 2 {
@@ -265,17 +244,4 @@ extension SortLocationTableVC{
             return 7.multiplyHeightRatio()
         }
     }
-    
 }
-
-
-/*
- 
- func findLocation(){
- let userId: String! = ""
- locValue = locationManager.getUserLocation()
- print(locValue)
- locationManager.setLocationDB(userId)
- }
-
- */

@@ -10,7 +10,7 @@
 import UIKit
 import Fusuma
 
-class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,FusumaDelegate {
+class MyListVC: UIViewController,FusumaDelegate {
     
     static var index: Int = 0
     let NO_IMAGE = "http://13.124.115.238:8080/image/no_image.png"
@@ -32,12 +32,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        setUpView()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        setup()
     }
     
     func setTableView(){
@@ -49,7 +44,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         self.tableView.dataSource = self
     }
     
-    func setUpView(){
+    func setup(){
         contentPic.removeAll()
         profilePic = nil
         
@@ -57,13 +52,13 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         apiManager.requestUserInfo { (userInfo) in
             self.userInfo = userInfo
             let userId = self.userInfo!.user_id!
-            self.profilePic = UIImage(data: NSData(contentsOf: NSURL(string: (self.userInfo!.profile_dir)!) as! URL)! as Data)!
+            self.profilePic = UIImage(data: NSData(contentsOf: NSURL(string: (self.userInfo!.profile_dir)!)! as URL)! as Data)!
             self.apiManager.setApi(path: "/contents/\(userId)/info", method: .get, parameters: [:], header: ["authorization":self.token])
             self.apiManager.requestUserContents(completion: { (mylist) in
                 self.myContentList = mylist
                 for i in 0..<self.myContentList.count{
                     if let contentImage = self.myContentList[i].contentImage {
-                        self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: contentImage) as! URL)! as Data)!)
+                        self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: contentImage)! as URL)! as Data)!)
                     }
                 }
                 self.tableView.reloadData()
@@ -88,22 +83,21 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     func fusumaImageSelected(_ image: UIImage, source: FusumaMode) {
         switch source {
         case .camera:
-            print("Image captured from Camera")
+            break
         case .library:
-            print("Image selected from Camera Roll")
+            break
         default:
-            print("Image selected")
+            break
         }
         
         apiManager.setApi(path: "/users/profile", method: .post, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
         
         apiManager.requestChangeProfileImage(resizing(image)!)
-        setUpView()
+        setup()
     }
     
     func fusumaVideoCompleted(withFileURL fileURL: URL) {
-        print("video completed and output to file: \(fileURL)")
-        //self.fileUrlLabel.text = "file output to: \(fileURL.absoluteString)"
+
     }
     
     func fusumaDismissedWithImage(_ image: UIImage, source: FusumaMode) {
@@ -116,19 +110,15 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         default: break
             
         }
-        
-        //performSegue(withIdentifier: "writeSegue", sender: self)
     }
     @IBAction func logoutBtnAction(_ sender: UIButton) {
         apiManager.setApi(path: "/users/:id", method: .delete, parameters: [:], header: ["authorization":token])
         apiManager.requestLogout { (code) in
             if code == 0{
                 self.users.set("RE_LOGIN", forKey: "token")
-                //present id : preview
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let PreViewVC = storyboard.instantiateViewController(withIdentifier: "preview")
                 self.present(PreViewVC, animated: false, completion: nil)
-
             }
         }
     }
@@ -152,19 +142,9 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
     
     func fusumaClosed() {
         
-        print("Called when the close button is pressed")
         
     }
-    
-    
-    func changeDate(_ date: String)->String{
-        let year = date.substring(to: date.index(date.startIndex, offsetBy: 4))
-        let month = date.substring(with: date.index(date.startIndex, offsetBy:5)..<date.index(date.startIndex, offsetBy:7))
-        let day = date.substring(with: date.index(date.startIndex, offsetBy:8)..<date.index(date.startIndex, offsetBy:10))
-        let date = year+"년 " + "\(Int(month)!)" + "월 " + "\(Int(day)!)" + "일"
-        return date
-    }
-    
+   
     func resizing(_ image: UIImage) -> Data?{
         let resizedWidthImage = image.resized(toWidth: 1080)
         let resizedData = UIImageJPEGRepresentation(resizedWidthImage!, 0.25)
@@ -184,8 +164,8 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         ReplyVC.receivedUserName = self.myContentList[MyListVC.index/2-1].userName!
         ReplyVC.receivedLikeCount = self.myContentList[MyListVC.index/2-1].likeCount!
         ReplyVC.receivedWriteTime = changeDate(self.myContentList[MyListVC.index/2-1].createdAt!)
-        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.myContentList[MyListVC.index/2-1].contentImage!)) as! URL)! as Data)!
-        ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.myContentList[MyListVC.index/2-1].profileImg!)) as! URL)! as Data)!
+        ReplyVC.receivedImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.myContentList[MyListVC.index/2-1].contentImage!))! as URL)! as Data)!
+        ReplyVC.receivedProfileImg = UIImage(data: NSData(contentsOf: NSURL(string: (self.myContentList[MyListVC.index/2-1].profileImg!))! as URL)! as Data)!
         
         ReplyVC.receivedContentId = self.myContentList[MyListVC.index/2-1].contentId!
         ReplyVC.receivedReplyCount = self.myContentList[MyListVC.index/2-1].replyCount!
@@ -227,7 +207,7 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
             let contentId = (self.myContentList[MyListVC.index].contentId!)
             self.apiManager.setApi(path: "/contents/\(contentId)", method: .delete, parameters: [:], header: ["authorization":self.users.string(forKey: "token")!])
             self.apiManager.requestDeleteContents(completion: { (code) in
-                print(code)
+
             })
             self.tableView.reloadData()
             alertView.dismiss(animated: true, completion: nil)
@@ -238,16 +218,11 @@ class MyListVC: UIViewController,UITableViewDataSource,UITableViewDelegate,Fusum
         alertView.addAction(cancelAction)
         alertView.addAction(removeContent)
         
-        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
-        alertWindow.rootViewController = UIViewController()
-        alertWindow.windowLevel = UIWindowLevelAlert + 1
-        alertWindow.makeKeyAndVisible()
-        alertWindow.rootViewController?.present(alertView, animated: true, completion: nil)
-        
+        alertWindow(alertView: alertView)
     }
 }
 
-extension MyListVC {
+extension MyListVC: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -314,9 +289,10 @@ extension MyListVC {
             
             return cell
         }
-        
     }
-    
+}
+
+extension MyListVC: UITableViewDelegate{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row % 2 {
         case 0:
@@ -334,9 +310,7 @@ extension MyListVC {
                 
                 picHeight.rframe(x: 0, y: (textHeight.y+textHeight.height+10), width: 375, height: 375)
                 picHeight.image = UIImage(named: "gguggu")
-                
-                // indexPath.row 가 사진이 있으면 없으면 으로 구분한다.
-                
+                                
                 if let contentImage = myContentList[indexPath.row/2 - 1].contentImage , contentImage == NO_IMAGE {
                     return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
                 }else{
@@ -348,23 +322,5 @@ extension MyListVC {
         }
         
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        //performSegue(withIdentifier: "segueToReplyVC", sender: self)
-        
-        //let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        //let replyContentVC = storyboard.instantiateViewController(withIdentifier: "ReplyVC")
-        
-        
-        
-        //        SelectListViewController.receivedCid = self.photos[indexPath.item].contentId
-        //        SelectListViewController.receivedCimg = self.photos[indexPath.item].image
-        //        SelectListViewController.receivedRange = 0
-        //        SelectListViewController.receivedIndex = indexPath.item
-        
-        //self.present(replyContentVC, animated: false, completion: nil)
-        
-    }
-    
 }
+

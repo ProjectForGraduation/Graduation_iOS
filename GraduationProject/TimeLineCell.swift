@@ -57,7 +57,6 @@ class TimeLineCell: UITableViewCell{
         contentText.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 17, color: UIColor.black)
         
         contentPic.rframe(x: 0, y: (contentText.y+contentText.height+30.multiplyHeightRatio()).remultiplyHeightRatio(), width: 375, height: 375)
-        //contentPic.image = UIImage(named: "gguggu")
         
         likeBtn.rframe(x: 10, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)
         likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnAction))
