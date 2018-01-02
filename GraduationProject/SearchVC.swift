@@ -39,11 +39,6 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         self.tableClickIndex = -1
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     func tableViewinit(){
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -73,15 +68,6 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         searchBar.endEditing(true)
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 }
 
 extension SearchVC{
@@ -141,11 +127,11 @@ extension SearchVC{
         cell.selectionStyle = .default
 
         if searchActive {
-            cell.imageView?.image = filtered[indexPath.row].1
-            cell.textLabel?.text = filtered[indexPath.row].0
+            cell.profileImage?.image = filtered[indexPath.row].1
+            cell.nameLabel?.text = filtered[indexPath.row].0
         } else {
-            cell.imageView?.image = datas[indexPath.row].image
-            cell.textLabel?.text = datas[indexPath.row].name
+            cell.profileImage?.image = datas[indexPath.row].image
+            cell.nameLabel?.text = datas[indexPath.row].name
         }
         
         return cell;

@@ -63,7 +63,7 @@ class TimeLineTableVC: UIViewController {
         let userLati = Float(locValue["latitude"]!)
         let userLong = Float(locValue["longitude"]!)
         apiManager.setApi(path: "/contents/friend?lat=\(userLati)&lng=\(userLong)", method: .get, parameters: [:], header: ["authorization":users.string(forKey: "token")!])
-        apiManager.requestContents { (ContentList) in
+        apiManager.requestContents { ContentList in
             self.timeContentList = ContentList
             for i in 0..<self.timeContentList.count{
                 self.contentPic.append(UIImage(data: NSData(contentsOf: NSURL(string: self.timeContentList[i].contentImage!)! as URL)! as Data)!)
@@ -121,7 +121,7 @@ class TimeLineTableVC: UIViewController {
         
         let alertView = UIAlertController(title: "", message: "이 글에 대하여", preferredStyle: .actionSheet)
         
-        let removeContent = UIAlertAction(title: "게시물 삭제", style: UIAlertActionStyle.destructive, handler: { (UIAlertAction) in
+        let removeContent = UIAlertAction(title: "게시물 삭제", style: UIAlertActionStyle.destructive, handler: { UIAlertAction in
             let contentId = (self.timeContentList[TimeLineTableVC.index/2].contentId!)
             self.apiManager.setApi(path: "/contents/\(contentId)", method: .delete, parameters: [:], header: ["authorization":self.users.string(forKey: "token")!])
             self.apiManager.requestDeleteContents(completion: { (code) in
@@ -133,9 +133,12 @@ class TimeLineTableVC: UIViewController {
         })
         
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { (_) in }
+        let reportAction = UIAlertAction(title: "신고하기", style: .destructive) { (_) in }
         
         if isMine{
             alertView.addAction(removeContent)
+        } else {
+            alertView.addAction(reportAction)
         }
         
         alertView.addAction(cancelAction)
@@ -233,7 +236,7 @@ extension TimeLineTableVC: UITableViewDelegate {
             picHeight.rframe(x: 0, y: (textHeight.y+textHeight.height+10).remultiplyHeightRatio(), width: 375, height: 375)
             picHeight.image = UIImage(named: "gguggu")
             
-            if timeContentList[indexPath.row/2].contentImage! == "0" {
+            if timeContentList[indexPath.row/2].contentImage! == NO_IMAGE {
                 return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
             }else{
                 return (picHeight.y+picHeight.height+50.multiplyHeightRatio())

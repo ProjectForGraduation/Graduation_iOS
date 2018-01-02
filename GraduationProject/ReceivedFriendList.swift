@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ReceivedFriendList{
+class ReceivedFriendList {
     
     var req_user_id: Int?
     var user_name: String?
@@ -19,5 +19,4 @@ class ReceivedFriendList{
         self.user_name = user_name
         self.profile_dir = profile_dir
     }
-    
 }

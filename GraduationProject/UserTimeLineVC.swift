@@ -162,7 +162,6 @@ extension UserTimeLineVC: UITableViewDataSource {
                 cell.userId.text = userInfo.login_id
                 cell.userName.text = userInfo.user_name
                 cell.mainProfileImg.image = profilePic
-                
             }
             if (indexPath.row != 0) , !userContentList.isEmpty , userContentList[indexPath.row/2 - 1].userName != nil{
                 cell.userlistProfileImg.image = profilePic
@@ -210,13 +209,14 @@ extension UserTimeLineVC: UITableViewDataSource {
                         cell.friendState = 2
                         cell.addFriendButton.setImage(UIImage(named: "alreadyfriend"), for: .normal)
                     }
-                }else{
+                } else {
                     cell.addFriendButton.isHidden = true
                 }
             }else {
                 cell.profileHidden(true)
                 if userContentList[indexPath.row/2 - 1].userName == nil{
                     cell.optionBtn.isHidden = true
+                    cell.optionImage.isHidden = true
                     cell.userlistProfileImg.isHidden = true
                 }
             }

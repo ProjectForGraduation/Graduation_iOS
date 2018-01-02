@@ -154,8 +154,6 @@ class MyListVC: UIViewController,FusumaDelegate {
     func commentBtnAction(){
 
         let liked = myContentList[MyListVC.index/2 - 1].isLiked!
-        print(liked)
-
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let replyVC = storyboard.instantiateViewController(withIdentifier: "ReplyVC")
@@ -206,11 +204,10 @@ class MyListVC: UIViewController,FusumaDelegate {
         let removeContent = UIAlertAction(title: "게시물 삭제", style: UIAlertActionStyle.destructive, handler: { (UIAlertAction) in
             let contentId = (self.myContentList[MyListVC.index].contentId!)
             self.apiManager.setApi(path: "/contents/\(contentId)", method: .delete, parameters: [:], header: ["authorization":self.users.string(forKey: "token")!])
-            self.apiManager.requestDeleteContents(completion: { (code) in
-
+            self.apiManager.requestDeleteContents(completion: { code in
+                self.setup()
+                alertView.dismiss(animated: true, completion: nil)
             })
-            self.tableView.reloadData()
-            alertView.dismiss(animated: true, completion: nil)
         })
         
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { (_) in }
@@ -279,6 +276,7 @@ extension MyListVC: UITableViewDataSource {
                 cell.profileHidden(true)
                 if myContentList[indexPath.row/2 - 1].userName == nil{
                     cell.optionBtn.isHidden = true
+                    cell.optionImage.isHidden = true
                     cell.mylistProfileImg.isHidden = true
                 }
             }

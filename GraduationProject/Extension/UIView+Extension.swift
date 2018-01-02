@@ -104,6 +104,7 @@ extension UIView {
         let extensionView = UIView(frame: CGRect(x: self.x - widthSize, y: self.y - heightSize, width: self.width + widthSize*2, height: self.height + heightSize*2))
         extensionView.backgroundColor = UIColor.clear
         extensionView.addAction(target: target, action: action)
+        extensionView.borderWidth = 1
         view.addSubview(extensionView)
     }
     

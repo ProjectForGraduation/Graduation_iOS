@@ -48,5 +48,4 @@ class UserContentList: NSObject{
         self.replyCount = replyCount
         self.login_id = login_id
     }
-    
 }

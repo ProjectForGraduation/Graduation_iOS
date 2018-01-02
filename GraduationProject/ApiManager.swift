@@ -19,7 +19,6 @@ class ApiManager {
     private var header: HTTPHeaders!
     private let encode = URLEncoding.default
     
-    
     public func setApi(path: String, method: HTTPMethod, parameters: Parameters,header: HTTPHeaders){
         self.url = server + path
         self.method = method
@@ -200,7 +199,6 @@ class ApiManager {
                         case .success(_):
                             if let json = response.result.value{
                                 let resp = JSON(json)
-                                print(resp)
                             }
                             break
                         case .failure(_):

@@ -19,7 +19,6 @@ class ReplyList: NSObject{
     public var replyId : Int?
     public var contentId : Int?
     
-    
     init(profileImg: String?, userName: String?, reply: String?, writeTime: String?, userId: Int?, replyId: Int?, contentId: Int?) {
         self.profileImg = profileImg
         self.userName = userName
@@ -29,5 +28,4 @@ class ReplyList: NSObject{
         self.replyId = replyId
         self.contentId = contentId
     }
-    
 }

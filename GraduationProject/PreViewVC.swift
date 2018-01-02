@@ -40,34 +40,36 @@ class PreViewVC: UIViewController {
     }
 
     func setup(){
-        mainImage = UIImageView()
-        mainImage.rcenter(y: 160, width: 120, height: 140, targetWidth: 375)
-        mainImage.image = UIImage(named: "pic")
-        self.view.addSubview(mainImage)
         
         mainLabel = UILabel()
-        mainLabel.rcenter(y: 310, width: 375, height: 40, targetWidth: 375)
-        mainLabel.setLabel(text: "지금 여기 우리", align: .center, fontName: "tvNEnjoystoriesM", fontSize: 40, color: UIColor.mainColor)
+        mainLabel.rcenter(y: 250, width: 375, height: 40, targetWidth: 375)
+        mainLabel.setLabel(text: "지금 여기 우리", align: .center, fontName: "tvNEnjoystoriesM", fontSize: 43, color: #colorLiteral(red: 0.2374400198, green: 0.6492436528, blue: 0, alpha: 1))
         self.view.addSubview(mainLabel)
         
         subLabel = UILabel()
-        subLabel.rcenter(y: 350, width: 375, height: 100, targetWidth: 375)
-        subLabel.setLabel(text: "내 주변 사람들과 소통할 수 있는\n 위치 기반 SNS", align: .center, fontName: "tvNEnjoystoriesL", fontSize: 23, color: UIColor.mainColor)
+        subLabel.rcenter(y: 290, width: 375, height: 100, targetWidth: 375)
+        subLabel.setLabel(text: "내 주변 사람들과 소통할 수 있는 위치 기반 SNS", align: .center, fontName: "tvNEnjoystoriesM", fontSize: 21, color: #colorLiteral(red: 0.2374400198, green: 0.6492436528, blue: 0, alpha: 1))
         subLabel.numberOfLines = 0
         self.view.addSubview(subLabel)
         
         registerBtn = UIButton()
-        registerBtn.rframe(x: 70, y: 470, width: 100, height: 50)
-        registerBtn.setButton(title: "계정 만들기", target: self, action: #selector(registerBtnAction), fontName: "tvNEnjoystoriesM", fontSize: 27, color: UIColor.mainColor)
-        registerBtn.backgroundColor = UIColor(r: 246, g: 246, b: 246, alpha: 1)
+        registerBtn.rframe(x: 70, y: 420, width: 100, height: 50)
+        registerBtn.setTitle("계정 만들기", for: .normal)
+        registerBtn.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
+        registerBtn.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        registerBtn.backgroundColor = #colorLiteral(red: 0.2374400198, green: 0.6492436528, blue: 0, alpha: 1)
         registerBtn.layer.cornerRadius = 15
+        registerBtn.addAction(target: self, action: #selector(registerBtnAction))
         self.view.addSubview(registerBtn)
         
         loginBtn = UIButton()
-        loginBtn.rframe(x: 200, y: 470, width: 100, height: 50)
-        loginBtn.setButton(title: "로그인 하기", target: self, action: #selector(loginBtnAction), fontName: "tvNEnjoystoriesM", fontSize: 27, color: UIColor.mainColor)
-        loginBtn.backgroundColor = UIColor(r: 246, g: 246, b: 246, alpha: 1)
+        loginBtn.rframe(x: 200, y: 420, width: 100, height: 50)
+        loginBtn.setTitle("로그인 하기", for: .normal)
+        loginBtn.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
+        loginBtn.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        loginBtn.backgroundColor = #colorLiteral(red: 0.2374400198, green: 0.6492436528, blue: 0, alpha: 1)
         loginBtn.layer.cornerRadius = 15
+        loginBtn.addAction(target: self, action: #selector(loginBtnAction))
         self.view.addSubview(loginBtn)
         
     }

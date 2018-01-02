@@ -50,13 +50,20 @@ class TimeLineCell: UITableViewCell{
         userName.rframe(x: 50, y: 18, width: 100, height: 13)
         userName.setButton(title: "", fontName: "AppleSDGothicNeo-SemiBold", fontSize: 13, color: UIColor.black)
         
-        optionBtn.rframe(x: 335, y: 22.5, width: 15, height: 5)
-        optionBtn.setButton(imageName: "option", target: self, action: #selector(optionBtnAction))
         
+        let optionImage = UIImageView()
+        optionImage.rframe(x: 335, y: 22.5, width: 15, height: 5)
+        optionImage.image = #imageLiteral(resourceName: "option")
+        
+        optionBtn.rframe(x: 305, y: 22.5, width: 45, height: 25)
+        optionBtn.addTarget(self, action: #selector(optionBtnAction), for: .touchUpInside)
+
         contentText.rframe(x: 10, y: 50, width: 355, height: 0)
-        contentText.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 17, color: UIColor.black)
+        contentText.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 14, color: UIColor.black)
         
         contentPic.rframe(x: 0, y: (contentText.y+contentText.height+30.multiplyHeightRatio()).remultiplyHeightRatio(), width: 375, height: 375)
+        contentPic.contentMode = .scaleAspectFill
+        contentPic.clipsToBounds = true
         
         likeBtn.rframe(x: 10, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)
         likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnAction))
@@ -73,6 +80,7 @@ class TimeLineCell: UITableViewCell{
         
         contentView.addSubview(profileImg)
         contentView.addSubview(userName)
+        contentView.addSubview(optionImage)
         contentView.addSubview(optionBtn)
         contentView.addSubview(contentText)
         contentView.addSubview(contentPic)

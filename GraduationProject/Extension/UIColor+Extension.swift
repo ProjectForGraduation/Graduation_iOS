@@ -10,7 +10,7 @@ import UIKit
 
 extension UIColor {
     
-    public static var mainColor:UIColor {
+    public static var mainColor: UIColor {
         get{
             return UIColor(r: 68, g: 67, b: 68, alpha: 1)
         }set(value) {

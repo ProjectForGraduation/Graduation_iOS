@@ -27,7 +27,8 @@ class MyListCell: UITableViewCell{
     var likeCountLabel = UILabel()
     var commentBtn = UIButton()
     var mapBtn = UIButton()
-    
+    let optionImage = UIImageView()
+
     var isLiked : Int = 1 {
         willSet(newValue){
             if newValue == 1{
@@ -67,14 +68,19 @@ class MyListCell: UITableViewCell{
         createdDate.rframe(x: 50, y: 26, width: 100, height: 11)
         createdDate.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
         
-        optionBtn.rframe(x: 335, y: 22.5, width: 15, height: 5)
-        optionBtn.setButton(imageName: "option", target: self, action: #selector(optionBtnActions))
+        optionImage.rframe(x: 335, y: 22.5, width: 15, height: 5)
+        optionImage.image = #imageLiteral(resourceName: "option")
+        
+        optionBtn.rframe(x: 305, y: 22.5, width: 45, height: 25)
+        optionBtn.addTarget(self, action: #selector(optionBtnActions), for: .touchUpInside)
         
         contentText.rframe(x: 10, y: 50, width: 355, height: 0)
-        contentText.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
+        contentText.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 14, color: UIColor.black)
         contentText.sizeToFit()
         
         contentPic.rframe(x: 0, y: (contentText.y+contentText.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 375, height: 375)
+        contentPic.contentMode = .scaleAspectFill
+        contentPic.clipsToBounds = true
         
         likeBtn.rframe(x: 10, y: (contentPic.y+contentPic.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 30, height: 30)
         likeBtn.setButton(imageName: "like", target: self, action: #selector(likeBtnActions))
@@ -96,6 +102,7 @@ class MyListCell: UITableViewCell{
         contentView.addSubview(mylistProfileImg)
         contentView.addSubview(mylistName)
         contentView.addSubview(createdDate)
+        contentView.addSubview(optionImage)
         contentView.addSubview(optionBtn)
         contentView.addSubview(contentText)
         contentView.addSubview(contentPic)
@@ -156,6 +163,7 @@ class MyListCell: UITableViewCell{
         mylistName.isHidden = !isindexOne
         createdDate.isHidden = !isindexOne
         optionBtn.isHidden = !isindexOne
+        optionImage.isHidden = !isindexOne
         contentText.isHidden = !isindexOne
         contentPic.isHidden = !isindexOne
         likeBtn.isHidden = !isindexOne

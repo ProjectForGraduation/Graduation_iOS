@@ -29,7 +29,8 @@ class UserListCell: UITableViewCell{
     var likeCountLabel = UILabel()
     var commentBtn = UIButton()
     var mapBtn = UIButton()
-    
+    let optionImage = UIImageView()
+
     let apiManager = ApiManager()
     let users = UserDefaults.standard
     
@@ -74,11 +75,14 @@ class UserListCell: UITableViewCell{
         createdDate.rframe(x: 50, y: 26, width: 100, height: 11)
         createdDate.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
         
-        optionBtn.rframe(x: 335, y: 22.5, width: 15, height: 5)
-        optionBtn.setButton(imageName: "option", target: self, action: #selector(optionBtnActions))
+        optionImage.rframe(x: 335, y: 22.5, width: 15, height: 5)
+        optionImage.image = #imageLiteral(resourceName: "option")
+        
+        optionBtn.rframe(x: 305, y: 22.5, width: 45, height: 25)
+        optionBtn.addTarget(self, action: #selector(optionBtnActions), for: .touchUpInside)
         
         contentText.rframe(x: 10, y: 50, width: 355, height: 0)
-        contentText.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 11, color: UIColor.black)
+        contentText.setLabel(text: "", align: .left, fontName: "AppleSDGothicNeo-Medium", fontSize: 14, color: UIColor.black)
         contentText.sizeToFit()
         
         contentPic.rframe(x: 0, y: (contentText.y+contentText.height+10.multiplyHeightRatio()).remultiplyHeightRatio(), width: 375, height: 375)
@@ -104,6 +108,7 @@ class UserListCell: UITableViewCell{
         contentView.addSubview(userlistProfileImg)
         contentView.addSubview(userlistName)
         contentView.addSubview(createdDate)
+        contentView.addSubview(optionImage)
         contentView.addSubview(optionBtn)
         contentView.addSubview(contentText)
         contentView.addSubview(contentPic)
@@ -173,6 +178,7 @@ class UserListCell: UITableViewCell{
         userlistProfileImg.isHidden = !isindexOne
         userlistName.isHidden = !isindexOne
         createdDate.isHidden = !isindexOne
+        optionImage.isHidden = !isindexOne
         optionBtn.isHidden = !isindexOne
         contentText.isHidden = !isindexOne
         contentPic.isHidden = !isindexOne

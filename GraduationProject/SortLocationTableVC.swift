@@ -132,10 +132,16 @@ class SortLocationTableVC: UIViewController {
             alertView.dismiss(animated: true, completion: nil)
         })
         
+        let reportAction = UIAlertAction(title: "게시물 신고", style: UIAlertActionStyle.destructive) { action in
+            
+        }
+        
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { (_) in }
         
         if isMine{
             alertView.addAction(removeContent)
+        } else {
+            alertView.addAction(reportAction)
         }
         
         alertView.addAction(cancelAction)
@@ -234,7 +240,7 @@ extension SortLocationTableVC: UITableViewDelegate{
             picHeight.rframe(x: 0, y: (textHeight.y+textHeight.height+10).remultiplyHeightRatio(), width: 375, height: 375)
             picHeight.image = UIImage(named: "gguggu")
             
-            if aroundContentList[indexPath.row/2].contentImage! == "0" {
+            if aroundContentList[indexPath.row/2].contentImage! == NO_IMAGE {
                 return (textHeight.y+textHeight.height+50.multiplyHeightRatio())
             }else{
                 return (picHeight.y+picHeight.height+50.multiplyHeightRatio())

@@ -32,17 +32,6 @@ extension UITextField: UITextFieldDelegate{
         return true
     }
     
-    /*
-     키보드 올라갈 때 화면 올림
-     사용법 : textField.setKeyboardNotification(target: self.view)
-    
-     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        textField.endEditing(true)
-        textField.setEmojiFlag()
-     }
-    */
-    
-    
     public func setKeyboardNotification(target: UIView!){
         
         targetView = target
@@ -50,13 +39,11 @@ extension UITextField: UITextFieldDelegate{
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
     }
     
     public func setEmojiFlag(){
         emojiFlag = 0
     }
-    
     
     public func keyboardWillShow(notification:NSNotification,target: UIView) {
         adjustingHeight(show: false, notification: notification)
@@ -64,7 +51,6 @@ extension UITextField: UITextFieldDelegate{
     
     public func keyboardWillHide(notification:NSNotification) {
         targetView.y = 0
-        
     }
     
     public func adjustingHeight(show:Bool, notification:NSNotification) {
@@ -94,14 +80,12 @@ extension UITextField: UITextFieldDelegate{
                 
             }
         })
-        
     }
     
     public func removeObserver(){
         NotificationCenter.default.removeObserver(self)
     }
-    
-   
+
     func setBottomBorder() {
         self.borderStyle = .none
         self.layer.backgroundColor = UIColor.white.cgColor
@@ -112,8 +96,6 @@ extension UITextField: UITextFieldDelegate{
         self.layer.shadowOpacity = 1.0
         self.layer.shadowRadius = 0.0
     }
-    
-    
 }
 
 
